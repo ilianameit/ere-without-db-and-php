@@ -1,0 +1,79 @@
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+try
+  { 
+  
+
+    
+    
+	foreach($_POST['numberzch'] as $key => $numberzch) 
+	{
+		$namezch = $_POST['namezch'][$key];
+		$ves = $_POST['ves'][$key];
+		
+		$sql = 'INSERT INTO infomaterial (mnomer, numberzch, namezch, ves) VALUES (:nomer, :numberzch, :namezch, :ves)';
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':nomer', $_POST['nomer']);
+		$s->bindValue(':numberzch', $numberzch);
+		$s->bindValue(':namezch', $namezch);
+		$s->bindValue(':ves', $ves);
+		$s->execute();	
+	}
+	
+	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении деталей';
+    include 'error.html.php';
+    exit();
+  }
+?> 
+
+<!--
+ <?php
+ if (isset($_POST['mass'])) {
+	 
+	 
+ foreach ( $_POST['mass'] as $k=>$m) {
+ if (!empty($m)) { $mass[$k] = $m; }
+ }
+ print '<pre>';
+ print_r ($mass);
+ } 
+ 
+ else {
+ print 'пусто';
+ }
+?> 
+
+
+
+
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+try {
+	
+	$stata = (!empty($_POST['stata'])) ? (int) $_POST['stata'] : 0;
+	
+	$input = isset($_POST['ids'])?$_POST['ids']:"";
+	$ids = explode("\n", str_replace("\r", "", $input));
+	
+	foreach($ids as $key => $value) 
+	{
+		$sql = 'INSERT INTO infovin (mnomer, vin, status) VALUES (:nomer, "' . $value . '", "' . $stata . '")';
+		$statement = $pdo->prepare($sql);
+		$statement->bindValue(':nomer', $_POST['nomer']);
+		$statement->execute();
+	}
+}
+ 
+catch (PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+
+?> 
+-->

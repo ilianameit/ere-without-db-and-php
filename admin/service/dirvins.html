@@ -1,0 +1,45 @@
+<?php 
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+	$choicenmail = $_POST['choice'];
+		$dir= $_POST['dir'];
+		$mail= $_POST['mail'];
+			
+			try {
+				$sql = "SELECT * FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$mail' and  direction='$dir'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$result_array = $statement->fetchAll();
+				foreach ($result_array as $vins) {
+				
+					echo "<div class='mail-vin'>".$vins["vin"]."<label class='check'>
+					
+					<input type='checkbox'  name='checkvins[]' value='".$vins["vin"]."' ";if($vins["stata"]==1){echo" checked='checked' class='notzero'><div></div></label><input class='zero' type='checkbox' name='vinszero[]' value='".$vins["vin"]."'>	";}
+					else{echo"><div></div></label>";}echo"
+</div>";
+				 
+				 
+			 
+				}
+				$kompl = $result_row["DrwNum"];
+			}
+
+catch(PDOException $e) {
+    echo "Нет VIN";
+}			
+			?>
+			
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+			<script>
+			
+			$('.notzero').change(function() {
+			
+			if( $(this).is(':checked') ){
+			 $(this).parent().siblings('input').prop("checked", false);
+			}else{
+			$(this).parent().siblings('input').prop("checked", true);
+			}
+			 
+			});
+			</script>

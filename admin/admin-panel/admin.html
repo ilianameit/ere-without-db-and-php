@@ -1,0 +1,71 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; 
+	include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Панель администратора</title>
+	<link rel="stylesheet" href="../../css/admin.css">
+  </head>
+
+  
+  
+  <body>
+	<div class="heading">
+		<h1>Панель администратора</h1>
+	</div>  
+
+	<div class="admin-center-block">
+    <p class="white-border div-adm"><a href="?add">Добавить нового администратора</a></p>
+   <ul id="adm-pnl-list"> <!--class="white-border div-adm" -->
+      <?php foreach ($authors as $author): ?>
+        <li>
+          <form action="" method="post" class="m-0" class="role">
+            <div>
+              <div class="name-role"><?php htmlout($author['name']); ?></div>
+              <input type="hidden" name="id" value="<?php
+                  echo $author['id']; ?>">
+				  <div class="btn-for-roles">
+              <input type="submit" name="action" value="Edit">
+              <input type="submit" name="action" value="Delete">
+			  </div>
+            </div>
+          </form>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+	</div>
+	
+		<?php 
+	
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT * FROM erelog";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result_array = $statement->fetchAll();
+	
+	echo "<div class='cont-table'> <table class='table'>";
+    echo "<thead><tr><th>Пользователь</th><th>Руководство</th><th>Дата</th><th>Вашему вниманию</th><th>Эксплуатационные параметры</th><th>Короткое описание систем и механизмов автомобиля</th><th>Эксплуатация автомобиля</th><th>Эксплуатация автомобиля в холодный период времени</th><th>Техническое обслуживание</th><th>Возможные неисправности агрегатов и систем автомобиля</th><th>Хранение автомобиля</th><th>Транспортирование автомобиля</th><th>Гарантия предприятия-изготовителя и порядок предъявления рекламакции</th><th>Утилизация</th><th>Приложение 1</th><th>Приложение 2</th><th>Приложение 3</th><th>Приложение 4</th><th>Приложение 5</th><th>Приложение 6</th><th>Приложение 7</th><th>Приложение 8</th><th>Приложение 9</th><th>Приложение 10</th><th>Приложение 11</th><th>Приложение 12</th></tr></thead><tbody>";
+    foreach ($result_array as $result_row) {	
+	
+		echo "<tr><td>".$result_row['email']."</td><td>".$result_row['idere']."</td><td>".$result_row['data']."</td><td>".$result_row['vvlog']."</td><td>".$result_row['eplog']."</td><td>".$result_row['kslog']."</td><td>".$result_row['ealog']."</td><td>".$result_row['eaxlog']."</td><td>".$result_row['tholog']."</td><td>".$result_row['vnlog']."</td><td>".$result_row['xalog']."</td><td>".$result_row['talog']."</td><td>".$result_row['galog']."</td><td>".$result_row['ytlog']."</td><td>".$result_row['pril1log']."</td><td>".$result_row['pril2log']."</td><td>".$result_row['pril3log']."</td><td>".$result_row['pril4log']."</td><td>".$result_row['pril5log']."</td><td>".$result_row['pril6log']."</td><td>".$result_row['pril7log']."</td><td>".$result_row['pril8log']."</td><td>".$result_row['pril9log']."</td><td>".$result_row['pril10log']."</td><td>".$result_row['pril11log']."</td><td>".$result_row['pril12log']."</td></tr>";
+    	}
+	echo "</tbody></table></div>";
+	
+
+	
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	?>
+	
+	
+     <a class="back"><?php include '../logout.inc.html.php'; ?></a>
+
+  </body>
+</html>

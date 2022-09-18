@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../../css/admin.css"> 
+	<title>Список комплектаций</title>
+</head>
+<body class='wrap'>
+<a href="index.php" class="back"></a>
+<div class="heading">
+			<h1>Отчет непривязанных комплектаций</h1>
+		</div>
+	<div class='list-kompl'>
+		<div class='cond-check'>
+		
+			<div class="check">
+				
+				
+			</div>
+		</div>
+		<div class="komplvin-btn">
+		<div class="btn-kompl" style="">
+			<a class="kompl1">Комплектация</a>
+		</div>
+		</div> 
+		<div class='list-result'>
+<?php 
+	include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+	$sql = "SELECT DrwNum, ANY_VALUE(away), idsk FROM sap LEFT JOIN skkompl ON skkompl.kompl = sap.DrwNum where idsk IS NULL and sap.company='".$company."' GROUP BY DrwNum ORDER BY STR_TO_DATE(ANY_VALUE(away), '%d.%m.%Y') DESC";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$result_array = $statement->fetchAll();
+		$num = 0;	
+	echo "<table>";
+	echo "<tr><th>№</th><th>Комплектация</th><th>Дата</th></tr>";
+	foreach ($result_array as $result_row) {
+	echo ' <tr><td>'.$num.'</td><td>'.$result_row['DrwNum'].'</td><td>'.substr($result_row['ANY_VALUE(away)'], 0, 10).'</td></tr>'; $num++;
+	}
+	echo '</table>';
+?>
+		</div>
+
+	
+</div>	
+</body>
+<script src="../../js/js-libary.js"></script>
+
+</html>

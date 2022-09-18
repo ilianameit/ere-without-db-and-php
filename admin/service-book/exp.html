@@ -1,0 +1,93 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+$pageTitle = 'Список исключений';
+
+  $button = 'Добавить СК';
+
+ 
+ $result = $pdo->query("SELECT * FROM iskl_sk where company='".$company."'");
+ foreach ($result as $row)
+{
+  $result_array[] = array('sk' => $row['sk'], 'reason' => $row['reason']);
+}
+	
+	?>
+	<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php htmlout($pageTitle); ?></title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+
+  </head>
+   <body class="wrap">
+   		<a href="index.php" class="back"></a>
+		
+		<div class="heading">
+				<h1>Панель администратора</h1>
+				<h1><?php htmlout($pageTitle); ?></h1>
+			</div>
+<form action="" method="post">
+	<div class="main-div -hidden"> 	
+	
+				<div class="btn-voen">
+					<a href="?add_expsk">Добавить СК</a>
+				</div>
+				<div class='dlist'>
+					<div class='headlist'>
+						
+						<div class='head'>
+						Сервисная книжка
+						</div>
+						<div class='head'>
+						Причина
+						</div>
+						<div class='head send'>
+						Удалить
+						</div>					  
+					</div>
+<ol class='voen-list' >
+<?php foreach ($result_array as $result_row): ?>
+			<li>  
+			
+				  <div class="line">
+					  
+					  <div class='kompl'><?php htmlout($result_row['sk']); ?></div>
+					  <div class="reason"><?php htmlout($result_row['reason']); ?></div>
+					  <div  class='send check delete'>
+					  <label>
+					  <input type="checkbox" name="delete2[]"  value="<?php echo $result_row['sk']; ?>"><div></div></label>
+					  
+					  
+					 <!-- <a href="?Editq">Edit</a> -->
+					  </div>
+					 
+					  
+					 
+					 
+				  </div>
+			 </li>
+<?php endforeach; ?>
+</ol>
+</div>
+</div>
+
+	 
+	 <div class="foot-btn">
+		 <div class='voen-btn-list'>
+			  <div class="button-add" id="btn-voen">
+				<input class="save text-center" type="submit" value="<?php htmlout($delete); ?>">
+			  </div>
+		  </div>
+	 </div>
+</form>	 
+	 
+	 
+	 
+	 </body>
+
+  
+</html>

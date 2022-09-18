@@ -1,0 +1,744 @@
+<?php
+include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/magicquotes.inc.php';
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/access.inc.php';
+
+if (!userIsLoggedIn())
+{
+  include '../login.html.php';
+  exit();
+}
+
+if (!userHasRole('Информатор'))
+{
+  $error = 'Отказано в доступе. У Вас нет привилегии Информатор';
+  include '../accessdenied.html.php';
+  exit();
+}
+
+if (isset($_GET['add']))
+{
+  $pageTitle = 'Добавление информационного письма';
+  $action = 'addform';
+  $button = 'Добавить';
+  
+  include 'add.html.php';
+  exit();
+}
+
+
+
+// Добавление Информационного письма
+
+if (isset($_GET['addform']))
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+	
+  try
+  {
+  
+    $status = (!empty($_POST['status'])) ? (int) $_POST['status'] : 0;
+	
+	$direction = $_POST['direction'];
+  
+		foreach($_POST['direction'] as $val) {
+  
+		$sql = 'INSERT INTO infomessage (id, nazvanie, data, rasprostranenie, dorabotka, primechanie, zatrat, datachange, status, direction) VALUES (:id, :nazvanie, :data, :rasprostranenie, :dorabotka, :primechanie, :zatrat, now(), :status, :direction)';
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':id', $_POST['id']);
+		$s->bindValue(':nazvanie', $_POST['nazvanie']);
+		$s->bindValue(':data', $_POST['data']);
+		$s->bindValue(':rasprostranenie', $_POST['rasprostranenie']);
+		$s->bindValue(':dorabotka', $_POST['dorabotka']);
+		$s->bindValue(':primechanie', $_POST['primechanie']);
+		$s->bindValue(':zatrat', $_POST['zatrat']);
+		$s->bindValue(':status', $status);
+		$s->bindValue(':direction', $val);
+
+		$s->execute();	
+	  }
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении информационного письма. Письмо с №'.$_POST['id'].' уже существует.';
+    include 'error.html.php';
+    exit();
+  }
+
+// Добавление Операции
+
+
+try
+  {
+	if(!empty($_POST['codoper']))
+	{
+    foreach($_POST['codoper'] as $key => $codoper) 
+	{
+		$nameoper = $_POST['nameoper'][$key];
+		$work = $_POST['work'][$key];
+		
+		$sql = 'INSERT INTO infooper (mnomer, codoper, nameoper, work) VALUES (:id, :codoper, :nameoper, :work)';
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':id', $_POST['id']);
+		$s->bindValue(':codoper', $codoper);
+		$s->bindValue(':nameoper', $nameoper);
+		$s->bindValue(':work', $work);
+		$s->execute();	
+	}
+  }
+}
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении операции';
+    include 'error.html.php';
+    exit();
+}
+
+
+
+
+// Добавление материалов
+
+try
+  {
+    foreach($_POST['numberzch'] as $key => $numberzch) 
+	{
+		$namezch = $_POST['namezch'][$key];
+		$ves = $_POST['ves'][$key];
+		$kol = $_POST['kol'][$key];
+		$zchizv = $_POST['zchizv'][$key];
+		
+		
+		$sql = 'INSERT INTO infomaterial (mnomer, numberzch, namezch, ves, kol, zchizv) VALUES (:id, :numberzch, :namezch, :ves, :kol, :zchizv)';
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':id', $_POST['id']);
+		$s->bindValue(':numberzch', $numberzch);
+		$s->bindValue(':namezch', $namezch);
+		$s->bindValue(':ves', $ves);
+		$s->bindValue(':kol', $kol);
+		$s->bindValue(':zchizv', $zchizv);
+		$s->execute();	
+	}
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении расходников';
+    include 'error.html.php';
+    exit();
+  }
+
+
+
+
+
+// Добавление VIN-ов
+
+
+try
+  {	
+	$stata = (!empty($_POST['stata'])) ? (int) $_POST['stata'] : 0;
+
+		$direction = $_POST['direction'];
+
+	foreach($_POST['direction'] as $j => $val) {	
+	//echo($val);
+	$input = isset($_POST['vin'][$j])?$_POST['vin'][$j]:"";
+	//$vin = explode("\n", implode($input));
+	$vin = explode(PHP_EOL, $input);
+	//$vin = explode("\n", str_replace("\r", "", $input));
+	
+
+	foreach($vin as $key => $value) 
+	{
+//echo($value." i=".$key);
+		//echo($val.'= '.$value.' =>'.$key.' || ');
+		$sql = 'INSERT INTO infovin (mnomer, vin, stata, direction) VALUES (:nomer, :value, :stata, :direction) on duplicate key update vin = VALUES (vin)';
+
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':nomer', $_POST['id']);
+		$s->bindValue(':value', substr($value, 0 , 17));
+		$s->bindValue(':stata', $stata);
+		$s->bindValue(':direction', $val);
+		$s->execute();
+	}
+}
+		
+	  
+}
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка в добавлении VIN';
+    include 'error.html.php';
+   exit();
+ }
+
+
+// Добавление Файла
+
+
+try
+  {
+	  
+    $sql = 'INSERT IGNORE INTO infopril (mnomer, instruction1, instruction2, instruction3, instruction4, instruction5, original) VALUES (:id, :instruction1, :instruction2, :instruction3, :instruction4, :instruction5, :origin)';
+	$s = $pdo->prepare($sql);
+    $s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':instruction1', $_POST['instruction1']);
+	$s->bindValue(':instruction2', $_POST['instruction2']);
+	$s->bindValue(':instruction3', $_POST['instruction3']);
+	$s->bindValue(':instruction4', $_POST['instruction4']);
+	$s->bindValue(':instruction5', $_POST['instruction5']);
+	$s->bindValue(':origin', $_POST['origin']);
+	$s->execute();	
+	}
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении письма.';
+    include 'error.html.php';
+    exit();
+  }
+	
+
+if (!empty($_FILES['attachment1'])) {
+    $file = $_FILES['attachment1'];
+	$file2 = $_FILES['attachment2'];
+	$file3 = $_FILES['attachment3'];
+	$file4 = $_FILES['attachment4'];
+	$file5 = $_FILES['attachment5'];
+	$for1 = $_FILES['attachmentor1'];
+
+    $srcFileName = $_POST['id'];
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction1'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file2['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction2'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file3['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction3'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file4['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction4'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file5['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction5'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($for1['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['origin'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+}
+
+ 
+  header('Location: .');
+
+  exit();
+}
+
+
+// Подтягивание данных к редактированию
+
+if (isset($_POST['action']) and $_POST['action'] == 'Edit')
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+  try   
+  {
+    $sql = 'SELECT * FROM infomessage WHERE id = :id';
+    $s = $pdo->prepare($sql);
+    $s->bindValue(':id', $_POST['id']);
+    $s->execute();
+	
+
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В выборке информационных писем';
+    include 'error.html.php';
+    exit();
+  }
+
+  $row = $s->fetch();
+
+
+  $pageTitle = 'Редактирование информационного письма '.$row['id'].'';
+  $action = 'editform';
+  $id = $row['id'];
+  $nazvanie = $row['nazvanie'];
+  $data = $row['data'];
+  $rasprostranenie = $row['rasprostranenie'];
+  $dorabotka = $row['dorabotka'];
+  
+  $codoper = $row['codoper'];
+  $nameoper = $row['nameoper'];
+  $work = $row['work'];
+  
+  $primechanie = $row['primechanie'];
+  $zatrat = $row['zatrat'];
+  $status = $row['status'];
+  
+  $numberzch = $row['numberzch'];
+  $namezch = $row['namezch'];
+  $ves = $row['ves'];
+  $kol = $row['kol'];
+  
+  $vin = $row['vin'];
+  $stata = $row['stata'];
+
+
+  $button = 'Сохранить';
+
+  include 'edit.html.php';
+  exit();
+}
+
+// Редактирование информационного письма
+
+if (isset($_GET['editform']))
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+  try   
+  {
+
+	$status = (!empty($_POST['status'])) ? $_POST['status'] : 0;
+	  
+    $sql = 'UPDATE infomessage SET
+		id = :id,
+		nazvanie = :nazvanie,
+		data = :data,
+		rasprostranenie = :rasprostranenie,
+		dorabotka = :dorabotka,
+		primechanie = :primechanie,
+		zatrat = :zatrat,
+		datachange = now(),
+		status = :status
+		WHERE id=:id';
+    $s = $pdo->prepare($sql);
+	$s->bindValue(':id', $_POST['nomer']);
+	$s->bindValue(':nazvanie', $_POST['nazvanie']);
+	$s->bindValue(':data', $_POST['data']);
+	$s->bindValue(':rasprostranenie', $_POST['rasprostranenie']);
+	$s->bindValue(':dorabotka', $_POST['dorabotka']);
+	
+	$s->bindValue(':primechanie', $_POST['primechanie']);
+	$s->bindValue(':zatrat', $_POST['zatrat']);
+	$s->bindValue(':status', $status);
+    $s->execute();
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении информационного письма '.$row['id'].'';
+    include 'error.html.php';
+    exit();
+  }
+
+
+// Редактирование операции
+
+try
+  {
+  
+	if(isset($_POST['submit']))
+	{
+		
+		if(isset($_POST['code']))
+		{
+			foreach($_POST['code'] as $keys => $code) 
+				{
+					$nameo = $_POST['nameo'][$keys];
+					$workm = $_POST['workm'][$keys];
+
+					
+					$sql = 'INSERT INTO infooper (mnomer, codoper, nameoper, work) VALUES (:id, :code, :nameo, :workm)';
+					$s = $pdo->prepare($sql);
+					$s->bindValue(':id', $_POST['nomer']);
+					$s->bindValue(':code', $code);
+					$s->bindValue(':nameo', $nameo);
+					$s->bindValue(':workm', $workm);
+					$s->execute();	
+				}
+		}
+
+		if(isset($_POST['delete2']))
+		{
+			$list = implode("," , $_POST['delete2']);
+			$sql = "DELETE FROM infooper WHERE id IN ($list)";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+				
+		foreach ($_POST['id'] AS $id) 
+		{
+			
+			$nomer = $_POST['nomer'];
+			$codoper = $_POST['codoper'][$id];
+			$nameoper = $_POST['nameoper'][$id];
+			$work = $_POST['work'][$id];
+			
+			$sql = "UPDATE infooper SET mnomer = '$nomer', codoper = '$codoper', nameoper = '$nameoper', work = '$work' WHERE ID = '$id' LIMIT 1";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+		
+	}
+	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении операции.';
+    include 'error.html.php';
+    exit();
+  }
+
+
+// Редактирование материалов
+
+try
+  {
+  
+	if(isset($_POST['submit']))
+	{
+		
+		if(isset($_POST['num']))
+		{
+			foreach($_POST['num'] as $key => $num) 
+				{
+					$nam = $_POST['nam'][$key];
+					$massa = $_POST['massa'][$key];
+					$kolvo = $_POST['kolvo'][$key];
+					$izvechdet = $_POST['izvechdet'][$key];
+					
+					$sql = 'INSERT INTO infomaterial (mnomer, numberzch, namezch, ves, kol, zchizv) VALUES (:id, :num, :nam, :massa, :kolvo, :izvechdet )';
+					$s = $pdo->prepare($sql);
+					$s->bindValue(':id', $_POST['nomer']);
+					$s->bindValue(':num', $num);
+					$s->bindValue(':nam', $nam);
+					$s->bindValue(':massa', $massa);
+					$s->bindValue(':kolvo', $kolvo);
+					$s->bindValue(':izvechdet', $izvechdet);
+					$s->execute();	
+				}
+		}
+
+		if(isset($_POST['delete']))
+		{
+			$list = implode("," , $_POST['delete']);
+			$sql = "DELETE FROM infomaterial WHERE id IN ($list)";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+				
+		foreach ($_POST['id'] AS $id) 
+		{
+			
+			$nomer = $_POST['nomer'];
+			$numberzch = $_POST['numberzch'][$id];
+			$namezch = $_POST['namezch'][$id];
+			$ves = $_POST['ves'][$id];
+			$kol = $_POST['kol'][$id];
+			$zchizv = $_POST['zchizv'][$id];
+			
+			$sql = "UPDATE infomaterial SET mnomer = '$nomer', numberzch = '$numberzch', namezch = '$namezch', ves = '$ves', kol = '$kol', zchizv = '$zchizv'  WHERE ID = '$id' LIMIT 1";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+		
+	}
+	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении материалов.';
+    include 'error.html.php';
+    exit();
+  }
+  
+  
+// Редактирование VIN
+try {	
+  if(isset($_POST['submit']))
+	{
+	$stata = (!empty($_POST['stata'])) ? (int) $_POST['stata'] : 0;
+
+		$direction = $_POST['direction'];
+
+	foreach($_POST['direction'] as $j => $val) {	
+
+	$input = isset($_POST['vin'][$j])?$_POST['vin'][$j]:"";
+
+	$vin = explode(PHP_EOL, $input);
+
+	
+
+		foreach($vin as $key => $value) 
+		{
+			$sql = 'INSERT INTO infovin (mnomer, vin, stata, direction) VALUES (:nomer, :value, :stata, :direction) on duplicate key update vin = VALUES (vin)';
+
+			$s = $pdo->prepare($sql);
+			$s->bindValue(':nomer', $_POST['nomer']);			
+			$s->bindValue(':value', substr($value, 0 , 17));
+			$s->bindValue(':stata', $stata);
+			$s->bindValue(':direction', $val);
+			$s->execute();
+		}
+	}
+	
+
+	if(isset($_POST['directionadd']))
+		{
+		
+		
+		$idd = $_POST['id'];
+		
+			$addir = $_POST['directionadd'];
+				$stata = (!empty($_POST['stata'])) ? (int) $_POST['stata'] : 0;
+
+			foreach($addir as $j => $val) {
+
+				$sql = 'INSERT INTO infomessage (id, nazvanie, data, rasprostranenie, dorabotka, primechanie, zatrat, datachange, status, direction) VALUES (:id, :nazvanie, :data, :rasprostranenie, :dorabotka, :primechanie, :zatrat, now(), :status, :direction)';
+		$s = $pdo->prepare($sql);
+		$s->bindValue(':id', $_POST['nomer']);
+		$s->bindValue(':nazvanie', $_POST['nazvanie']);
+		$s->bindValue(':data', $_POST['data']);
+		$s->bindValue(':rasprostranenie', $_POST['rasprostranenie']);
+		$s->bindValue(':dorabotka', $_POST['dorabotka']);
+		$s->bindValue(':primechanie', $_POST['primechanie']);
+		$s->bindValue(':zatrat', $_POST['zatrat']);
+		$s->bindValue(':status', $status);
+		$s->bindValue(':direction', $val);
+
+		$s->execute();	
+
+			$input = isset($_POST['vinadd'][$j])?$_POST['vinadd'][$j]:"";
+
+			//$vin = explode("\n", $input);
+			$vin = explode(PHP_EOL, $input);
+
+			
+
+				foreach($vin as $key => $value) 
+				{
+					$sql = 'INSERT INTO infovin (mnomer, vin, stata, direction) VALUES (:nomer, :value, :stata, :direction) on duplicate key update vin = VALUES (vin)';
+
+					$s = $pdo->prepare($sql);
+					$s->bindValue(':nomer', $_POST['nomer']);
+					$s->bindValue(':value', substr($value, 0 , 17));
+					$s->bindValue(':stata', $stata);
+					$s->bindValue(':direction', $val);
+					$s->execute();
+				}
+			}
+			
+			
+			
+			
+			
+		
+		}
+		
+		if(isset($_POST['direction']))
+		{
+			$eddir = $_POST['direction'];
+			$stata = (!empty($_POST['stata'])) ? (int) $_POST['stata'] : 0;
+			
+			foreach($eddir as $k => $val) {
+
+				$input = isset($_POST['vinedit'][$k])?$_POST['vinedit'][$k]:"";
+
+			$vinedit = explode(PHP_EOL, $input);
+
+			foreach($vinedit as $key => $value) 
+				{
+					$sql = 'INSERT INTO infovin (mnomer, vin, stata, direction) VALUES (:nomer, :value, :stata, :direction) on duplicate key update vin = VALUES (vin); DELETE FROM infovin WHERE vin = "" ';
+
+					$s = $pdo->prepare($sql);
+					$s->bindValue(':nomer', $_POST['nomer']);
+					$s->bindValue(':value', substr($value, 0 , 17));
+					$s->bindValue(':stata', $stata);
+					$s->bindValue(':direction', $val);
+					$s->execute();
+				}
+			}
+			
+		}
+		
+		
+		$nomer = $_POST['nomer'];
+		if(isset($_POST['deletevin']))
+		{
+			
+			$list3 =   "'" . implode("','" , $_POST['deletevin']) . "'";
+			
+			$sql = "DELETE FROM infovin WHERE vin in ($list3) and mnomer = '$nomer'";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+
+//echo $list." - ".$nomer;
+	
+	  
+	}
+}
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка в редактировании VIN';
+    include 'error.html.php';
+   exit();
+ } 
+
+ 
+  try
+ {
+  
+	if(isset($_POST['submit']))
+	{
+		if(isset($_POST['deletedirection']))
+		{
+			$list =   "'" . implode("','" , $_POST['deletedirection']) . "'";
+			$sql = "DELETE FROM infovin WHERE direction IN ($list); DELETE FROM infomessage where direction IN ($list)";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+	}
+}
+	catch (PDOException $e)
+ {
+  $error = 'Ошибка: В удалении направления.';
+   include 'error.html.php';
+   exit();
+ }
+ 
+ 
+ try
+  {
+  
+	if(isset($_POST['submit']))
+	{
+		
+		if(isset($_POST['delete2']))
+		{
+			$list = implode("," , $_POST['delete2']);
+			$sql = "DELETE FROM infooper WHERE id IN ($list)";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+				
+		foreach ($_POST['id'] AS $id) 
+		{
+			
+			$nomer = $_POST['nomer'];
+			$codoper = $_POST['codoper'][$id];
+			$nameoper = $_POST['nameoper'][$id];
+			$work = $_POST['work'][$id];
+			
+			$sql = "UPDATE infooper SET mnomer = '$nomer', codoper = '$codoper', nameoper = '$nameoper', work = '$work' WHERE ID = '$id' LIMIT 1";
+			$s = $pdo->prepare($sql);
+			$s->execute();
+		}
+		
+	}
+	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении операции.';
+    include 'error.html.php';
+    exit();
+  }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+// Редактирование приложений 
+  
+ 
+try
+  {
+	$sql = "UPDATE IGNORE infopril SET 
+	mnomer = :id,
+	instruction1 = :instruction1, 
+	instruction2 = :instruction2,
+	instruction3 = :instruction3,
+	instruction4 = :instruction4,
+	instruction5 = :instruction5, 
+	original = :origin 
+	
+	
+	WHERE mnomer = :id";
+	$s = $pdo->prepare($sql);
+	$s->bindValue(':id', $_POST['nomer']);
+	$s->bindValue(':instruction1', $_POST['instruction1']);
+	$s->bindValue(':instruction2', $_POST['instruction2']);
+	$s->bindValue(':instruction3', $_POST['instruction3']);
+	$s->bindValue(':instruction4', $_POST['instruction4']);
+	$s->bindValue(':instruction5', $_POST['instruction5']);
+	$s->bindValue(':origin', $_POST['origin']);
+	$s->execute();
+
+
+	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении приложений.';
+    include 'error.html.php';
+    exit();
+  }
+
+ 
+  
+  
+if (!empty($_FILES['attachment1'])) {
+    $file = $_FILES['attachment1'];
+	$file2 = $_FILES['attachment2'];
+	$file3 = $_FILES['attachment3'];
+	$file4 = $_FILES['attachment4'];
+	$file5 = $_FILES['attachment5'];
+	$for1 = $_FILES['attachmentor1'];
+
+    $srcFileName = $_POST['nomer'];
+
+//if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction1'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/'.$srcFileName)) mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/'.$srcFileName, 0755);if(move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/'. $_POST['instruction1'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file2['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction2'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file3['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction3'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file4['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction4'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($file5['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['instruction5'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/info/message/' . $srcFileName, 0755); if(move_uploaded_file($for1['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/info/message/' . $srcFileName . '/' . $_POST['origin'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+}
+
+
+
+
+  header('Location: .');
+  exit();
+}
+
+
+
+
+
+
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+try
+{
+  $result = $pdo->query("SELECT DISTINCT id, nazvanie, data  FROM infomessage"); 
+}
+catch (PDOException $e)
+{
+  $error = 'Ошибка: Вывода информационных писем из БД';
+  include 'error.html.php';
+  exit();
+}
+
+foreach ($result as $row)
+{
+ $infomes[] = array('id' => $row['id'], 'nazvanie' => $row['nazvanie'], 'data' => $row['data'] );
+}
+
+include 'info-mes.html.php';

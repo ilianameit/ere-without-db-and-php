@@ -1,0 +1,744 @@
+<?php
+session_start();
+
+//	if($_SESSION['join'] == FALSE) {header('Location: ../index.php');exit();}
+	
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+if(isset($_POST['jav']))
+{
+		$lang = $_POST['jav'];
+		$_SESSION['LN'] = $lang;
+		$sql = "SELECT * FROM page_ere where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+}
+else 
+{
+	if(!isset($_SESSION['LN']))
+	{
+		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+		$LN = ['ru', 'en', 'fr', 'es'];
+		$lang = in_array($lang, $LN) ? $lang : 'ru';
+		$_SESSION['LN'] = $lang;
+
+		$sql = "SELECT * FROM page_ere where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+	}
+	else 
+	{
+		$lang = $_SESSION['LN'];
+
+		$sql = "SELECT * FROM page_ere where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+	}
+}
+
+try {
+	if(!empty($_POST['vin']))
+		{
+			$vin = $_POST['vin'];
+			
+			
+	
+
+	$sql2 = "SELECT * FROM sap where VIN_SAP = '$vin' -- ";
+    $statement2 = $pdo->prepare($sql2);
+    $statement2->execute();
+    $opred = $statement2->fetchAll();
+
+    foreach ($opred as $kompl) {
+			$kompl = $kompl['DrwNum'];
+			$vinsap = $kompl['VIN_SAP'];
+		}
+
+// Подтягивание руководств
+	$sql = "SELECT * FROM erekompl INNER JOIN ererazdel ON erekompl.idere = ererazdel.id WHERE kompl = '$kompl' AND LN = '$lang' -- ";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $res1 = $statement->fetchAll();
+
+    foreach ($res1 as $rw1) {
+
+		}
+	}
+
+	else{
+	$kompl = $_COOKIE['Coockie-kompl'];
+		$vin = $_COOKIE['Coockie-vin'];
+
+	$sql = "SELECT * FROM erekompl INNER JOIN ererazdel ON erekompl.idere = ererazdel.id WHERE kompl = '$kompl' AND LN = '$lang' -- ";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $res1 = $statement->fetchAll();
+
+    foreach ($res1 as $rw1) {
+
+		}
+	}
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+
+//	if(empty($rw1['id'])) {$empty = $r['empty_ere']; $_SESSION['empty'] = $empty;header('Location: ../menu.php');exit();}
+
+try {
+	
+	$sql = "SELECT * FROM erekompl INNER JOIN ereizv ON erekompl.idere = ereizv.idere WHERE kompl = '$kompl' AND LN = '$lang' -- ";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $res2 = $statement->fetchAll();
+
+    foreach ($res2 as $rw2) {
+    }
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+
+?> 
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+	<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../css/ruk.css"> 
+	<link rel="stylesheet" href="../css/language.css"> 
+	<!--<script src="../js/js-libary.js"></script>-->
+	
+</head>
+
+
+<?php echo "<title>".htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8').": $kompl</title>";?>
+
+
+<body class="rykovodstvo main">
+	
+	<!--<ul class="breadcrumb">
+		<li><a href="../">VIN</a></li>
+		<li><a href="../menu.php">Меню</a></li>
+		<li><a href="">Комплектация</a></li>
+	</ul>-->
+<div class="heading">	
+<form  method="post" action="">
+	<div class= 'acordion ln' >
+			<input type="checkbox" id="ln">
+			<label for="ln" value="<?php echo htmlspecialchars($r['LN'], ENT_QUOTES, 'UTF-8'); ?>"><div></div></label>
+			<div class="acor-body">
+			<ul class='list' name="jav" onchange="this.form.submit();">
+				<li><label><input name='jav' type="radio" value="ru"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="en"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="fr"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="es"><div></div></label></li>
+			</ul>
+			</div>
+	</div>
+</form>
+	
+
+		<?php echo "<h1>".htmlspecialchars($r['kompl'], ENT_QUOTES, 'UTF-8').": <span>$kompl</span></h1>";?>
+	</div>
+
+		<a class="back" href="../menu.php"></a>
+		
+		
+		<?php 	
+
+
+$kamaz= 'XTC';	
+$pos = stripos($vin, $kamaz);
+
+		if ($pos !== false) {
+			$let=null;
+		
+		} else {
+			$let = 'n-';
+		}
+    //id вначале 
+	
+?>
+		<div class="switch-and-search">
+			<div class="switch">
+				<div class="active" id="box-to-line">
+					<img src="../img/cube.png">
+					<div class='hint'><?php echo htmlspecialchars($r['tablo'], ENT_QUOTES, 'UTF-8'); ?></div>
+				</div>
+				<div class="" id="line-to-box">
+					<img src="../img/line.png">
+					<div class='hint'><?php echo htmlspecialchars($r['stroka'], ENT_QUOTES, 'UTF-8'); ?></div>
+				</div>
+				
+				
+				
+			</div>
+			<div class="search">
+				<form disabled action="">
+					<input disabled class='none-outline' type="text" name="search">
+				</form>
+			</div>
+		</div>
+		
+	<div class='block-ruk'>
+		<div id='preview-docs'>
+			<form method='post' action='komplect/index.php'>
+				<div class='acor-container read'>
+					<?php include "soderjanie/".$rw1["idere"].".php"; ?>
+				</div>
+			</form>
+		</div>	
+		<div id='btn-open-preview'><div></div></div>
+		
+
+		<div class="main" id='main-menu'>
+
+			<form method='post' action='komplect/index.php' autocomplete = "off">
+			  <div class="box-text" id="rykov-cont">
+																 
+<?php 
+
+      
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['vv']) ){ echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["vv"]."><img class='1' src='img/1Cube.png'><p>".htmlspecialchars($r['r1'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['vv']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["vv"]."'><img class='1' src='img/1Cube.png'><p>".htmlspecialchars($r['r1'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['ep']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ep"]."><img class='2' src='img/2Cube.png'><p>".htmlspecialchars($r['r2'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['ep']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ep"]."'><img class='2' src='img/2Cube.png'><p>".htmlspecialchars($r['r2'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>
+ 
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['ks']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ks"]."><img class='3' src='img/3Cube.png'><p>".htmlspecialchars($r['r3'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['ks']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ks"]."'><img class='3' src='img/3Cube.png'><p>".htmlspecialchars($r['r3'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?> 
+                							
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['ea']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ea"]."><img class='4' src='img/4Cube.png'><p>".htmlspecialchars($r['r4'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['ea']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ea"]."'><img class='4' src='img/4Cube.png'><p>".htmlspecialchars($r['r4'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                                   
+				
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['eax']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["eax"]."><img class='5' src='img/5Cube.png'><p>".htmlspecialchars($r['r5'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['eax']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["eax"]."'><img class='5' src='img/5Cube.png'><p>".htmlspecialchars($r['r5'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>
+                						
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['tho']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["tho"]."><img class='6' src='img/6Cube.png'><p>".htmlspecialchars($r['r6'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['tho']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["tho"]."'><img class='6' src='img/6Cube.png'><p>".htmlspecialchars($r['r6'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>   
+                				
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['vn']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["vn"]."><img class='7' src='img/7Cube.png'><p>".htmlspecialchars($r['r7'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['vn']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["vn"]."'><img class='7' src='img/7Cube.png'><p>".htmlspecialchars($r['r7'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                                                  
+						
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['xa']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["xa"]."><img class='8' src='img/8Cube.png'><p>".htmlspecialchars($r['r8'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['xa']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["xa"]."'><img class='8' src='img/8Cube.png'><p>".htmlspecialchars($r['r8'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                                                                  
+				
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['ta']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ta"]."><img class='9' src='img/9Cube.png'><p>".htmlspecialchars($r['r9'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['ta']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ta"]."'><img class='9' src='img/9Cube.png'><p>".htmlspecialchars($r['r9'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                   
+
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['ga']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ga"]."><img class='10' src='img/10Cube.png'><p>".htmlspecialchars($r['r10'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['ga']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["ga"]."'><img class='10' src='img/10Cube.png'><p>".htmlspecialchars($r['r10'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                   
+                
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['yt']) ) {echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["yt"]."><img class='11' src='img/11Cube.png'><p>".htmlspecialchars($r['r11'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+else {if( !empty($rw1['yt']) ){echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["yt"]."'><img class='11' src='img/11Cube.png'><p>".htmlspecialchars($r['r11'], ENT_QUOTES, 'UTF-8')."</p></button>";}}
+?>                                                                                       
+                  									   
+				  <div id="pril" class="child">
+						<img class="12" src="img/12Cube.png">
+						<p><?php echo htmlspecialchars($r['pril'], ENT_QUOTES, 'UTF-8'); ?></p>                                                                                 
+				  </div>
+				  <div id="dopol" class="child">
+						<img class="13" src="img/13Cube.png">
+						<p><?php echo htmlspecialchars($r['dop'], ENT_QUOTES, 'UTF-8'); ?></p>                                                                                 
+				  </div>
+				</div>
+				
+
+						
+				<div class="disp-none" id="pril-8">
+				<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril1']) ) {$str = $rw1["pril1"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril1"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril1']) ) {$str = $rw1["pril1"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril1"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril2']) ) {$str = $rw1["pril2"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril2"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril2']) ) {$str = $rw1["pril2"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril2"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril3']) ) {$str = $rw1["pril3"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril3"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril3']) ) {$str = $rw1["pril3"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril3"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril4']) ) {$str = $rw1["pril4"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril4"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril4']) ) {$str = $rw1["pril4"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril4"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril5']) ) {$str = $rw1["pril5"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril5"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril5']) ) {$str = $rw1["pril5"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril5"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril6']) ) {$str = $rw1["pril6"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril6"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril6']) ) {$str = $rw1["pril6"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril6"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril7']) ) {$str = $rw1["pril7"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril7"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril7']) ) {$str = $rw1["pril7"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril7"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril8']) ) {$str = $rw1["pril8"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril8"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril8']) ) {$str = $rw1["pril8"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril8"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril9']) ) {$str = $rw1["pril9"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril9"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril9']) ) {$str = $rw1["pril9"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril9"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril10']) ) {$str = $rw1["pril10"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril10"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril10']) ) {$str = $rw1["pril10"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril10"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril11']) ) {$str = $rw1["pril11"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril11"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril11']) ) {$str = $rw1["pril11"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril11"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['pril12']) ) {$str = $rw1["pril12"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril12"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['pril12']) ) {$str = $rw1["pril12"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["pril12"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>	
+<!-- кнопка для закрытия приложений -->
+					<div class="child" id="pril-back">
+						<img class="backruk" src="../img/backruk.png">
+						<p><?php echo htmlspecialchars($r['back'], ENT_QUOTES, 'UTF-8'); ?></p>                                                                                          
+					</div>
+				 </div>
+				
+				
+				<div class="disp-none" id="dop-20">
+<?php 
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop1']) ) {$str = $rw1["dop1"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop1"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop1']) ) {$str = $rw1["dop1"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop1"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop2']) ) {$str = $rw1["dop2"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop2"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop2']) ) {$str = $rw1["dop2"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop2"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop3']) ) {$str = $rw1["dop3"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop3"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop3']) ) {$str = $rw1["dop3"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop3"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop4']) ) {$str = $rw1["dop4"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop4"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop4']) ) {$str = $rw1["dop4"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop4"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop5']) ) {$str = $rw1["dop5"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop5"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop5']) ) {$str = $rw1["dop5"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop5"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop6']) ) {$str = $rw1["dop6"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop6"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop6']) ) {$str = $rw1["dop6"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop6"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop7']) ) {$str = $rw1["dop7"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop7"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop7']) ) {$str = $rw1["dop7"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop7"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop8']) ) {$str = $rw1["dop8"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop8"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop8']) ) {$str = $rw1["dop8"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop8"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop9']) ) {$str = $rw1["dop9"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop9"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop9']) ) {$str = $rw1["dop9"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop9"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+<?php
+if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($rw1['dop10']) ) {$str = $rw1["dop10"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value=".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop10"]."><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+else {if( !empty($rw1['dop10']) ) {$str = $rw1["dop10"];$str = str_replace("-", " ", $str);$str = str_replace(".pdf", "", $str);echo "<button class='child btn' formtarget='_blank' type='submit' name='name' value='/rukovodstvo/pdfjs/web/viewer.html?file=/rukovodstvo/komplect/".$let.$rw1["idere"]."/".$rw1["LN"]."/".$rw1["dop10"]."'><img class='docimg' src='../img/pdf.png'><p>".$str."</p></button>";}}
+?>
+
+							
+	<!-- кнопка для закрытия долнений -->
+					<div class="child" id="dop-back">
+						<img class="backruk" src="../img/backruk.png">
+						<p><?php echo htmlspecialchars($r['back'], ENT_QUOTES, 'UTF-8'); ?></p>                                                                                          
+					</div>
+				 </div>
+				</form>         
+
+								   
+	<?php
+	include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+	try {
+		$search = $_COOKIE['Coockie'];
+		$kompl = $_COOKIE['Coockie-kompl'];
+	
+		$lang = $_SESSION['LN'];
+
+		$sql = "SELECT * FROM erekompl INNER JOIN ereizv ON erekompl.idere = ereizv.idere WHERE kompl = '$kompl' AND LN = '$lang' ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$result_array = $statement->fetchAll();
+		foreach ($result_array as $result_row) {
+		}
+	} 
+	catch(PDOException $e) {
+		echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+	}
+	?> 
+
+
+		</div>		
+	</div>		
+			<div class="footer">
+				<div class="foot-div">
+					<img class="foot-img" src="../img/mesfoot.png"/>
+
+					<div class="foot">
+						<p><?php echo htmlspecialchars($r['pismo'], ENT_QUOTES, 'UTF-8'); ?></p>
+						<p>E-mail: <a href="mailto:Aleksey.igovskiy@kamaz.ru">Aleksey.igovskiy@kamaz.ru</a></p>
+					</div>
+				</div>
+				<div class="i-snoska">
+					<img class="foot-img" id="info"  onclick="stateChange()" src="../img/info-white.png"/>
+					<div  id="info-open" id="info-open0"><?php echo "<p>".htmlspecialchars($r['data'], ENT_QUOTES, 'UTF-8')."<br><span >" .$result_row["data"]. "</span></p><p>№ ".htmlspecialchars($r['izv'], ENT_QUOTES, 'UTF-8').": <span>" .$result_row["izvid"]. "</span></p>" ?></div>
+				
+				</div>
+			</div>
+	
+	
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	 
+	 	 <script>
+$('.ln input[type=radio]').on('change', function() {
+    $(this).closest("form").submit();
+});
+</script>
+    <script>
+$(document).ready(function(){
+<!-- при нажатии на переключатель с иконой кубов - отображение плитками -->
+        $("#box-to-line").bind('click', function(){
+		<!-- устанавливает на кнопку подчеркивание -->
+            $("#box-to-line").addClass("active");
+             $("#line-to-box").removeClass("active");
+
+			 <!-- для основного контента добавляет бокс стиль и убирает линию -->
+			 $("#rykov-cont").addClass("box-text");
+			 $("#rykov-cont").removeClass("line-text");
+
+			 $("#pril").css("display", "flex");
+			 
+			  $("#dopol").css("display", "flex");
+			 
+			 $("#pril-8").removeClass("line-text");
+			 $("#pril-8").removeClass("box-text");
+			 
+			 $("#pril-8").css("display","none");
+			 
+			  $("#dop-20").removeClass("line-text");
+			 $("#pril-20").removeClass("box-text");
+			 
+			 $("#dop-20").css("display","none");
+			 
+			  $("#rykov-cont").css("display","flex");
+			
+			 $(".box-text .child .1").attr("src","img/1Cube.png"); 
+			 $(".box-text .child .2").attr("src","img/2Cube.png");
+			 $(".box-text .child .3").attr("src","img/3Cube.png");
+			 $(".box-text .child .4").attr("src","img/4Cube.png");
+			 $(".box-text .child .5").attr("src","img/5Cube.png");
+			 $(".box-text .child .6").attr("src","img/6Cube.png");
+			 $(".box-text .child .7").attr("src","img/7Cube.png");
+			 $(".box-text .child .8").attr("src","img/8Cube.png");
+			 $(".box-text .child .9").attr("src","img/9Cube.png");
+			 $(".box-text .child .10").attr("src","img/10Cube.png");
+			 $(".box-text .child .11").attr("src","img/11Cube.png");
+			 $(".box-text .child .12").attr("src","img/12Cube.png");
+			 $(".box-text .child .13").attr("src","img/13Cube.png");
+			 $(".box-text .child .backruk").attr("src","../img/backruk.png");
+			 $(".box-text .child .docimg").attr("src","../img/pdf.png");
+			
+			
+			$("div.main").removeClass("line");
+			
+			if ( $(window).width() < 950 ) {
+			 $("#pril").css("display", "block");
+			 
+			  $("#dopol").css("display", "block");
+			   $("#rykov-cont").css("display","block");
+			}
+			
+        });
+   <!-- при нажатии на переключатель с иконой линий - отображение строками -->       
+        $("#line-to-box").bind('click', function(){ 
+
+            $("#line-to-box").addClass("active");
+            $("#box-to-line").removeClass("active"); 
+
+			$("#rykov-cont").addClass("line-text");
+			 $("#rykov-cont").removeClass("box-text");
+			  $("#rykov-cont").css("display","flex");
+		 
+			 $(".line-text .child img").attr("src","../img/pdf.png");
+			  $("#pril-8 .child img").attr("src","../img/pdf.png");
+			 $("#pril-8").addClass("line-text");
+			  $("#pril-8").removeClass("box-text");
+			 $("#pril-8").css("display","none");
+			 
+			 $("#dop-20 .child img").attr("src","../img/pdf.png");
+			 $("#dop-20").addClass("line-text");
+			  $("#dop-20").removeClass("box-text");
+			 $("#dop-20").css("display","none");
+			 
+			 $(".child .doc").attr("src","../img/pdf.png");
+			 
+			 $("#pril").css("display", "flex");
+			$("#dopol").css("display", "flex");
+			 
+			$("#pril-back").css("display", "none");
+			$("#dop-back").css("display", "none");
+			
+			$("#pril img").attr("src","../img/docruk.png");
+			 $("#dopol img").attr("src","../img/docruk.png");
+			 
+			 $(".child .backruk").attr("src","../img/backruk.png");
+			 $(".child .docimg").attr("src","../img/pdf.png");
+			
+			$("div.main").addClass("line");
+        });
+    });
+	</script>
+	
+	
+	 <script>
+		
+
+		  function stateChange() {
+   var obj = document.getElementById('info-open');
+	obj.classList.toggle("start-anim");
+
+	  
+ }
+		 
+		 
+	 </script>
+	
+	
+	<script>
+$(document).ready(function(){
+    
+
+<!-- если основа имеет бокс, то открывает приложения, скрыва основу, отображается как плитки-->
+      $("#pril").on('click', function(){
+		if($('#rykov-cont').hasClass('box-text')) {
+			
+				$("#rykov-cont").css("display","none");
+				$("#pril-8").addClass("box-text");
+				<!-- $("#pril-8").css("display","flex"); -->
+				$("#pril-8").removeClass("line-text");
+				$("#pril-8").removeClass("disp-none");
+				
+
+				if ( $(window).width() < 950 ) {
+					$("#pril-8").css("display","block");
+					$("#pril-back").css("display","block");
+				}else {
+					$("#pril-8").css("display","flex");
+					$("#pril-back").css("display","flex");
+				}
+				
+					$(".box-text .child .1").attr("src","img/1Cube.png"); 
+			 $(".box-text .child .2").attr("src","img/2Cube.png");
+			 $(".box-text .child .3").attr("src","img/3Cube.png");
+			 $(".box-text .child .4").attr("src","img/4Cube.png");
+			 $(".box-text .child .5").attr("src","img/5Cube.png");
+			 $(".box-text .child .6").attr("src","img/6Cube.png");
+			 $(".box-text .child .7").attr("src","img/7Cube.png");
+			 $(".box-text .child .8").attr("src","img/8Cube.png");
+			 $(".box-text .child .9").attr("src","img/9Cube.png");
+			 $(".box-text .child .10").attr("src","img/10Cube.png");
+			 $(".box-text .child .11").attr("src","img/11Cube.png");
+			 $(".box-text .child .12").attr("src","img/12Cube.png");
+			 $(".box-text .child .13").attr("src","img/13Cube.png");
+			 $(".box-text .child .backruk").attr("src","../img/backruk.png");
+			 $(".box-text .child .docimg").attr("src","../img/pdf.png");
+
+			  $("#pril-back-line").css("display","none"); 	
+			  			
+		}
+		<!-- если имеет другой класс, присваиваем ему класс линий, не скрыва яоснову, отображается линиями-->
+		else{
+				$("#rykov-cont").css("display","none");
+				
+				$("#pril-8").addClass("line-text");
+				$("#pril-8").removeClass("box-text");
+				
+				$("#pril-8").removeClass("disp-none");
+				$(".child img").attr("src","../img/pdf.png");
+				
+				
+			 $(".child .backruk").attr("src","../img/backruk.png");
+			 $(".child .docimg").attr("src","../img/pdf.png");
+			 	$("#pril img").attr("src","../img/docruk.png");
+				 $("#dopol img").attr("src","../img/docruk.png");
+			
+			 $("#pril").css("display","flex");
+				$("#pril-8").css("display","flex");
+				$("#pril-back").css("display","flex");
+			 
+		}
+		
+		});
+		
+		 $("#dopol").on('click', function(){
+		if($('#rykov-cont').hasClass('box-text')) {
+			
+				$("#rykov-cont").css("display","none");
+				$("#dop-20").addClass("box-text");
+				<!-- $("#pril-8").css("display","flex"); -->
+				$("#dop-20").removeClass("line-text");
+				$("#dop-20").removeClass("disp-none");
+				
+
+					$(".box-text .child .1").attr("src","img/1Cube.png"); 
+			 $(".box-text .child .2").attr("src","img/2Cube.png");
+			 $(".box-text .child .3").attr("src","img/3Cube.png");
+			 $(".box-text .child .4").attr("src","img/4Cube.png");
+			 $(".box-text .child .5").attr("src","img/5Cube.png");
+			 $(".box-text .child .6").attr("src","img/6Cube.png");
+			 $(".box-text .child .7").attr("src","img/7Cube.png");
+			 $(".box-text .child .8").attr("src","img/8Cube.png");
+			 $(".box-text .child .9").attr("src","img/9Cube.png");
+			 $(".box-text .child .10").attr("src","img/10Cube.png");
+			 $(".box-text .child .11").attr("src","img/11Cube.png");
+			 $(".box-text .child .12").attr("src","img/12Cube.png");
+			 $(".box-text .child .13").attr("src","img/13Cube.png");
+			 $(".box-text .child .docimg").attr("src","../img/pdf.png");
+			 $(".box-text .child .backruk").attr("src","../img/backruk.png");
+
+
+	
+			  $("#pril-back-line").css("display","none");
+
+			 if ( $(window).width() < 950 ) {
+			  $("#dop-20").css("display","block");
+				$("#pril-back").css("display","block");
+				$("#dop-back").css("display","block");
+				$("#box-text").css("display","block");
+			 }else{
+			 $("#dop-20").css("display","flex");
+				$("#pril-back").css("display","flex");
+				$("#dop-back").css("display","flex");
+			}
+			 
+			  			
+		}
+		<!-- если имеет другой класс, присваиваем ему класс линий, не скрыва яоснову, отображается линиями-->
+		else{
+				$("#rykov-cont").css("display","none");
+				
+				$("#dop-20").addClass("line-text");
+				$("#dop-20").removeClass("box-text");
+				
+				$("#dop-20").removeClass("disp-none");
+				$(".child img").attr("src","../img/pdf.png");
+				$("#pril img").attr("src","../img/docruk.png");
+				 $("#dopol img").attr("src","../img/docruk.png");
+				//$("#pril-back").css("display","none"); 
+				$("#dop-20").css("display","flex"); 
+				$("#dop-back").css("display","flex"); 
+				 $("#pril").css("display","flex"); 
+				 
+				 
+			<!-- 	$("#pril-back-line").css("display","flex"); -->
+			
+				$(".child .backruk").attr("src","../img/backruk.png");
+			 $(".child .docimg").attr("src","../img/pdf.png");
+		}
+		
+		});
+		
+		<!-- при нажатии на кнопку вернуться назад, скрывает приложения, возвращает основу -->
+		$("#pril-back").on("click", function(){
+		
+			 $("#rykov-cont").css("display","flex");
+				$("#pril-8").removeClass("box-text");
+				
+				$("#pril-8").addClass("disp-none");
+				$("#pril-8").css("display","none");
+				
+				$("#pril-back-line").css("display","none"); 	
+		if($('#rykov-cont').hasClass('box-text')) {	
+				 if ( $(window).width() < 950 ) {
+					$("#rykov-cont").css("display","block");
+				 }
+		}	
+		});
+	
+	$("#dop-back").on("click", function(){
+			 $("#rykov-cont").css("display","flex");
+				$("#dop-20").removeClass("box-text");
+				
+				$("#dop-20").addClass("disp-none");
+				$("#dop-20").css("display","none");
+				
+				$("#pril-back-line").css("display","none"); 	
+			if($('#rykov-cont').hasClass('box-text')) {	
+				 if ( $(window).width() < 950 ) {
+					 $("#rykov-cont").css("display","block");
+				 }
+		}
+		});
+	
+    });
+	
+	</script>
+	
+	<script>
+	$(document).ready(function() {
+		$("#btn-open-preview").click(function () { 
+			$("#preview-docs").toggleClass('active');
+			});
+	});		
+	</script>
+	
+</body>
+
+
+
+</html>

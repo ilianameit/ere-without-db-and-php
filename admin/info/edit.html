@@ -1,0 +1,627 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';
+
+try
+	{
+		if (!empty($_POST['id'])) 
+		{
+			$idd = $_POST['id'];
+				
+			$result = $pdo->query("SELECT * FROM infomaterial WHERE mnomer = '$idd' "); 
+					
+			foreach ($result as $row)
+				{
+					$massiv[] = array('id' => $row['id'], 'mnomer' => $row['mnomer'], 'numberzch' => $row['numberzch'], 'namezch' => $row['namezch'], 'ves' => $row['ves'], 'kol' => $row['kol'], 'zchizv' => $row['zchizv'] );	
+					
+				}
+				
+				
+			$result2 = $pdo->query("SELECT * FROM infooper WHERE mnomer = '$idd' "); 
+					
+			foreach ($result2 as $row2)
+				{
+					$massiv2[] = array('id' => $row2['id'], 'mnomer' => $row2['mnomer'], 'codoper' => $row2['codoper'], 'nameoper' => $row2['nameoper'], 'work' => $row2['work'] );	
+					
+				}
+				
+				
+				
+			$result3 = $pdo->query("SELECT * FROM infopril WHERE mnomer = '$idd' "); 	
+				  foreach ($result3 as $row3){
+				  
+				  $massiv3[] = array('mnomer' => $row3['mnomer'], 'instruction1' => $row3['instruction1'], 'instruction2' => $row3['instruction2'], 'instruction3' => $row3['instruction3'], 'instruction4' => $row3['instruction4'], 'instruction5' => $row3['instruction5'], 'original' => $row3['original'] );
+
+				  }
+
+  
+
+		}
+		
+		
+	}
+catch (PDOException $e)
+	{
+		$error = 'Ошибка: Вывода расходников в БД';
+	}
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+    <title><?php htmlout($pageTitle); ?></title>
+  </head>
+
+  <body>
+
+  		<div class="heading">
+			<h1><?php htmlout($pageTitle); ?></h1>
+		</div>
+
+	<a href="index.php" class="back"></a>
+	
+    <form class="wrap" action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">      
+		  <div  class="ser-edit">
+				<div class="pismo">
+					<div class="head">
+						<label for="data"><div class='title'>Дата письма:</div><textarea class="textarea-line" rows="1" placeholder="Дата письма" name="data" value=""><?php htmlout($data); ?></textarea></label>
+					</div>
+					<div>
+						<label for="nazvanie"><div class='title'>Название письма:</div><textarea class="textarea-line" rows="1" placeholder="Наименование письма" name="nazvanie" value=""><?php htmlout($nazvanie); ?></textarea></label>
+					</div>
+					<div>
+						<label><div class='title'>Информационное письмо № </div><input readonly  placeholder="№ письма" type="text" name="nomer" value="<?php htmlout($id); ?>"></label>
+						
+					</div>
+					<div>
+							<label for="rasprostranenie"><div class='title'>Сообщение распространяется на:</div><textarea class="textarea-line" rows="1" placeholder="Распространение" name="rasprostranenie" value=""><?php htmlout($rasprostranenie); ?></textarea></label>
+					</div>					
+					<div>
+							<label for="dorabotka"><div class='title'>Причина доработки:</div><textarea class="textarea-line" rows="1" placeholder="Доработка" name="dorabotka" value=""><?php htmlout($dorabotka); ?></textarea></label>
+					</div>
+					<div>
+							<label for="zatrat"><div class='title'>Затраты по доработке:</div><textarea class="textarea-line" rows="1" placeholder="Затраты по доработке" name="zatrat" value=""><?php htmlout($zatrat); ?></textarea></label>
+					</div>						
+					<div>
+							<?php echo "<input class='dis' name='status' ".($row['status'] == 1 ? "checked='checked'" : "")."type='checkbox' value='".$row["status"]."' disabled> ";?>	
+					</div>
+				
+					
+					<table class="table serv" id="node1">
+						<tr>
+							<td>Код операции</td>
+							<td>Наименование операции</td>
+							<td>Трудоемкость</td>
+						</tr>
+						<tr>
+<?php 
+foreach ($massiv2 as $mess2) {
+				echo '<tr>';
+				echo '<td><textarea class="textarea-line" rows="1" name="codoper['.$mess2['id'].']" value="">'.$mess2['codoper'].'</textarea></td>';
+				echo '<td class="name"><textarea class="textarea-line" rows="1" name="nameoper['.$mess2['id'].']" value="">'.$mess2['nameoper'].'</textarea></td>';
+				echo '<td><textarea class="textarea-line" rows="1" name="work['.$mess2['id'].']"  value="">'.$mess2['work'].'</textarea></td>';
+				echo '<td class="check delete"><label><input type="checkbox" name="delete2[]"  value="'.$mess2['id'].'"><div></div></label></td>';
+				echo '<input type="hidden" name="id[]"  value="'.$mess2['id'].'">';
+				echo '</tr>';
+}
+?>	
+						</tr>				
+					</table>
+					<div class="plus">
+						<div id="addRow1" class='plus-btn'>+</div>
+						<div id="delRow1" class='minus-btn'>-</div>
+					</div>
+					
+					
+
+					
+				</div>
+				
+
+
+			<table class="table serv" id="node">
+				<tr>
+					<td>Каталожный номер детали</td>
+					<td>Наименование запасной части</td>
+					<td>Кол-во</td>
+					<td>Ед измерения</td>
+					<td>№ извещения</td>
+				</tr>	
+<?php 
+foreach ($massiv as $mess) {
+				echo '<tr>';
+				echo '<td class="numdet"><textarea class="textarea-line" rows="1" name="numberzch['.$mess['id'].']" value="">'.$mess['numberzch'].'</textarea></td>'; 
+				echo '<td class="name"><textarea class="textarea-line" rows="1" name="namezch['.$mess['id'].']" value="">'.$mess['namezch'].'</textarea></td>';     
+				echo '<td><textarea class="textarea-line" rows="1" name="kol['.$mess['id'].']"  value="">'.$mess['kol'].'</textarea></td>';            
+				echo '<td><textarea class="textarea-line" rows="1" name="ves['.$mess['id'].']"  value="">'.$mess['ves'].'</textarea></td>';
+				echo '<td><textarea class="textarea-line izv" rows="1" name="zchizv['.$mess['id'].']"  value="" placeholder="№ извещения">'.$mess['zchizv'].'</textarea></td>';
+				echo '<td class="check delete"><label><input type="checkbox" name="delete[]"  value="'.$mess['id'].'"><div></div></label></td>';
+				echo '<input type="hidden" name="id[]"  value="'.$mess['id'].'">';
+				echo '</tr>';
+}
+?>				
+			</table>
+				<div class="plus">
+					<div id="addRow" class='plus-btn'>+</div>
+					<div id="delRow" class='minus-btn'>-</div>
+				</div>	
+				
+			<div class="pismo prim">	
+					<div>
+							<label for="primechanie"><div class='title'>Примечание:</div><textarea class="textarea-line" rows="1" placeholder="primechanie" name="primechanie" value=""><?php htmlout($primechanie); ?></textarea></label>
+					</div>
+			</div>	
+<?php 
+	$idd = $_POST['id'];
+	
+	$resultdirection = $pdo->query("SELECT DISTINCT direction FROM infomessage WHERE id = '$idd' "); 
+	  $resultdirection->execute();
+	   $resultdir = $resultdirection->fetchAll();
+	 foreach ($resultdir as  $i => $rowdir) {
+	 	//$massivdir[] = array('direction' => $rowdir['direction']);
+		$dir = $rowdir[0];
+		//echo($i .'=>'.$dir);	
+	
+
+	
+	
+	//$sql = ("SELECT * FROM infovin WHERE mnomer = '$idd' ");
+	//$sql = ("SELECT infovin.mnomer, infovin.vin, infovin.stata, infomessage.direction FROM ere.infovin INNER JOIN infomessage ON infovin.mnomer = infomessage.id AND infovin.direction = infomessage.direction where infovin.mnomer='$idd' and infovin.direction='$dir'");
+	$sql = ("SELECT  infovin.mnomer,infovin.vin, infomessage.direction FROM ere.infovin INNER JOIN infomessage ON infovin.mnomer = infomessage.id AND infovin.direction = infomessage.direction where infovin.direction='$dir' AND infovin.mnomer='$idd'");
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $j => $row) {
+	
+	//$massiv3[] = array('vin' => $row['vin']);	
+	
+	 //echo($dir.' - '.$j.' => '. $row[1]);
+	 
+    }
+	 }
+?>				
+				
+				
+			<h2 class='headdefauto'>Перечень дефектной автотехники</h2>	
+			<div class="block" id='vins'>
+				<input class="dis" type="checkbox" name="stata" value = "1" disabled />
+				<?php 
+				//foreach ($massivdir as $dir) {
+				// foreach ($resultdir as $rowdir) {
+				 foreach ($resultdir as  $i => $rowdir) {
+				 $dir = $rowdir[0];
+				echo '<div class="area-vin edit">
+					<div>
+						<div class="dir-head">
+							<input readonly class="direction" name="direction[]" type="text" placeholder="Введите направление" value="'.$dir.'">
+							<div  class="check delete deldir"><label><input type="checkbox" name="deletedirection[]"  value="'.$dir.'"><div></div></label></div>
+						</div>
+				';
+//					 echo '<textarea name="vin[]">';
+//				//	foreach ($massiv3 as $mess3) 
+//				//	foreach ($massiv3 as $mess3) 
+//				//	{$mess4[] = $mess3['vin'];}
+//				//	echo implode("\n", $mess4);
+//				
+//				$sql = ("SELECT  infovin.mnomer,infovin.vin, infomessage.direction FROM ere.infovin INNER JOIN infomessage ON infovin.mnomer = infomessage.id AND infovin.direction = infomessage.direction where infovin.direction='$dir' AND infovin.mnomer='$idd'");
+//    $statement = $pdo->prepare($sql);
+//    $statement->execute();
+//    $result = $statement->fetchAll();
+//					foreach ($result as $j => $row) {
+//					 echo $row[1]."\n" ;
+//  //echo "<div class="check delete"><label><input type='checkbox' name='delete[]'  value=''.$row[1].''><div></div></label></div>";
+//					}
+//					echo '
+//					
+//					
+//					</textarea>
+					
+//				echo '<div contenteditable="true"> ';
+				echo '<div class="vinlist">';
+					$sql = ("SELECT  infovin.mnomer,infovin.vin, infomessage.direction FROM ere.infovin INNER JOIN infomessage ON infovin.mnomer = infomessage.id AND infovin.direction = infomessage.direction where infovin.direction='$dir' AND infovin.mnomer='$idd'");
+					$statement = $pdo->prepare($sql);
+					$statement->execute();
+					$result = $statement->fetchAll();
+						foreach ($result as $j => $row) {
+							 echo"<div class='textarealine'><div class='check delete'><label>". $row[1]."<input type='checkbox' name='deletevin[]'  value='".$row[1]."'><div></div></label></div></div><br>" ;
+						 }
+					echo '	 	</div>';
+					echo '	 	</div>';
+				echo '<div class="area-vin end"> ';
+						 echo'<textarea name="vinedit[]" placeholder="Введите список VIN:"></textarea>';
+				echo '</div>	';			
+					
+					
+					
+					
+					
+					
+					
+					
+				echo ' </div>';
+				}
+				?>
+				<div class="plus rightblock">
+					<div id="add-area-vin" class='plus-btn'>></div>
+					<div id="del-area-vin" class='minus-btn'><</div>
+				</div>	
+				<div class="modal-win" id="mod-wind-save">	
+					<div class="window" >
+						<h3>Внимание</h3>
+						<div class="p">
+							<p>Вы действительно хотите удалить данное направление? Данное действие нельзя отменить.</p>
+						</div>
+						<div class="buttons">
+							<div class="delcheck"><input  type="button" value="Удалить"></div>
+							<div class="close-window otmena"><input  type="button" value="Отмена"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="ser-pril-block" id='ser-pril-block'>
+				
+				<?php 
+foreach ($massiv3 as $mess) {
+
+				echo'<div class="ser-pril">
+					<p>Оригинал документа:</p>
+					<label for="origin">
+							<div class="input-text" >
+								<input id="origin"  type="text" name="origin" value='.$mess['original'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-orig">Выберите файл...<input id="orf1" type="file" name="attachmentor1" accept="application/pdf"></div>
+							</div>
+					</label>
+				</div> ';
+				echo '<div class="ser-pril">
+					<p>Приложение 1:</p>
+						<label for="instruction1">
+							<div class="input-text" >
+								<input   type="text" name="instruction1" id="instruction1" value='.$mess['instruction1'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i1">Выберите файл...<input id="f1" type="file" name="attachment1" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>';
+				if( !empty($mess['instruction2']) ){
+				echo '<div class="ser-pril">
+					<p>Приложение 2:</p>
+						<label for="instruction2">
+							<div class="input-text" >
+								<input   type="text" name="instruction2" id="instruction2" value='.$mess['instruction2'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i2">Выберите файл...<input id="f2" type="file" name="attachment2" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>';
+				
+				}if( !empty($mess['instruction3']) ){
+				echo '<div class="ser-pril">
+					<p>Приложение 3:</p>
+						<label for="instruction3">
+							<div class="input-text" >
+								<input   type="text" name="instruction3" id="instruction3" value='.$mess['instruction3'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i3">Выберите файл...<input id="f3" type="file" name="attachment3" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>';
+				
+				}if( !empty($mess['instruction4']) ){
+				echo '<div class="ser-pril">
+					<p>Приложение 4:</p>
+						<label for="instruction4">
+							<div class="input-text" >
+								<input   type="text" name="instruction4" id="instruction4" value='.$mess['instruction4'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i4">Выберите файл...<input id="f4" type="file" name="attachment4" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>';
+				
+				}if( !empty($mess['instruction5']) ){
+				echo '<div class="ser-pril">
+					<p>Приложение 5:</p>
+						<label for="instruction5">
+							<div class="input-text" >
+								<input   type="text" name="instruction5" id="instruction5" value='.$mess['instruction5'].'>
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i5">Выберите файл...<input id="f5" type="file" name="attachment5" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>';
+				
+				}
+}
+?>
+			</div>
+			<div class="plus">
+				<div id="addPril" class='plus-btn'>+</div>
+				<div id="delPril" class='minus-btn'>-</div>
+			</div>	
+			</div>	
+				<div  class="foot-serv">
+						<button id = "button-add">Изменить...<input name="submit" type="submit" value="<?php htmlout($button); ?>"></button>
+				</div>
+		
+		
+		</form>
+ 
+<script>
+//$('#ser-pril-block .input-text input').change(function() {    
+$('#ser-pril-block').on('change', '.input-text input', function() {   
+
+    $(this).val($(this).val().replace(/ /g,"-"));
+});
+</script>  
+<script>
+document.getElementById('orf1').onchange = function () {
+    document.getElementById('origin').value = document.getElementById('orf1').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-orig');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}  
+
+document.getElementById('f1').onchange = function () {
+    document.getElementById('instruction1').value = document.getElementById('f1').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-i1');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}  
+		//
+if ( document.getElementById("f2") ) {
+		document.getElementById('f2').onchange = function () {
+		document.getElementById('instruction2').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i2');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f3") ) {
+	document.getElementById('f3').onchange = function () {
+		document.getElementById('instruction3').value = document.getElementById('f3').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i3');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f4") ) {
+document.getElementById('f4').onchange = function () {
+    document.getElementById('instruction4').value = document.getElementById('f4').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-i4');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}
+}
+if ( document.getElementById("f5") ) {
+document.getElementById('f5').onchange = function () {
+    document.getElementById('instruction5').value = document.getElementById('f5').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-i5');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}
+}
+//
+</script>  
+
+  
+<script>
+var node = document.getElementById("node");
+document.getElementById("addRow").onclick = function() {
+    var row = document.createElement("tr");
+    row.innerHTML = "<td><textarea class='textarea-line' rows='1' name='num[]' value='<?php htmlout($num); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='nam[]'  value='<?php htmlout($nam); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='kolvo[]' value='<?php htmlout($kolvo); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='massa[]' value='<?php htmlout($massa); ?>'></textarea></td><td><textarea class='textarea-line izv' rows='1'   name='izvechdet[]'  placeholder='№ извещения' value='<?php htmlout($izvechdet); ?>'></textarea></td>";
+    document.getElementById("node").appendChild(row);
+	
+	var delRow = document.getElementById("delRow");
+	delRow.style.display = 'inline-block';
+	delRow.onclick = function() {
+		if(node.children.length >= 2){
+			node.removeChild(node.lastElementChild);
+		}else{
+			delRow.style.display = 'none';
+		}
+	}
+}
+</script>
+<script>
+var node1 = document.getElementById("node1");
+
+document.getElementById("addRow1").onclick = function() {
+    var row = document.createElement("tr");
+	var delRow1 = document.getElementById("delRow1");
+	
+    row.innerHTML = "<td><textarea class='textarea-line' rows='1' name='code[]' value='<?php htmlout($code); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='nameo[]'  value='<?php htmlout($nameo); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='workm[]' value='<?php htmlout($workm); ?>'></textarea></td>";
+    node1.appendChild(row);
+	
+	delRow1.style.display = 'inline-block';
+	
+	delRow1.onclick = function() {
+		if(node1.children.length >= 2){
+			node1.removeChild(node1.lastElementChild);
+		}else{
+			delRow1.style.display = 'none';
+		}
+	}
+}
+</script>
+
+<script>
+var $parent = $('.ser-edit');
+$parent.on('paste input click', '.textarea-line', function () {
+    if ($(this).outerHeight() > this.scrollHeight){
+        $(this).height(1)
+    }
+    while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))){
+        $(this).height($(this).height() + 1)
+    }
+});
+</script>
+
+<script>
+	var textarea = document.querySelectorAll('.vin');
+	var maxheight = 300;
+
+	for (var i = 0 ; i < textarea.length; i++) {
+		textarea[i].addEventListener('keyup', function(){
+		  if(this.scrollTop > 0 && this.scrollTop < maxheight){
+			this.style.height = this.scrollHeight + "px";
+		  }
+		});
+		
+	
+	}
+</script>
+
+<script>
+var vins = document.getElementById("vins");
+
+var count=document.querySelectorAll('area-vin').length;	
+document.getElementById("add-area-vin").onclick = function() {
+	var block = document.createElement("div");
+	var rightblock = document.querySelectorAll('.plus.rightblock');
+	var delblock = document.getElementById("del-area-vin");
+
+	block.classList.add("area-vin");
+	block.classList.add("edit");
+    block.innerHTML = "<div><input class='direction' type='text' name='directionadd[]' placeholder='Введите направление'></div><textarea name='vinadd[]' placeholder='Введите список VIN:'></textarea>";
+    vins.appendChild(block);
+		count++;
+	delblock.style.display = 'inline-block';
+	
+	delblock.onclick = function() {
+		count--;
+		if(vins.children.length >=	 1){
+			vins.removeChild(vins.children[vins.children.length-2]);
+		}
+		if(count==0){
+			delblock.style.display = 'none';
+		}
+	}
+	for (var i = 0 ; i < rightblock.length; i++) {
+		vins.appendChild(rightblock[i]);
+	}
+}
+</script>
+<script>
+var prilBlock = document.getElementById("ser-pril-block");
+var addPril = document.getElementById("addPril");
+	var i = prilBlock.children.length;	
+	var pril = prilBlock.children.length;	
+	var delPril = document.getElementById("delPril");
+
+addPril.onclick = function() {
+    var divPril = document.createElement("div");
+		divPril.classList.add("ser-pril");
+		
+		if(i<5){
+		i++;
+		divPril.innerHTML = "<p>Приложение "+(i)+":</p><label for='instruction"+(i)+"'><div class='input-text' ><input id='instruction"+(i)+"' type='text' name='instruction"+(i)+"'></div><div class='input-file'><div class='choosebtn' id='button-i"+(i)+"'>Выберите файл...<input  id='f"+(i)+"'type='file' name='attachment"+(i)+"' accept='application/pdf'></div></div></label>";
+
+    prilBlock.appendChild(divPril);
+	delPril.style.display = 'inline-block';
+	
+	
+	if(i==5){addPril.style.display = 'none';}
+	
+	
+	
+	
+		//
+if ( document.getElementById("f2") ) {
+		document.getElementById('f2').onchange = function () {
+		document.getElementById('instruction2').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "");
+		let elem = document.getElementById('button-i2');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f3") ) {
+	document.getElementById('f3').onchange = function () {
+		document.getElementById('instruction3').value = document.getElementById('f3').value.replace(/.*[\\\/]/, "");
+		let elem = document.getElementById('button-i3');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f4") ) {
+document.getElementById('f4').onchange = function () {
+    document.getElementById('instruction4').value = document.getElementById('f4').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-i4');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}
+}
+if ( document.getElementById("f5") ) {
+document.getElementById('f5').onchange = function () {
+    document.getElementById('instruction5').value = document.getElementById('f5').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-i5');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}
+}
+//
+	
+	
+	}
+	
+	delPril.onclick = function() {
+	i--;
+	if(i==pril){
+		delPril.style.display = 'none';
+	}
+	addPril.style.display = 'inline-block';
+			prilBlock.removeChild(prilBlock.lastElementChild);
+		}
+	}
+
+</script> 
+<script>
+$(document).ready(function(){
+	 $('.deldir').click(function(e){ 
+	
+
+
+	$ind = $('.deldir').index(this);
+	$target =  $(event.target);
+
+		$('#mod-wind-save').addClass("active"); 
+
+	
+		$('.modal-win .window .delcheck').click(function(){ 
+		//$target.css("backgroundColor", "red");
+		
+	$target.prop('checked', true); 
+			$('.modal-win').removeClass("active");// var $target = undefined;
+			$target = undefined;
+			
+		});
+		
+
+		$('.modal-win .window .close-window').click(function(){ 
+		$target.prop('checked', false);
+		
+		//$target.css("backgroundColor", "transparent");
+
+			$('.modal-win').removeClass("active"); 
+			$target = undefined;
+			
+		});  
+
+	}); 
+	
+});
+
+</script>
+
+ </body>
+</html>

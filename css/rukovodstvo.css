@@ -1,0 +1,83 @@
+
+@font-face {
+    font-family: 'pfd';
+    src: url('../fonts/pfdindisplaypro-xthin.ttf');
+}
+html, body, p, h1, input, button {
+    font-family: 'pfd', sans-serif;
+}
+
+button { border:0px;background:transparent;padding:0px;margin:0px;}
+
+html,body{background:#272727;height:100%;margin:0 auto;}
+
+.circle {
+	background-image:url("../rukovodstvo/img/osnova2.png");
+	background-repeat:no-repeat;
+	background-position:center center;
+	overflow:hidden;
+	margin:50px auto;
+	position: relative;
+	width:1200px;
+	height:800px;
+	}
+
+h1 {color:#34f6ff;text-align:center;font-weight:500;}
+@keyframes rotation {
+    0% {
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+}
+.active{
+    animation-name: rotation;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+/*  .img2:hover {transform: rotate(360deg);transition: transform 1s;}  */
+
+button, button:active, button:focus {outline: none;}
+.img1 {position:absolute;left:245px;top:450px;width:10%;display:none;}
+.img2 {position:absolute;left:235px;top:270px;width:10%;display:none;}
+.img3 {position:absolute;left:347px;top:108px;width:10%;display:none;}
+.img4 {position:absolute;left:540px;top:40px;width:10%;display:none;}
+.img5 {position:absolute;left:730px;top:105px;width:10%;display:none;}
+.img6 {position:absolute;left:844px;top:270px;width:10%;display:none;}
+.img7 {position:absolute;left:837px;top:448px;width:10%;display:none;}
+.img8 {position:absolute;left:716px;top:596px;width:10%;display:none;}
+.img9 {position:absolute;left:540px;top:649px;width:10%;display:none;}
+.img10 {position:absolute;left:359px;top:597px;width:10%;display:none;}
+.img11 {position:absolute;left:422px;top:173px;width:30%;display:none;}
+
+.text1 {font-size:32px;color:#969696;position:absolute;left:120px;top:560px;cursor:pointer;z-index:999;}
+.text2 {font-size:32px;color:#969696;position:absolute;left:230px;top:370px;cursor:pointer;z-index:998;}
+.text3 {font-size:32px;color:#969696;position:absolute;left:350px;top:200px;cursor:pointer;z-index:997;}
+.text4 {font-size:32px;color:#969696;position:absolute;left:780px;top:80px;cursor:pointer;z-index:996;}
+.text5 {font-size:32px;color:#969696;position:absolute;left:1230px;top:210px;cursor:pointer;z-index:995;}
+.text6 {font-size:32px;color:#969696;position:absolute;left:1330px;top:390px;cursor:pointer;z-index:994;}
+.text7 {font-size:32px;color:#969696;position:absolute;left:1320px;top:570px;cursor:pointer;z-index:993;}
+.text8 {font-size:32px;color:#969696;position:absolute;left:1230px;top:700px;cursor:pointer;z-index:992;}
+.text9 {font-size:32px;color:#969696;position:absolute;left:890px;top:855px;cursor:pointer;z-index:991;}
+.text10 {font-size:32px;color:#969696;position:absolute;left:300px;top:735px;cursor:pointer;z-index:990;}
+.text11 {font-size:32px;color:#969696;position:absolute;left:840px;top:475px;cursor:pointer;z-index:989}
+
+span {color:white;}
+.l1d,.l2d,.l3d,.l4d,.l5d,.l6d,.l7d,.l8d,.l9d,.l10d {display:none;}
+.back{position: absolute;top: 5%;left: 10%;color: white;font-size: 18px;text-decoration: none;}
+
+
+@media (max-width: 1100px) { 
+/* Меню */
+	.circle {display:none;}
+	.text1, .text2, .text3, .text4, .text5, .text6, .text7, .text8, .text9, .text10, .text11 {font-size:18px;margin:10px 0;padding:10px;color:white;position:relative;width:80%;top:0;left:0;	background: linear-gradient(to right, transparent, #075166);border: 2px solid transparent;border-left:none;border-image: linear-gradient(to right, transparent , #00D0FF);-moz-border-image: -moz-linear-gradient(to right, transparent , #00D0FF);-webkit-border-image: -webkit-linear-gradient(to right, transparent , #00D0FF);border-image-slice: 1;cursor:pointer;}
+	.div4ik {text-align:center;}
+	h1 {font-size:22px;margin:20px 100px;}
+.l1d,.l2d,.l3d,.l4d,.l5d,.l6d,.l7d,.l8d,.l9d,.l10d {visibility:hidden;}
+
+
+
+}

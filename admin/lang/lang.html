@@ -1,0 +1,67 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; 
+
+?>
+	
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Языковая панель</title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+  </head>
+
+    
+   <body class="main wrap">
+
+<a class="back"><?php include '../logout.inc.html.php'; ?></a>	
+	
+		<div class="heading">
+			<h1>Языковая панель</h1>
+		</div>
+	 <div class="main ere-tab">	
+		<div class="table-kr" >
+			<div class="line-kr" id="title-kr" >
+				<div  class="filter-div">
+					Страница
+				</div>
+				<div id="empty-div"></div>
+			</div>
+			<div id="search_box-result">
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div>Презентационная</div>
+					  <div><input type="hidden" name="page" value="page_present"><input type="submit" name="action" value="Edit"></div>
+				  </div>
+			  </form>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div>Ввод VIN</div>
+					  <div><input type="hidden" name="page" value="page_vin"><input type="submit" name="action" value="Edit"></div>
+				  </div>
+			  </form>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div>Меню</div>
+					  <div><input type="hidden" name="page" value="page_menu"><input type="submit" name="action" value="Edit"></div>
+				  </div>
+			  </form>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div>Руководство</div>
+					  <div><input type="hidden" name="page" value="page_ere"><input type="submit" name="action" value="Edit"></div>
+				  </div>
+			  </form>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div>Сервисная книжка</div>
+					  <div><input type="hidden" name="page" value="page_sk"><input type="submit" name="action" value="Edit"></div>
+				  </div>
+			  </form>
+		</div>
+	</div>	
+		
+		
+  </body>
+</html>

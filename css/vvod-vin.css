@@ -1,0 +1,305 @@
+html,body{background-image:url(../img/backvin.png); background-size:cover;background-repeat:no-repeat;background-position:center center;overflow:hidden;height:100%;margin:0 auto;}
+
+@font-face {
+    font-family: 'pfd';
+    src: url('../fonts/pfdindisplaypro-xthin.ttf');
+}
+html, body, p, h1, input {
+    font-family: 'pfd', sans-serif;
+}
+.glavniy {position:absolute;top:25%;left:25%;text-align:center;}
+
+.forma {margin-top:30%;}
+
+h1 {color:white;font-weight:500;font-size:40px;}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+-webkit-text-fill-color: #FFFFFF;
+-webkit-box-shadow: 0 0 0px 1000px transparent inset;
+transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="search"] { 
+	width:100%;
+	text-align:center;
+	height:50px;
+	font-size:30px;
+	border:none;
+    border-bottom: 1px solid white; /* Параметры рамки */
+    background: transparent; /* Прозрачный фон */
+    padding: 1px 4px; /* Поля вокруг текста */
+    color: #fff; /* Цвет текста */
+   }
+   input[type="search"]::-moz-placeholder {
+    color: white;font-size:30px; /* Цвет подсказывающего текста */
+   }
+   input[type="search"]::-webkit-input-placeholder { color: white;font-size:30px; }
+   input[type="search"]:-ms-input-placeholder { color: white;font-size:30px; }
+   input[type="search"]::-ms-input-placeholder { color: white;font-size:30px; }
+   input[type="search"]::placeholder { color: white;font-size:30px; }
+   input:hover {border:none; border-bottom:1px solid white;outline: none;}
+   input:focus {border:none; border-bottom:1px solid white;outline: none; font-size:30px;}
+   input:active {border:none; border-bottom:1px solid white;outline: none; font-size:30px;}
+   
+#body_button{
+  margin: 0;
+  padding: 0;
+  color: #ddf;
+  text-align: center;
+}
+.button_hola,
+.button_hola::before,
+.button_hola::after,
+.button_hola span,
+.button_hola span::before,
+.button_hola span::after
+{
+  transition: all ease .5s;
+}
+
+.head{    display: flex;justify-content: space-between; align-items: center;}
+
+.back{
+text-decoration:none;
+position: absolute;
+    top: 5%;
+    left: 3%;
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+	
+	width:20px;
+	height:42px;
+	 background-image: url(../img/backgo.png);
+    background-size: 20px;
+	background-repeat:no-repeat;
+	background-position: center;
+	z-index:1;
+}
+.button_hola{
+  position: relative;
+  display: inline-block;
+  padding: 0.3em;
+  margin: 1em;
+  border: solid 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  
+z-index:0;
+ }
+ 
+.button_hola:hover
+{
+  box-shadow: 0 0 5em .5em rgba(50,50,150,0.5);
+}
+ 
+.button_hola span
+{
+  display: inline-block;
+ /* padding: 0.6em 2em; */
+ 
+ z-index:10000;
+}
+
+.button_hola span::before, .button_hola span::after, .button_hola::before,.button_hola::after{
+z-index:-1;
+}
+ 
+.button_hola:hover span
+{
+  background-color: white;
+}
+ 
+.button_hola::before,
+.button_hola::after,
+.button_hola span::before,
+.button_hola span::after
+{
+  content: '';
+  position: absolute;
+  border: 1px;
+}
+ 
+.button_hola::before,
+.button_hola span::before
+{
+  border-style: solid none;  
+}
+ 
+.button_hola::before,
+.button_hola span::after{      
+  left: 0;
+  top: -0.4em;
+  width: 100%; 
+  height: calc(100% + 0.8em);
+}
+ 
+.button_hola::after,
+.button_hola span::after
+{
+  border-style: none solid;   
+}
+ 
+.button_hola::after,
+.button_hola span::before
+{
+  top: 0;
+  left: -0.4em;
+  height: 100%;
+  width: calc(100% + 0.8em); 
+}
+ 
+.button_hola:hover::after,
+.button_hola:hover span::after
+{
+  transform: scaleY(0);
+}
+ 
+.button_hola:hover::before,
+.button_hola:hover span::before
+{
+  transform: scaleX(0);
+}
+ 
+.button_hola:hover span::after,
+.button_hola:hover span::before
+{
+  opacity: 0;
+}
+.but {border:none;color:white;background:none;padding:10px 60px 10px 60px;font-size:20px;cursor:pointer;}
+.button_hola:hover .but {color:black;}
+
+.errorvin {
+    background-color: #dde9f7;
+    position: fixed;
+    top: 40%;
+    left: 30%;
+    width: 40%;
+    height: 10%;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+	font-weight:bold;
+	font-size:30px;
+    border: 1px solid lightgrey;
+    padding: 20px;
+}
+
+.into-admin{
+color:#00badf;
+opacity: .5;
+display: block;
+float: right;
+font-size:22px;
+margin:20px 70px;
+cursor: pointer;
+    text-decoration:none;
+}
+
+.into-admin p{
+display: inline-block; 
+margin: 0 10px;
+}
+
+.version{
+color:gray;
+position: absolute;
+display: block;
+float: left;
+font-size:22px;
+margin:20px 70px;
+bottom:0;
+
+}
+
+.version span:before{
+content:": ";
+}
+
+.version p{
+display: inline-block; 
+margin: 0;
+}
+
+#adm-lock{
+width: 22px;
+height: 30px;
+vertical-align: bottom;
+}
+
+@media (max-width: 930px) { /* это будет показано при разрешении монитора до 930 пикселей */
+  h1 {font-size:24px;} 
+  input[type="search"] {font-size:18px;}
+  input[type="search"]::-moz-placeholder {font-size:18px;}
+  input[type="search"]::-webkit-input-placeholder {font-size:18px; }
+  input[type="search"]:-ms-input-placeholder {font-size:18px; }
+  input[type="search"]::-ms-input-placeholder {font-size:18px; }
+  input[type="search"]::placeholder {font-size:18px; }
+  .but {font-size:15px;}
+  
+  .errorvin {
+    background-color: #dde9f7;
+    position: fixed;
+    top: 40%;
+    left: 5%;
+    width: 80%;
+    height: 70px;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    border: 1px solid lightgrey;
+    padding: 20px;
+	font-weight:bold;
+	font-size:16px;
+}
+.version, .into-admin{
+    margin: 20px 20px;
+}
+  
+}
+
+@media screen and (max-width: 760px) and (orientation: portrait){
+.glavniy{
+transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
+}
+
+@media screen and (min-width: 470px) and (max-width: 760px) and (orientation: landscape){
+.forma {
+    margin-top: 15%;
+}
+}
+@media screen and (min-width: 761px) and (max-width: 1150px) and (orientation: landscape){
+.forma {
+    margin-top: 20%;
+}
+}
+@media screen and (min-width: 761px) and (max-width: 1150px) and (orientation: portrait){
+h1 {font-size:36px;} 
+  input[type="search"],input[type="search"]::-webkit-input-placeholder  {font-size:26px;}
+  .but {font-size:20px;}
+  
+ .glavniy {
+ top:45%;
+     transform: translateY(-50%);}
+}
+
+@media screen and (min-width: 260px) and (max-width: 1150px){
+.back{
+    width: 15px;
+    height: 30px;
+    background-size: 15px;
+}
+}

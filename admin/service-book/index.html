@@ -1,0 +1,519 @@
+<?php
+include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/magicquotes.inc.php';
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/access.inc.php';
+
+if (!userIsLoggedIn())
+{
+  include '../login.html.php';
+  exit();
+}
+
+if (!userHasRole('Редактор СК'))
+{
+  $error = 'Отказано в доступе. У Вас нет привилегии Редактора СК';
+  include '../accessdenied.html.php';
+  exit();
+}
+
+if(userHasRole('Редактор СК Нефаз')){$company='nefaz';$let='n-';}
+elseif(userHasRole('Редактор СК Камаз')){$company='kamaz';$let=null;}
+
+if (isset($_GET['add']))
+{
+  session_start();
+  $pageTitle = 'Добавление СК';
+  $action = 'addform';
+  $name = '';
+  $button = 'Добавить';
+  $semail = $_SESSION['email'];
+
+  include 'add.html.php';
+  exit();
+}
+
+if (isset($_GET['addform']))
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+	
+ try
+  {
+	
+	$sql = 'INSERT INTO skrazdel (id, vp, predpp, ga, vidto, kp, grafto, pwork, spisok, vkl1, vkl2, vkl3, vkl4, LN, company) VALUES (:id, :vp, :predpp, :ga, :vidto, :kp, :grafto, :pwork, :spisok, :vkl1, :vkl2, :vkl3, :vkl4, :LN, :company )';
+	$s = $pdo->prepare($sql);
+    $s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':vp', $_POST['vp']);
+	$s->bindValue(':predpp', $_POST['predpp']);
+	$s->bindValue(':ga', $_POST['ga']);
+	$s->bindValue(':vidto', $_POST['vidto']);
+	$s->bindValue(':kp', $_POST['kp']);
+	$s->bindValue(':grafto', $_POST['grafto']);
+	$s->bindValue(':pwork', $_POST['pwork']);
+	$s->bindValue(':spisok', $_POST['spisok']);
+	$s->bindValue(':vkl1', $_POST['vkl1']);
+	$s->bindValue(':vkl2', $_POST['vkl2']);
+	$s->bindValue(':vkl3', $_POST['vkl3']);
+	$s->bindValue(':vkl4', $_POST['vkl4']);
+	$s->bindValue(':LN', $_POST['LN']);
+	$s->bindValue(':company', $company);
+	$s->execute();	
+  }
+  catch (PDOException $e)
+  {
+   $error = "Ошибка: в добавлении СК dsfds".$company."";
+   include 'error.html.php';
+    exit();
+  }
+  
+  try
+  {
+    $sql = 'INSERT INTO sklog (email, idsk, data, vplog, predpplog, galog, vidtolog, kplog, graftolog, pworklog, spisoklog, vkl1log, vkl2log, vkl3log, vkl4log, LN, company) VALUES ( :semail, :id, now(), :vplog, :predpplog, :galog, :vidtolog,  :kplog, :graftolog, :pworklog, :spisoklog, :vkl1log, :vkl2log, :vkl3log, :vkl4log, :LN, :company)';
+	$s = $pdo->prepare($sql);
+	$s->bindValue(':semail', $_SESSION['email']);
+    $s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':vplog', $_POST['vp']);
+	$s->bindValue(':predpplog', $_POST['predpp']);
+	$s->bindValue(':galog', $_POST['ga']);
+	$s->bindValue(':vidtolog', $_POST['vidto']);
+	$s->bindValue(':kplog', $_POST['kp']);
+	$s->bindValue(':graftolog', $_POST['grafto']);
+	$s->bindValue(':pworklog', $_POST['pwork']);
+	$s->bindValue(':spisoklog', $_POST['spisok']);
+	$s->bindValue(':vkl1log', $_POST['vkl1']);
+	$s->bindValue(':vkl2log', $_POST['vkl2']);
+	$s->bindValue(':vkl3log', $_POST['vkl3']);
+	$s->bindValue(':vkl4log', $_POST['vkl4']);
+	$s->bindValue(':LN', $_POST['LN']);
+	$s->bindValue(':company', $company);
+	
+    $s->execute();	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении логирования';
+    include 'error.html.php';
+    exit();
+  }
+  
+ // ФАЙЛЫ В БД
+
+  if (!empty($_FILES['attachment'])) {
+    $file = $_FILES['attachment'];
+	$file1 = $_FILES['attachment1'];
+	$file2 = $_FILES['attachment2'];
+	$file3 = $_FILES['attachment3'];
+	$file4 = $_FILES['attachment4'];
+	$file5 = $_FILES['attachment5'];
+	$file6 = $_FILES['attachment6'];
+	$file7 = $_FILES['attachment7'];
+	$file8 = $_FILES['attachment8'];
+	$file9 = $_FILES['attachment9'];
+	$file10 = $_FILES['attachment10'];
+	$file11 = $_FILES['attachment11'];
+	
+	
+    $srcFileName = $let.$_POST['id'];
+	$languege = $_POST['LN'];
+
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file1['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file1['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file2['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file2['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file3['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file3['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file4['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file4['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file5['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file5['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file6['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file6['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file7['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file7['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file8['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl1'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file9['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl2'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file10['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl3'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file11['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl4'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+
+}
+//КОНЕЦ ФАЙЛЫ В БД
+
+
+  header('Location: .');
+
+  exit();
+}
+
+
+
+if (isset($_GET['kompl']))
+{
+  $pageTitle = 'Привязка комплектации';
+  $action = 'addkompl';
+  $name = '';
+  $button = 'Добавить';
+
+  include 'kompl.html.php';
+  exit();
+}
+
+if (isset($_GET['addkompl']))
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+
+
+  try
+  {
+	if(isset($_POST['kompl'])) {
+	$kompls = $_POST['kompl'];
+	} 
+    $sql = 'INSERT INTO skkompl (id, kompl, idsk, company) VALUES (:id, :kompl, :idsk, :company )';
+    $s = $pdo->prepare($sql);
+	
+	foreach ($kompls as $kompl) {
+		$s->bindValue(':id', $_POST['id']);
+		$s->bindValue(':kompl', $kompl);
+		$s->bindValue(':idsk', $_POST['idsk']);
+		$s->bindValue(':company', $company);
+		$s->execute();
+	}
+
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В привязке комплектации';
+    include 'error.html.php';
+    exit();
+  }
+
+  header('Location: .');
+  exit();
+}
+
+
+
+if (isset($_POST['action']) and $_POST['action'] == 'Edit')
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+  try
+  {
+    $sql = 'SELECT * FROM skrazdel  WHERE id = :id AND LN = :LN AND  company = :company';
+    $s = $pdo->prepare($sql);
+    $s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':LN', $_POST['LN']);
+	$s->bindValue(':company', $company);
+    $s->execute();
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В выборке комплектации';
+    include 'error.html.php';
+    exit();
+  }
+  
+  
+  $row = $s->fetch();
+
+
+  $pageTitle = 'Редактирование Сервисной книжки '.$row['id'].' ';
+  $action = 'editform';
+  $id = $row['id'];
+  $vp = $row['vp'];
+  $predpp = $row['predpp'];
+  $ga = $row['ga'];
+  $vidto = $row['vidto'];
+  $kp = $row['kp'];
+  $grafto = $row['grafto'];
+  $pwork = $row['pwork'];
+  $spisok = $row['spisok'];
+  $vkl1 = $row['vkl1'];
+  $vkl2 = $row['vkl2'];
+  $vkl3 = $row['vkl3'];
+  $vkl4 = $row['vkl4'];
+  $LN = $row['LN'];
+  
+  $button = 'Сохранить';
+
+  include 'edit.html.php';
+  exit();
+}
+
+if (isset($_GET['editform']))
+{
+  include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+  try
+  {
+    $sql = 'UPDATE skrazdel SET
+		id = :id,
+		vp = :vp,
+		predpp = :predpp,
+		ga = :ga,
+		vidto = :vidto,
+		kp = :kp,
+		grafto = :grafto,
+		pwork = :pwork,
+		spisok = :spisok,
+		vkl1 = :vkl1,
+		vkl2 = :vkl2,
+		vkl3 = :vkl3,
+		vkl4 = :vkl4,
+		LN = :LN,
+		company = :company
+		
+		WHERE id = :id AND LN = :LN';
+    $s = $pdo->prepare($sql);
+	$s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':vp', $_POST['vp']);
+	$s->bindValue(':predpp', $_POST['predpp']);
+	$s->bindValue(':ga', $_POST['ga']);
+	$s->bindValue(':vidto', $_POST['vidto']);
+	$s->bindValue(':kp', $_POST['kp']);
+	$s->bindValue(':vidito', $_POST['vidito']);
+	$s->bindValue(':grafto', $_POST['grafto']);
+	$s->bindValue(':pwork', $_POST['pwork']);
+	$s->bindValue(':spisok', $_POST['spisok']);
+	$s->bindValue(':vkl1', $_POST['vkl1']);
+	$s->bindValue(':vkl2', $_POST['vkl2']);
+	$s->bindValue(':vkl3', $_POST['vkl3']);
+	$s->bindValue(':vkl4', $_POST['vkl4']);
+	$s->bindValue(':LN', $_POST['LN']);
+	$s->bindValue(':company', $company);
+
+    $s->execute();
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В обновлении сервисной книжки';
+    include 'error.html.php';
+    exit();
+  }
+  
+
+ try
+  {
+    $sql = 'INSERT INTO sklog (email, idsk, data, vplog, predpplog, galog, vidtolog, kplog, graftolog, pworklog, spisoklog, vkl1log, vkl2log, vkl3log, vkl4log, LN, company) VALUES ( :semail, :id, now(), :vplog, :predpplog, :galog, :vidtolog,  :kplog, :graftolog, :pworklog, :spisoklog, :vkl1log, :vkl2log, :vkl3log, :vkl4log, :LN, :company)';
+	$s = $pdo->prepare($sql);
+	$s->bindValue(':semail', $_SESSION['email']);
+    $s->bindValue(':id', $_POST['id']);
+	$s->bindValue(':vplog', $_POST['vp']);
+	$s->bindValue(':predpplog', $_POST['predpp']);
+	$s->bindValue(':galog', $_POST['ga']);
+	$s->bindValue(':vidtolog', $_POST['vidto']);
+	$s->bindValue(':kplog', $_POST['kp']);
+	$s->bindValue(':graftolog', $_POST['grafto']);
+	$s->bindValue(':pworklog', $_POST['pwork']);
+	$s->bindValue(':spisoklog', $_POST['spisok']);
+	$s->bindValue(':vkl1log', $_POST['vkl1']);
+	$s->bindValue(':vkl2log', $_POST['vkl2']);
+	$s->bindValue(':vkl3log', $_POST['vkl3']);
+	$s->bindValue(':vkl4log', $_POST['vkl4']);
+	$s->bindValue(':LN', $_POST['LN']);
+	$s->bindValue(':company', $company);
+
+    $s->execute();	
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении логирования';
+    include 'error.html.php';
+    exit();
+  } 
+  
+  
+  // ФАЙЛЫ В БД
+  if (!empty($_FILES['attachment'])) {
+    $file = $_FILES['attachment'];
+	$file1 = $_FILES['attachment1'];
+	$file2 = $_FILES['attachment2'];
+	$file3 = $_FILES['attachment3'];
+	$file4 = $_FILES['attachment4'];
+	$file5 = $_FILES['attachment5'];
+	$file6 = $_FILES['attachment6'];
+	$file7 = $_FILES['attachment7'];
+	$file8 = $_FILES['attachment8'];
+	$file9 = $_FILES['attachment9'];
+	$file10 = $_FILES['attachment10'];
+	$file11 = $_FILES['attachment11'];
+	
+    $srcFileName = $let.$_POST['id'];
+	$languege = $_POST['LN'];
+
+	
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file1['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file1['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file2['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file2['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file3['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file3['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file4['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file4['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file5['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file5['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file6['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file6['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file7['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $file7['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file8['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl1'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file9['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl2'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file10['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl3'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName))mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/' . $srcFileName, 0755); if(!is_dir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege)) mkdir($_SERVER['DOCUMENT_ROOT']. '/services-book/sk/s-b/'.$srcFileName.'/' . $languege, 0755);if(move_uploaded_file($file11['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/services-book/sk/s-b/' . $srcFileName . '/' . $languege . '/'. $_POST['vkl4'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+}
+//КОНЕЦ ФАЙЛЫ В БД
+
+  header('Location: .');
+  exit();
+}
+
+
+
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+if (isset($_GET['add_expsk']))
+{
+  $pageTitle = 'Добавление исключения';
+  $action = 'add_exp';
+  $button = 'Добавить';
+
+  include 'add_exp.html.php';
+  exit();
+}
+
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+if (isset($_GET['add_exp']))
+{
+	
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+try
+  {
+  
+    $sql = 'INSERT INTO iskl_sk ( directory, sk, reason, company) VALUES ( "Справочник", :sk, :reason, :company )';
+   $s = $pdo->prepare($sql);
+	   if(!empty($_POST['sk']) and !empty($_POST['reason'])){
+			foreach ($_POST['sk'] as $i => $sk) {
+				$s->bindValue(':sk', $_POST['sk'][$i]);
+				$s->bindValue(':reason', $_POST['reason'][$i]);
+				$s->bindValue(':company', $company);
+				$s->execute();
+			}
+		}
+		
+  }
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении исключения';
+		foreach ($_POST['sk'] as $i => $sk) {
+	if (empty($sk[$i]) and empty($_POST['reason'][$i])) {
+    $error = 'Ошибка: '.++$i.'. Пустые значения.';
+}
+}
+    include 'error.html.php';
+    exit();
+  }
+  
+  
+  
+  try
+  {
+  
+	$sql = 'INSERT INTO skkompl ( kompl, idsk, company ) VALUES (:kompl, "Справочник", :company)';
+	$d = $pdo->prepare($sql);
+	if(!empty($_POST['sk']) ){
+			foreach ($_POST['sk'] as $k => $komplsk) {
+				$d->bindValue(':kompl', $_POST['sk'][$k]);
+				$d->bindValue(':company', $company);
+				$d->execute();
+			}
+		}
+  } 
+  catch (PDOException $e)
+  {
+    $error = 'Ошибка: В добавлении исключения';
+    include 'error.html.php';
+    exit();
+  }
+
+}
+
+if (isset($_GET['exp']))
+{
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+$pageTitle = 'Список исключений';
+
+  $button = 'Добавить сервисные книжки';
+  $delete = 'Удалить...';
+		if(isset($_POST['delete2']))
+		{
+		
+		
+			try
+			{
+				foreach ($_POST['delete2'] as $d => $del) {
+					//$list = implode("," , $_POST['delete2']);
+					
+					$del = $_POST['delete2'][$d];
+					$sql = "DELETE FROM iskl_sk where sk IN ('$del') and company = '".$company	."'";
+		//			$sql = "SELECT * FROM voen_kompl";
+					$s = $pdo->prepare($sql);
+					$s->execute();
+				}
+			}catch (PDOException $e)
+			  {
+				$e = $_POST['sk'];
+				$error = 'Ошибка: В удалении'.$e.' исключения';
+				include 'error.html.php';
+				exit();
+			  }
+			try{ 
+				foreach ($_POST['delete2'] as $d => $del) {
+					$sql = "DELETE FROM skkompl where kompl IN ('$del') and company = '".$company	."'";
+					$s = $pdo->prepare($sql);
+					$s->bindValue(':kompl', $_POST['sk']);
+					$s->execute();
+				}
+			  }
+			  catch (PDOException $e)
+			  {
+				$e = $_POST['sk'];
+				$error = 'Ошибка: В удалении'.$e.' cправочника';
+				include 'error.html.php';
+				exit();
+			  }
+		}
+	include 'exp.html.php';
+	exit();
+ } 
+
+  if (isset($_GET['otchet']))
+{
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+include 'otchet.php';
+  exit();
+}
+ 
+ 
+ 
+  if (isset($_GET['k']))
+{
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+include 'k.html.php';
+  exit();
+}
+ 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+
+try
+{
+  $result = $pdo->query("SELECT id, LN FROM skrazdel where company='".$company."'");
+}
+catch (PDOException $e)
+{
+  $error = 'Ошибка: Вывода СК из БД';
+  include 'error.html.php';
+  exit();
+}
+
+foreach ($result as $row)
+{
+  $categories[] = array('id' => $row['id'], 'LN' => $row['LN']);
+}
+
+include 'sk.html.php';

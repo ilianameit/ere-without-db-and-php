@@ -1,0 +1,43 @@
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if (!empty($_POST['kompl'])) {
+	
+	$kompl = $_POST['kompl'];
+
+}
+	
+try {
+	
+	$sql = "SELECT DISTINCT DrwNum FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$kompl'";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result_array = $statement->fetchAll();
+	
+	echo "<div class='select acor-kompl'><span>Показать</span><ul class='select_'>";
+	
+    foreach ($result_array as $result_row) {
+	
+		echo " <li>".$result_row["DrwNum"]."</li> ";
+	 
+    }
+	echo "</ul></div>";
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+
+?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+$("div.select span").click(function(){
+// $(this).children('.select_').toggle();
+ $(this).next($('.select_')).toggle();
+
+});
+});
+</script>

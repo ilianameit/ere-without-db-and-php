@@ -1,0 +1,142 @@
+.acordion.ln * {
+    box-sizing: unset;
+}
+.acordion.ln {color:white;}
+
+ body >form  .acordion.ln ,   body > .head > form, body > .heading > form,  body >.name >form{margin-left: calc(3% + 50px);}
+
+  body > .heading > form, body >.name >form, body > .head > form {position:relative;}
+    body > .heading > form {top:-12px;left: -1px;}
+   body > .heading, body >.name,  body > .head{position:relative;}
+ 
+   body > .heading > .title {width:100%;}
+ 
+ .heading{margin-left:0px;}
+ .heading,  body >.name { display: flex;    align-items: center;flex-wrap: nowrap;
+    flex-direction: row;}
+ body >.name {margin-left:0px;margin-right:0px; padding-top: 0;}
+  
+ .heading  h1, .name h1 {width: auto;     margin-left: auto;
+    margin-right: auto;}
+ 
+form{margin-bottom:0}
+
+.acordion.ln > input {
+    display: none;
+}
+
+.acordion.ln > label {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-weight: 300;
+    z-index: 100; 
+}
+.acordion.ln > label {
+    margin: 0 0 5px;
+    padding: 20px 20px 12px;
+    transition: border-bottom .35s;
+	font-size: 16px;
+	text-align: center;
+}
+.acordion.ln > label:before {
+    content: '\276F';
+    float: right;
+    order: 1;
+    width: 20px;
+    text-align: center;
+    flex: 0 1 30px;
+}
+
+.acordion.ln> label:before{
+    content: '';
+}
+.acordion.ln input:checked + label:before {
+    transition: transform .35s;
+    transform: rotate(90deg);
+}
+
+.acordion.ln .acor-body {
+    width: 100%;
+    margin: 0 auto;
+    height: 0;
+    padding: 0 10px;
+    transition: color 0.5s, padding 0.5s, height 2s;
+    overflow: auto;
+}
+
+
+.acordion.ln .acor-body::-webkit-scrollbar { width: 0; }
+.acordion.ln .acor-body { -ms-overflow-style: none; }
+
+.acordion.ln .acor-body{
+position: absolute;
+width: auto;
+}
+.acordion.ln input:checked + label + .acor-body {
+    height: auto;
+    margin-top: -5px;
+    margin-bottom: 5px;
+    padding: 10px 10px 0px;
+	z-index: 1;
+}
+.acordion.ln ul.list {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 0px;
+    list-style: none;
+}
+.acordion.ln > .acor-body > ul li {
+    padding: 0 10px;
+}
+.acordion.ln> .acor-body > ul li{
+margin-top: 5px;
+}
+
+.acordion.ln .acor-body input[type="radio"] {
+    display: none;
+}
+
+.acordion.ln .acor-body  li label > div, .acordion.ln > label div{
+
+	width: 40px;
+    height: 30px;
+	    background-repeat: no-repeat;
+    background-position: center center;
+	    background-size: contain;
+		cursor: pointer;
+}
+
+.acordion.ln > label div{
+border: 1px solid white;}
+
+.acordion.ln .acor-body  li label  > input[value="ru"] + div, .acordion.ln > label[value="ru"] div{
+    background-image: url(../img/ln/rus.png);
+}
+.acordion.ln .acor-body  li label  > input[value="en"] + div, .acordion.ln > label[value="en"] div{
+    background-image: url(../img/ln/eng.png);
+}
+.acordion.ln .acor-body  li label  > input[value="fr"] + div, .acordion.ln > label[value="fr"] div{
+    background-image: url(../img/ln/fr.png);
+}
+.acordion.ln .acor-body  li label  > input[value="es"] + div, .acordion.ln > label[value="es"] div{
+    background-image: url(../img/ln/es.png);
+}
+
+@media screen and (min-width: 260px) and (max-width: 1150px) {
+.acordion.ln > label { padding: 5px 10px 5px;}
+.acordion.ln> .acor-body > ul li {padding-left:0px;padding-right:0px;}
+
+body >form .acordion.ln, body > .head > form,   body >.name >form,   body >.heading >form{
+    margin-left: calc(3% + 20px);
+}
+
+.heading, body >.name ,  body > .head{
+    margin-left: 27px;
+    margin-right: 27px;
+    /*align-items: flex-start; */
+}
+body > .heading > form {    top: -7px;left: -2px;}
+ body > .head{ margin-right: 0px;}
+
+}

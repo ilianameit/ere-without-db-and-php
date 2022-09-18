@@ -1,0 +1,39 @@
+<?php 
+ echo'<form  method="post" action="/info/message/index.php" >';
+
+	
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+		
+		$num = $_POST['num'];
+		
+			try {
+				$sql = "SELECT DISTINCT *  FROM infopril where mnomer='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$origdoc = $statement->fetchAll();
+				
+				
+				
+				foreach ($origdoc as $or) { 
+				
+				$original=$or["original"];
+					if(isset($original)){
+						
+							
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($original) ) {echo "<button class='inst-btn origin-doc' formtarget='_blank'  name='inst' value=".$num."/".$original.">Оригинал документа<span></span></button>";}}	
+						else {if( !empty($original) ){echo "<button class='inst-btn origin-doc' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$num."/".$original."'>Оригинал документа<span></span></button>";}}
+							
+					}
+				}
+			}catch(PDOException $e) {
+				echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+			}						
+	
+	 echo'</form>';
+
+ 
+	 echo'<a href="index.php?otchet='.$num.'"  id="otchet" target="_blank"><div class="otchet-doc">Отчёт<span></span></div></a>'; 
+
+	 echo'<div class="instruc" id="instrukc">Инструкция по доработке<span></span></div>';
+	 echo'<div class="save-changes" id="save-changes">Сохранить<span></span></div>';
+?>

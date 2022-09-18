@@ -1,0 +1,139 @@
+<?php
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+		$num = $_POST['num'];
+	echo'<div>
+					<div class="h-left" ><p>Модель автотехники</p></div>
+					<div >';
+					
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+				
+				$sql = "SELECT DISTINCT DrwNum FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$kompls = $statement->fetchAll();
+				foreach ($kompls as $kompl) {
+				echo"<p class='model'>".$kompl['DrwNum']."</p>";
+				}
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+		
+					
+					
+					
+					
+					echo'</div>
+				</div>
+				<div>
+					<div class="h-left"><p>Сообщение распростроняется на</p></div>
+					<div>';
+				
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT rasprostranenie,dorabotka, primechanie, zatrat  FROM infomessage where id='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$infomess = $statement->fetchAll();
+				foreach ($infomess as $info) {
+				echo"<p>".$info["rasprostranenie"]."</p>";
+				}
+				$dorab = $info["dorabotka"];
+				$prim = $info["primechanie"];
+				$zatrat = $info["zatrat"];
+				
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			
+					
+					
+					
+					
+echo'</div>
+				</div>
+				<div>
+					<div class="h-left"><p>Причина доработки</p></div>
+					<div><p>'.$dorab.'</p></div>
+				</div>
+				<div>
+					<div class="h-left"><p>Затраты по доработке относить на</p></div>
+					<div><p>'.$zatrat.'</p></div>
+				</div>';
+					
+					if($prim){
+					
+					echo"<div>
+					<div class='prim'><p>Примечание</p><p> ".$prim."</p></div>
+					</div>";
+					}
+					
+				
+				
+				
+				
+									
+						
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT *  FROM infooper where mnomer='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$kodop = $statement->fetchAll();
+				
+				
+				
+				
+
+								
+				$stmt = $pdo->query("SELECT count(*)  FROM infooper where mnomer='$num'"); // выполняем запрос
+$count = $stmt->fetch(PDO::FETCH_NUM)[0];
+
+				if($count==1){
+					foreach ($kodop as $kod) {
+						if(!empty($kod["codoper"])) {
+							echo"
+							<div>
+								<div class='h-left'><p>Код операции и трудоемкость</p></div>
+									<div>
+									<p class='codoper'>Код работ: ".$kod["codoper"].". ".$kod["nameoper"].". Трудоемкость: ".$kod["work"].". </p>
+									</div>
+								</div>
+							</div>	";
+						}
+					
+					}
+				} 
+				
+				
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			?>	
+			
+	<script>
+	var cnt = "<?php echo $count; ?>";
+	
+	//<hr class='sep-table'>
+</script>		

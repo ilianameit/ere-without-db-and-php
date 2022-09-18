@@ -1,0 +1,74 @@
+body {
+	overflow:hidden; 
+background: #000000;
+background: -webkit-linear-gradient(top, #000000, #8A8892);
+background: -moz-linear-gradient(top, #000000, #8A8892);
+background: linear-gradient(to bottom, #000000, #8A8892);overflow:hidden;height:100%;margin:0;
+	}
+
+.ba-slider {
+    position: relative;
+	
+	transform: skew(-63deg);
+}
+ 
+.ba-slider img {
+    width: 100%;
+    display:block;
+    max-width:none;
+	transform: skew(63deg);
+	
+}
+ 
+.ba-slider .resize {
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+
+}
+
+
+.ba-slider .handle { /* Thin line seperator */
+  position:absolute; 
+  left:50%;
+  top:0;
+  bottom:0;
+  width:63px;
+  cursor: ew-resize;
+}
+ 
+.ba-slider .handle:after {  /* Big orange knob  */
+    position: absolute;
+	right:50px;
+	transform: skew(62deg);
+    content:"";
+	width:100%;
+	height:46px;
+	bottom:80%;
+	background: url(strelka.png);
+    transition:all 1.3s ease;
+	
+
+}
+
+.ba-slider .handle:before {  /* Big orange knob  */
+    position: absolute;
+
+	transform: skew(62deg);
+    content:"";
+	width:100%;
+	height:46px;
+	bottom:20%;
+	background: url(strelka2.png);
+    transition:all 1.3s ease;
+	
+
+}
+
+.ba-slider .handle.ba-draggable:after {
+
+    font-size:30px;
+}

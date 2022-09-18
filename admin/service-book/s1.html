@@ -1,0 +1,40 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if (!empty($_POST['search'])) {
+	
+	$search = $_POST['search'];
+ 
+	$sth = $pdo->query("SELECT kompl, idsk FROM skkompl where idsk LIKE '$search%'");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+} 
+else {
+	
+	$sth = $pdo->query("SELECT kompl, idsk FROM skkompl");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+}
+	
+	if ($result) {
+		?>
+
+				<?php foreach ($result as $row): ?>
+				<form action="" method="post">
+					<div  class="line-kr">
+						  <div ><?php echo $row['kompl']; ?></div>
+						  <div ><?php echo $row['idsk']; ?></div>
+						 
+						  <!-- <input type="submit" name="action" value="Delete"> -->
+					</div>
+				</form>
+				<?php endforeach; ?>
+			
+			
+		<?php
+	}
+
+?>

@@ -1,0 +1,137 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Сервисная книжка</title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+  </head>
+
+    
+   <body class="main wrap">
+<a class="back"><?php include '../logout.inc.html.php'; ?></a>	
+	
+		<div class="heading">
+			<h1>Панель администратора</h1>
+			<h1>Сервисная книжка</h1>
+		</div>
+	 <div class="main sk-tab">	
+
+		<div  class="table-sk" >
+			<div class="line-filter" id="title-filter" >
+				<div  class="filter-div">СК
+				<form method="post" class="filter kompl" action="">
+					<input type="text" name="search" id="search1" placeholder="Поиск по СК">
+				</form>
+				</div>
+				<div  class="filter-div">Язык
+				<form method="post" class="filter sk" action="">
+					<input type="text" name="search" id="search" placeholder="Поиск по языку">
+				</form>
+				</div>
+				<div id="empty-div"></div>
+			</div>
+			<div class="sk-result" id="search_box-result">
+		  <?php foreach ($categories as $category): ?>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div ><?php htmlout($category['id']); ?></div>
+					  <div ><?php htmlout($category['LN']); ?></div>
+					  <div ><input type="hidden" name="LN" value="<?php echo $category['LN']; ?>"><input type="hidden" name="id" value="<?php echo $category['id']; ?>"><input type="submit" name="action" value="Edit"></div>
+					  <!-- <input type="submit" name="action" value="Delete"> -->
+				  </div>
+			  </form>
+		  <?php endforeach; ?></div>
+		
+			<div class="line-bot" id="foot-kr">
+				<div class="btn-conn">
+					<a href="?kompl">Привязать СК</a>
+				</div>
+				<div class="btn-add-plus">
+					<a href="?add">Добавить новую СК</a>
+				</div>
+<div class="btn-add-plus">
+					<a href="k.html.php">Привязанные комплектации</a>
+				</div>
+				<div class="btn-otchet">
+					<a href="otchet.php" target="_blank">Отчет непривязанных комплектаций</a>
+				</div>
+				
+			</div>
+			
+		
+	</div>
+	</div>	
+		
+		
+  </body>
+  
+  <script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "search.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search1').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "search1.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {
+      $('form').keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+      }
+   });
+});
+</script>
+</html>

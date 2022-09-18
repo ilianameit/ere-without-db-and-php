@@ -1,0 +1,54 @@
+.container {
+   display: grid;
+   grid-template-columns: 150px 20vw [elis] auto 1fr;
+}
+.el {
+   padding: 15px 35px;
+   font-size: 21px;
+   color: #fff;
+   background: lightblue;
+   border: 2px dashed #aaa;
+}
+.el-3 {
+	grid-column: elis;
+}
+
+.main {
+display: grid;
+grid-template-columns:  repeat(14, 1fr);
+ grid-template-rows: [header] 100px [body] auto;
+ 
+grid-column-gap: 2rem;
+grid-row-gap: 1rem;
+
+background-color: gainsboro;
+}
+
+.header {
+    grid-row: header;
+	grid-column: 2 / span 12;
+	background-color: darkcyan;
+}
+.sidebar {
+    grid-row: body;
+    grid-column: 2 / span 4;
+	background-color: darksalmon;
+}
+ 
+.content {
+    grid-row: body;
+    grid-column: 6 / span 8;
+	grid-template-columns:  [left-gutter] 1fr [article] 4fr [info] 2fr [right-gutter] 1fr;
+	background-color: steelblue;
+	grid-column-gap: 2rem;
+	display: grid;
+}
+.article {
+	grid-column: article;
+}
+.info {
+ grid-column: info;
+}
+
+
+

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+	$choicenvin = $_POST['choice'];
+	
+
+try {
+	$sql = "SELECT DISTINCT mnomer, stata, nazvanie FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP INNER JOIN infomessage on infovin.mnomer=infomessage.id where vin='$choicenvin'";
+	$statement = $pdo->prepare($sql);
+	$statement->execute();
+	$nummail = $statement->fetchAll();
+	
+	$numfirst = $nummail[0]["mnomer"];
+	
+}
+catch(PDOException $e) {
+    echo "-";
+}	
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+
+?> 
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+	<link rel="icon" href="../../../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../../../css/admin.css">
+  </head>
+  <body class='wrap hidden'>
+     <a class="back"></a>
+	<div class="heading">
+		<h1>Рабочее место сервисного центра</h1>
+		<p class="m-0">Выбран VIN: <span><?php echo  $choicenvin?></span></p>
+	</div>
+	<!--<form action="" class='serv-mess-button' method='post'>-->
+	
+	<div class="workspace-btn" id='workspace-btn'>
+	<form  method='post' action='/info/message/index.php' >
+	<?php 
+	
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+				$sql = "SELECT DISTINCT *  FROM infopril where mnomer='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$origdoc = $statement->fetchAll();
+				
+				
+				
+				foreach ($origdoc as $or) { 
+				
+				$original=$or["original"];
+					if(isset($original)){
+						
+							
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($original) ) {echo "<button class='inst-btn origin-doc' formtarget='_blank'  name='inst' value=".$numfirst."/".$original.">Оригинал документа<span></span></button>";}}	
+						else {if( !empty($original) ){echo "<button class='inst-btn origin-doc' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$original."'>Оригинал документа<span></span></button>";}}
+							
+					}
+				}
+			}catch(PDOException $e) {
+				echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+			}						
+	?>
+	</form>
+
+ 
+	<?php echo'<a href="index.php?otchet='.$numfirst.'"  id="otchet" target="_blank"><div class="otchet-doc">Отчёт<span></span></div></a>'; ?>
+
+	<div class="instruc" id='instrukc'>Инструкция по доработке<span></span></div>
+	<div class="save-changes" id="save-changes">Сохранить<span></span></div>
+	</div>
+	<form action="index.php" method='post'> 
+	
+
+	<div class="cont-services">
+		<div class='left-div'>
+		<div class='direction'>
+		
+<?php 	
+
+
+
+	
+echo"	<div class=' '><label for='choosdir'>№ письма: ".$numfirst."</label>		
+</div>	";	
+		
+?>		
+		
+		
+		
+		
+		
+		
+		
+		</div>
+		
+	
+
+<input id='choicenvin' type='hidden' name='numvin' value="<?php echo"$choicenvin"; ?>">			
+		<div class="head-mess" id='result-dirvins'>
+		
+<?php 
+try {
+				
+				foreach ($nummail as $vins) {
+				
+					echo "<div class='mail-vin'><button type='button' class='nums' value='".$vins["mnomer"]."' >".$vins["mnomer"].' '.$vins["nazvanie"]."</button><label class='check'>
+					
+					<input type='checkbox'  name='checkmails[]' value='".$vins["mnomer"]."' ";if($vins["stata"]==1){echo" checked='checked' class='notzero'><div></div></label><input class='zero' type='checkbox' name='mailszero[]' value='".$vins["mnomer"]."'>	";}
+					else{echo"><div></div></label>";}echo"
+</div>";
+				 
+				 
+			 
+				}
+				$kompl = $result_row["DrwNum"];
+			}
+
+catch(PDOException $e) {
+    echo "Нет VIN";
+}			
+
+?>			
+			
+			
+			
+		</div>
+
+		</div>
+		
+		<div class="content-mess" >
+			<div class="info-mess">
+				<div class="head" id='namenum_stata'>
+				
+				<?php 
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+				
+				$sql = "SELECT DISTINCT nazvanie  FROM infomessage where id='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$name_mail = $statement->fetchAll();
+				foreach ($name_mail as $name) {
+				echo"<h3>Наименование письма: ".$name['nazvanie']."</h3>";
+				}
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			?>
+				
+					
+			<?php		
+			
+				$stmvin = $pdo->query("SELECT count( distinct stata) FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$numfirst'"); // подсчет
+$countst = $stmvin->fetch(PDO::FETCH_NUM)[0];
+echo'<div class="check"><label for="ready_mail">Выполнено<input type="checkbox"  value="" id="ready_mail" disabled name="statmess" ';
+				if($countst==1){}
+				
+				$sql = "SELECT DISTINCT stata FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$result_stata = $statement->fetchAll();
+				foreach ($result_stata as $stat) {
+				
+					if($countst==1 and $stat['stata']==1){echo' checked="checked" ';}
+					else{echo'';}
+					  }				
+				
+				echo '><div></div></label></div>';	
+			?>		  
+				</div>
+			</div>
+			
+			<div class="list-work" id='list-work'>
+				<div>
+					<div class="h-left" ><p>Модель автотехники</p></div>
+					<div >
+					<?php 
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+				
+				$sql = "SELECT DISTINCT DrwNum FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$kompls = $statement->fetchAll();
+				foreach ($kompls as $kompl) {
+				echo"<p class='model'>".$kompl['DrwNum']."</p>";
+				}
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			?>
+					
+					
+					
+					
+					</div>
+				</div>
+				<div>
+					<div class="h-left"><p>Сообщение распростроняется на</p></div>
+					<div>
+				<?php 
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT rasprostranenie,dorabotka, primechanie, zatrat  FROM infomessage where id='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$infomess = $statement->fetchAll();
+				foreach ($infomess as $info) {
+				echo"<p>".$info["rasprostranenie"]."</p>";
+				}
+				$dorab = $info["dorabotka"];
+				$prim = $info["primechanie"];
+				$zatrat = $info["zatrat"];
+				
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			?>	
+					
+					
+					
+					
+</div>
+				</div>
+				<div>
+					<div class="h-left"><p>Причина доработки</p></div>
+					<div><p><?php echo"$dorab";?>	</p></div>
+				</div>
+				<div>
+					<div class="h-left"><p>Затраты по доработке относить на</p></div>
+					<div><p><?php echo"$zatrat";?></p></div>
+				</div>
+					<?php 
+					if($prim){
+					
+					echo"<div>
+					<div class='prim'><p>Примечание</p><p> ".$prim."</p></div>
+					</div>";
+					}
+					?>
+				
+				
+				
+				
+									
+						<?php 
+
+					
+					
+					
+			include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT *  FROM infooper where mnomer='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$kodop = $statement->fetchAll();
+				
+				
+				
+				
+
+								
+				$stmt = $pdo->query("SELECT count(*)  FROM infooper where mnomer='$numfirst'"); // выполняем запрос
+$count = $stmt->fetch(PDO::FETCH_NUM)[0];
+
+				if($count==1){
+					foreach ($kodop as $kod) {
+						if(!empty($kod["codoper"])) {
+							echo"
+							<div>
+								<div class='h-left'><p>Код операции и трудоемкость</p></div>
+									<div>
+									<p class='codoper'>Код работ: ".$kod["codoper"].". ".$kod["nameoper"].". Трудоемкость: ".$kod["work"].". </p>
+									</div>
+								</div>
+							</div>	
+								";
+						
+						}
+					}
+				} else {
+				
+				echo"
+				</div>
+				<hr class='sep-table' >
+				<div class='oper-table' id='oper-table'>
+					<div class='head-oper white-border'>
+						<div class='w-10'>№<br>п/п</div>
+						<div class='w-40'>Код работ</div>
+						<div class='w-40'>Наименование операций</div>
+						<div class='w-10'>Трудоемкость</div>
+					</div>
+					
+					<div class='perechen-oper'>
+					 
+					
+				";
+				
+				$nn = 0;
+				foreach ($kodop as $kod) { 
+				$nn++;
+				 echo"<div class='oper-line'>
+						<div class='w-10'>$nn</div>
+						<div class='w-40' tabindex='0'>".$kod["codoper"]."</div>
+						<div class='w-40' tabindex='0'>".$kod["nameoper"]."</span></div>
+						<div class='w-10' tabindex='0'>".$kod["work"]."</div>
+					</div>";
+				
+				}echo"</div></div>";
+				}
+				
+				echo "<hr class='sep-table' id='foroper'>
+						<div>Детали, необходимые для проведения доработки на 1 м/к:</div>
+						<hr class='sep-table'>";
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+			?>	
+					
+					
+					
+				
+				
+		
+			
+			<div id="zapchast">
+				<div class="head-zapch	white-border">
+					<div class="w-10">№<br>п/п</div>
+					<div class="w-40" tabindex='0'>Каталожный номер запчасной части</div>
+					<div class="w-40" tabindex='0'>Наименование запасной части</div>
+					<div class="w-10" tabindex='0'>Кол-во</div>
+					<div class="w-10" tabindex='0'>№ извещения</div>
+				</div>
+				
+				<div class="perechen" id='tabledet'>
+				<?php 
+				include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT *  FROM infomaterial where mnomer='$numfirst'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$zpchti = $statement->fetchAll();
+				$nzp = 0;
+				foreach ($zpchti as $zp) { 
+				$nzp++;
+				 echo"<div class='perech-line'>	
+						<div class='w-10'>$nzp</div>
+						<div class='w-40' tabindex='0'>".$zp["numberzch"]."</div>
+						<div class='w-40' tabindex='0'>".$zp["namezch"]."</span></div>
+						<div class='w-10' >".$zp["kol"]."</div>
+						<div class='w-10' tabindex='0'>".$zp["zchizv"]."</span></div>
+					</div>";
+				
+				}
+				}catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+				?>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<div class="modal-win" id="mod-wind-save">
+		<div class="window" >
+			<a href="#" class="close-window"></a>
+			<h3>Внимание</h3>
+			<div class="p">
+				<p>Вы собираетесь внести изменения. Данное действие нельзя отменить.</p>
+				<p>Сохранить изменения?</p>
+			</div>
+			<div class="buttons">
+			
+				<div class="save-ch"><input  type="submit" value="Сохранить"></div>
+				<div class="close-window otmena"><input  type="" value="Отмена"></div>	
+		
+			</div>
+		</div>
+	</div>		
+		
+	<div class="modal-win" id="mod-wind-wout-save">	
+		<div class="window" >
+			<a href="#" class="close-window"></a>
+			<h3>Внимание</h3>
+			<div class="p">
+				<p>Вы собираетесь внести изменения. Данное действие нельзя отменить.</p>
+				<p>Сохранить изменения?</p>
+			</div>
+			<div class="buttons">
+				<div class="save-ch"><input  type="submit" value="Сохранить"></div>
+				<div class="wout-save"><a href="./" >Выйти без сохранения</a></div>
+				<div class="close-window otmena"><input  type="" value="Отмена"></div>
+			</div>
+		</div>
+	</div>
+	</form>
+	<div class="modal-win instrukc" id="mod-wind-instrukc">	
+	<form  method='post' action='/info/message/index.php' >
+		<div class="window" >
+			<a href="#" class="close-window"></a>
+			<h3>Инструкции</h3>
+			<div class="p">
+				<?php 
+					include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+					try {
+						$sql = "SELECT DISTINCT *  FROM infopril where mnomer='$numfirst'";
+						$statement = $pdo->prepare($sql);
+						$statement->execute();
+						$instruk = $statement->fetchAll();
+						$nin = 0;
+						
+						
+						foreach ($instruk as $in) { 
+						
+						$in1=$in["instruction1"];
+						$in2=$in["instruction2"];
+						$in3=$in["instruction3"];
+						$in4=$in["instruction4"];
+						$in5=$in["instruction5"];
+						
+						$nin++;
+						if(isset($in1)){
+						$str = str_replace("-", " ", $in1);
+						$str = str_replace(".pdf", "", $str);
+						//	echo "<p>".$nin.". ".$str."</p>";
+							
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($in1) ) {echo "<button class='inst-btn' formtarget='_blank'  name='inst' value=".$numfirst."/".$in1."><p>".$nin.". ".$str."</p></button>";}}	
+						else {if( !empty($in1) ){echo "<button class='inst-btn' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$in1."'><p>".$nin.". ".$str."</p></button>";}}
+							
+						 } if ( isset($in2) ) {
+						 $nin++;
+						 $str = str_replace("-", " ", $in2);
+						$str = str_replace(".pdf", "", $str);
+						 
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($in2) ) {echo "<button class='inst-btn' formtarget='_blank'  name='inst' value=".$numfirst."/".$in2."><p>".$nin.". ".$str."</p></button>";}}	
+						else {if( !empty($in2) ){echo "<button class='inst-btn' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$in2."'><p>".$nin.". ".$str."</p></button>";}}
+							 
+							 
+						 } if ( isset($in3) ) {
+						 $nin++;
+						$str = str_replace("-", " ", $in3);
+						$str = str_replace(".pdf", "", $str);
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($in3) ) {echo "<button class='inst-btn' formtarget='_blank'  name='inst' value=".$numfirst."/".$in3."><p>".$nin.". ".$str."</p></button>";}}	
+						else {if( !empty($in3) ){echo "<button class='inst-btn' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$in3."'><p>".$nin.". ".$str."</p></button>";}}
+						
+						 } if ( isset($in4) ) {
+						 $nin++;
+						 $str = str_replace("-", " ", $in4);
+						$str = str_replace(".pdf", "", $str);
+						if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($in4) ) {echo "<button class='inst-btn' formtarget='_blank'  name='inst' value=".$numfirst."/".$in4."><p>".$nin.". ".$str."</p></button>";}}	
+						else {if( !empty($in4) ){echo "<button class='inst-btn' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$in4."'><p>".$nin.". ".$str."</p></button>";}}
+						
+						 } if ( isset($in5) ) {
+						 $nin++;
+						 $str = str_replace("-", " ", $in5);
+						$str = str_replace(".pdf", "", $str);
+						 if( !preg_match('/iPhone|iPad|iPod/i', $_SERVER ['HTTP_USER_AGENT']) ) {if( !empty($in5) ) {echo "<button class='inst-btn' formtarget='_blank'  name='inst' value=".$numfirst."/".$in5."><p>".$nin.". ".$str."</p></button>";}}	
+						else {if( !empty($in5) ){echo "<button class='inst-btn' formtarget='_blank'  name='inst' value='/info/pdfjs/web/viewer.html?file=/info/message/".$numfirst."/".$in5."'><p>".$nin.". ".$str."</p></button>";}}
+						
+						 }
+						}
+					}catch(PDOException $e) {
+						echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+					}	
+					
+					?>
+			</div>
+		</div>
+	</form>
+	</div>
+	
+
+		
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>		
+<script>
+			
+			$('.notzero').change(function() {
+			
+			if( $(this).is(':checked') ){
+			 $(this).parent().siblings('input').prop("checked", false);
+			}else{
+			$(this).parent().siblings('input').prop("checked", true);
+			}
+			 
+			});
+			</script>
+	<script>
+
+$(document).ready(function(){
+    $(".head-mess ").on('click', '.mail-vin', function () {
+        $(".head-mess .mail-vin").removeClass("active"); 
+        $(this).addClass("active");
+
+    });
+});
+
+</script>
+
+<script>
+$(document).ready(function(){
+	 $('.workspace-btn').on('click', '#save-changes', function(){ 
+		$('#mod-wind-save').addClass("active"); 
+	}); 
+	
+	$('a.back').click(function(){ 
+		$('#mod-wind-wout-save').addClass("active"); 
+	});  
+
+	$('.modal-win ').on('click', '.window .close-window',  function(){ 
+		$('.modal-win').removeClass("active"); 
+	});  
+	 
+});
+
+</script>
+
+<script>
+$(document).ready(function(){
+	  $('.workspace-btn').on('click','#instrukc', function(){ 
+		$('#mod-wind-instrukc').addClass("active"); 
+	}); 
+
+
+	$('.modal-win .window .close-window').click(function(){ 
+		//$('#mod-wind-instrukc').removeClass("active"); 
+	}); 
+$(document).on('keyup', function(e) {
+	if ( e.key == "Escape"|| e.keyCode === 27 ) {
+		$('.modal-win').removeClass("active"); 
+	}
+});
+$(document).mouseup( function(e){	
+	var div = $(".window");	
+	if (!div.is(e.target) && div.has(e.target).length === 0){
+		$('.modal-win').removeClass("active"); 
+	}
+});
+	 
+});
+</script>
+<script>
+
+//function vin(){
+
+    var mail = $('#choicenvin').attr('value');
+  $('.nums').on('click', function() {
+    var num = $(this).attr('value');
+$('.direction label').empty();
+$('.direction label').html("№ письма: "+ num);
+
+	var divBtn = $('#workspace-btn');
+	var instrukc = $('#mod-wind-instrukc');
+	var head = $('#namenum_stata');
+	var listWork = $('#list-work');
+	var operTable = $('#oper-table');
+	var operBr = $('#foroper');
+	var tableDet = $('#tabledet');
+
+
+	$.ajax({
+                type: "POST",
+                url: "workspacebtn.php",
+                data: {num: num, mail: mail},
+                //При удачном завершение запроса - выводим то, что нам вернул PHP
+                success: function(html) {
+					 // alert(dir+mail);
+ //предварительно очищаем нужный элемент страницы
+                        divBtn.empty();
+//и выводим ответ php скрипта
+                        divBtn.append(html);
+
+                }
+        });
+		
+		
+		$.ajax({
+                type: "POST",
+                url: "instrukc.php",
+                data: {num: num},
+                success: function(html) {
+                        instrukc.empty();
+                        instrukc.append(html);
+                }
+        });
+		
+		$.ajax({
+                type: "POST",
+                url: "namenum-stata.php",
+                data: {num: num},
+                success: function(html) {
+                        head.empty();
+                        head.append(html);
+                }
+        });
+		
+		$.ajax({
+                type: "POST",
+                url: "listwork.php",
+                data: {num: num},
+                success: function(html) {
+                        listWork.empty();
+                        listWork.append(html);
+						if (cnt==1) {  operTable.empty();
+                      
+                        operBr.addClass("zero");}
+                }
+        });
+		
+		$.ajax({
+                type: "POST",
+                url: "tableoper.php",
+                data: {num: num},
+                success: function(html) {
+                       // listWork.empty();
+                        operTable.empty();
+                      //  operBr.remove();
+                        operTable.append(html);
+					  if (cnt>1) {
+						 operBr.removeClass("zero");}
+                }
+        });
+		
+		$.ajax({
+                type: "POST",
+                url: "tabledet.php",
+                data: {num: num},
+                success: function(html) {
+                       
+                       tableDet.empty();
+                     
+                       tableDet.append(html);
+					
+                }
+        });
+		
+		
+	})
+//};
+</script>
+
+
+
+  </body>
+</html>

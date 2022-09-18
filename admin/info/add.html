@@ -1,0 +1,329 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/admin.css">	
+	<script src="../../js/js-libary.js"></script>
+    <title><?php htmlout($pageTitle); ?></title>
+  </head>
+
+  <body class="wrap">
+		<div class="heading">
+			<h1>Панель администратора</h1>
+			<h2>Добавление информацинного письма</h2>
+		</div>
+		<a href="index.php" class="back"></a>
+			
+		<form class="wrap" action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">  
+		<div class="ser-add">  
+    		  		  <!-- Письмо -->
+		<div class="pismo-div">
+			<!--<div class="pismo  short">
+				
+			</div>-->
+
+			<div class="pismo">
+				<div><p>Дата :</p><textarea class='textarea-line head' rows='1' name="data"  value="<?php htmlout($data); ?>"></textarea></div>
+				<div><p>Наименование :</p><textarea class='textarea-line head' rows='1' name="nazvanie"  value="<?php htmlout($nazvanie); ?>"></textarea></div>
+				<div><p>Номер :</p><textarea class='textarea-line head' rows='1' name="id"  value="<?php htmlout($id); ?>"></textarea></div>
+				<div><p>Сообщение распространяется на :</p><textarea class='textarea-line head' rows='1' name="rasprostranenie"  value="<?php htmlout($rasprostranenie); ?>"></textarea></div>
+				<div><p>Причина доработки :</p><textarea class='textarea-line head' rows='1' name="dorabotka"  value="<?php htmlout($dorabotka); ?>"></textarea></div>
+				<div><p>Затраты по доработке относить на : </p><textarea class='textarea-line head' rows='1' name="zatrat" value="<?php htmlout($zatrat); ?>"></textarea></div>
+				
+				<div><input class="dis" type="checkbox" name="status" value = "1" disabled /></div>
+			</div>
+			</div>
+			
+			<table class="table serv" id="tryd">
+				<tr>
+					<td>Код операции</td>
+					<td>Наименование операции</td>
+					<td>Трудоемкость</td>
+				</tr>			
+				<tr>
+					<td><textarea class='textarea-line' rows='1' name="codoper[]" value="<?php htmlout($codoper); ?>"></textarea></td>
+					<td class='name'><textarea class='textarea-line ' rows='1' name="nameoper[]" value="<?php htmlout($nameoper); ?>"></textarea></td>
+					<td><textarea class='textarea-line' rows='1' name="work[]" value="<?php htmlout($work); ?>"></textarea></td>
+				</tr>
+			</table>
+			<div class="plus">
+					<div id="addTryd" class='plus-btn'>+</div>
+					<div id="delTryd" class='minus-btn'>-</div>
+			</div>	
+
+			<table class="table serv" id="node">
+				<tr>
+					<td>Каталожный номер детали</td>
+					<td>Наименование запасной части</td>
+					<td>Кол-во</td>
+					<td>Ед измерения</td>
+					<td>№ извещения</td>
+				</tr>			
+				<tr>
+					<td class="numdet"><textarea class='textarea-line' rows='1' name="numberzch[]" value="<?php htmlout($numberzch); ?>"></textarea></td>
+					<td class='name'><textarea class='textarea-line ' rows='1' name="namezch[]" value="<?php htmlout($namezch); ?>"></textarea></td>
+					<td><textarea class='textarea-line' rows="1" name="kol[]" value="<?php htmlout($kol); ?>"></textarea></td>
+					<td><textarea class='textarea-line' rows='1' name="ves[]" value="<?php htmlout($ves); ?>"></textarea></td>
+					<td><textarea class='textarea-line izv' rows='1' name="zchizv[]" value=""placeholder="№ извещения"></textarea></td>
+				</tr>
+			</table>
+			<div class="plus">
+					<div id="addRow" class='plus-btn'>+</div>
+					<div id="delRow" class='minus-btn'>-</div>
+			</div>		
+			
+			<div class="pismo prim">
+				<div class="primech"><p>Примечание :</p><textarea class='textarea-line' rows='1' name="primechanie"  value="<?php htmlout($primechanie); ?>"></textarea></div>
+			</div>
+			
+			
+			<h2 class='headdefauto'>Перечень дефектной автотехники</h2>
+			<div class="block" id='vins'>
+				<input class="dis" type="checkbox" name="stata" value = "1" disabled />
+				<div class="area-vin">
+					<div>
+						<input class='direction'  name='direction[]' type="text" placeholder="Введите направление">
+					</div>
+					<textarea name="vin[]" id ='textdir' style="overflow-y:auto;" placeholder="Введите список VIN:"></textarea>
+				</div>
+					
+				<div class="plus rightblock">
+					<div id="add-area-vin" class='plus-btn'>></div>
+					<div id="del-area-vin" class='minus-btn'><</div>
+				</div>
+			</div>
+			
+			
+			<div class="ser-pril-block" id='ser-pril-block'>
+				<div class="ser-pril">
+					<p>Оригинал документа:</p>
+					<label for="origin">
+							<div class="input-text" >
+								<input id='origin'  type="text" name="origin" value="">
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-orig">Выберите файл...<input id="orf1" type="file" name="attachmentor1" accept="application/pdf"></div>
+							</div>
+					</label>
+				</div>
+				<div class="ser-pril">
+					<p>Приложение 1:</p>
+						<label for="instruction1">
+							<div class="input-text" >
+								<input id='instruction1'  type="text" name="instruction1" value="">
+							</div>
+							<div class="input-file">
+								<div class="choosebtn" id="button-i1">Выберите файл...<input id="f1" type="file" name="attachment1" accept="application/pdf"></div>
+							</div>
+						</label>
+				</div>
+
+		</div>
+		<div class="plus">
+				<div id="addPril" class='plus-btn'>+</div>
+				<div id="delPril" class='minus-btn'>-</div>
+			</div>
+		</div>
+		
+				<div  class="foot-serv">
+					<button id = "button-add">Добавить...<input type="submit" value="<?php htmlout($button); ?>"></button>
+				</div>
+	</form>
+	
+<script>
+//$('#ser-pril-block .input-text input').change(function() {    
+$('#ser-pril-block').on('change', '.input-text input', function() {   
+    $(this).val($(this).val().replace(/ /g,"-"));
+	
+});
+</script> 	
+<script>
+document.getElementById('orf1').onchange = function () {
+    document.getElementById('origin').value = document.getElementById('orf1').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-orig');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+} 
+
+document.getElementById('f1').onchange = function () {
+    document.getElementById('instruction1').value = document.getElementById('f1').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+	let elem = document.getElementById('button-i1');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+}	
+</script>
+<script>
+var prilBlock = document.getElementById("ser-pril-block");
+var addPril = document.getElementById("addPril");
+	var i = prilBlock.children.length;
+	var delPril = document.getElementById("delPril");
+	
+addPril.onclick = function() {
+    var divPril = document.createElement("div");
+		divPril.classList.add("ser-pril");
+
+	if(i<5){
+		i++; 
+		divPril.innerHTML = "<p>Приложение "+(i)+":</p><label for='instruction"+(i)+"'><div class='input-text' ><input id='instruction"+(i)+"' type='text' name='instruction"+(i)+"'></div><div class='input-file'><div class='choosebtn' id='button-i"+(i)+"'>Выберите файл...<input id='f"+(i)+"' type='file' name='attachment"+(i)+"' accept='application/pdf'></div></div></label>";
+		
+    prilBlock.appendChild(divPril);
+	delPril.style.display = 'inline-block';
+		
+		
+if ( document.getElementById("f2") ) {
+	document.getElementById('f2').onchange = function () {
+		document.getElementById('instruction2').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i2');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f3") ) {
+	document.getElementById('f3').onchange = function () {
+		document.getElementById('instruction3').value = document.getElementById('f3').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i3');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f4") ) {
+	document.getElementById('f4').onchange = function () {
+		document.getElementById('instruction4').value = document.getElementById('f4').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i4');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+if ( document.getElementById("f5") ) {
+	document.getElementById('f5').onchange = function () {
+		document.getElementById('instruction5').value = document.getElementById('f5').value.replace(/.*[\\\/]/, "").replace(/ /g,"-");
+		let elem = document.getElementById('button-i5');
+		elem.style.color = '#00ff00';
+		elem.style.backgroundImage = 'url(../../img/button-gj.png)';
+	}
+}
+	if(i==5){addPril.style.display = 'none';}
+	}
+	
+	delPril.onclick = function() {
+	i--;
+	if(i==1){
+		delPril.style.display = 'none';
+	}
+	addPril.style.display = 'inline-block';
+	prilBlock.removeChild(prilBlock.lastElementChild);
+	}
+}
+
+</script>	
+
+<script>
+var table1 = document.getElementById("node");
+document.getElementById("addRow").onclick = function() {
+    var row = document.createElement("tr");
+    row.innerHTML = "<td><textarea class='textarea-line' rows='1' name='numberzch[]' value='<?php htmlout($numberzch); ?>'></textarea></td><td class='name'><textarea class='textarea-line ' rows='1' name='namezch[]'  value='<?php htmlout($namezch); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='kol[]' value='<?php htmlout($kol); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='ves[]' value='<?php htmlout($ves); ?>'></textarea></td><td><textarea class='textarea-line izv' rows='1' name='zchizv[]' placeholder='№ извещения'></textarea></td>";
+    table1.appendChild(row);
+	
+	var delRow = document.getElementById("delRow");
+	delRow.style.display = 'inline-block';
+	delRow.onclick = function() {
+		if(table1.children.length >= 2){
+			table1.removeChild(table1.lastElementChild);
+		}else{
+			delRow.style.display = 'none';
+		}
+	}
+}
+</script>
+
+<script>
+var table = document.getElementById("tryd");
+document.getElementById("addTryd").onclick = function() {
+    var row = document.createElement("tr");
+    row.innerHTML = "<td><textarea class='textarea-line' rows='1' name='codoper[]' value='<?php htmlout($codoper); ?>'></textarea></td><td class='name'><textarea class='textarea-line' rows='1' name='nameoper[]'  value='<?php htmlout($nameoper); ?>'></textarea></td><td><textarea class='textarea-line' rows='1' name='work[]' value='<?php htmlout($work); ?>'></textarea></td>";
+    table.appendChild(row);
+
+	
+	var del = document.getElementById("delTryd");
+	del.style.display = 'inline-block';
+	del.onclick = function() {
+		if(table.children.length >= 2){
+			table.removeChild(table.lastElementChild);
+		}else{
+			del.style.display = 'none';
+		}
+	}
+}
+</script>
+<script>
+var $parent = $('.ser-add');
+$parent.on('paste input click', '.textarea-line', function () {
+    if ($(this).outerHeight() > this.scrollHeight){
+        $(this).height(1)
+    }
+    while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))){
+        $(this).height($(this).height() + 1)
+    }
+});
+</script> 
+
+
+<script>
+var texdir = document.getElementById('textdir');
+texdir.setAttribute('style', 'overflow-y:auto;');
+</script>
+
+
+<script>
+	var textarea = document.querySelectorAll('.area-vin textarea');
+	var maxheight = 300;
+
+	for (var i = 0 ; i < textarea.length; i++) {
+		textarea[i].addEventListener('keyup', function(){
+		  if(this.scrollTop > 0 && this.scrollTop < maxheight){
+			this.style.height = this.scrollHeight + "px";
+		  }
+		});
+		
+	
+	}
+</script>
+
+<script>
+var vins = document.getElementById("vins");
+
+var count=document.querySelectorAll('area-vin').length;	
+document.getElementById("add-area-vin").onclick = function() {
+	var block = document.createElement("div");
+	var rightblock = document.querySelectorAll('.plus.rightblock');
+	var delblock = document.getElementById("del-area-vin");
+	
+	block.classList.add("area-vin");
+   // block.innerHTML = "<div><input class='direction' type='text' name='direction"+(count)+"' placeholder='Введите направление'></div><textarea name='vin"+(count)+"' placeholder='Введите список VIN:'></textarea>";
+    block.innerHTML = "<div><input class='direction' type='text' name='direction[]' placeholder='Введите направление'></div><textarea name='vin[]' placeholder='Введите список VIN:'></textarea>";
+    vins.appendChild(block);
+	count++;
+	delblock.style.display = 'inline-block';
+	
+	delblock.onclick = function() {
+	count--;
+		if(vins.children.length >=	 1){
+			vins.removeChild(vins.children[vins.children.length-2]);
+		}
+		if(count==0){
+			delblock.style.display = 'none';
+		}
+	}
+	for (var i = 0 ; i < rightblock.length; i++) {
+		vins.appendChild(rightblock[i]);
+	}
+}
+</script>
+
+
+  </body>
+</html>

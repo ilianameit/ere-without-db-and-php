@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto');
+
+html{
+  height: 100%;
+}
+
+body{
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color:#474d59;
+  margin: 0; 
+  padding: 0;
+}
+
+.container {
+  padding-right:15px;
+  padding-left:15px;
+  margin-right:auto;
+  margin-left:auto;
+}
+
+@media (min-width:568px) {
+  .container {
+    width: 538px;
+  }
+}
+
+@media (min-width:970px) {
+  .container {
+    width: 940px;
+  }
+}
+
+.container:after {
+  display : table;
+  content : " ";
+  clear : both;
+}
+
+label {
+  font-weight: 900;
+  width: 100px;
+  padding: 5px 10px 5px 0;
+  display:inline-block;
+  text-align: right;
+  color: #000;
+}
+
+.container > div {
+  padding: 7px 0;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.container > div:first-child {
+  border-top: 0 none;
+}
+
+select {
+  width: 350px;
+  background: #fff url("img/arrow_down.png") no-repeat 98% center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  padding: 7px;
+  border: 1px solid #e8e8e8;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+@media (max-width:668px) {
+  select {
+    width: 100%;
+  }
+
+  label{
+    width: 100%;
+    text-align: left;
+  }
+}
+
+option {
+  color: #000;
+}
+
+select:required:invalid {
+  color: #a9a9a9;
+}
+
+*::-webkit-input-placeholder {
+  color: #a9a9a9;
+}
+
+*:-moz-placeholder {
+  color: #a9a9a9;
+}
+
+*::-moz-placeholder {
+  color: #a9a9a9;
+}
+
+*:-ms-input-placeholder {
+  color: #a9a9a9; 
+}

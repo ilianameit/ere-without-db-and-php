@@ -1,0 +1,33 @@
+<?php
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+		$num = $_POST['num'];
+			try {
+				$sql = "SELECT DISTINCT nazvanie  FROM infomessage where id='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$name_mail = $statement->fetchAll();
+				foreach ($name_mail as $name) {
+				echo"<h3>Наименование письма: ".$name['nazvanie']."</h3>";
+				}
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+?>
+<?php		
+
+	$stmvin = $pdo->query("SELECT count( distinct stata) FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$num'"); // подсчет
+$countst = $stmvin->fetch(PDO::FETCH_NUM)[0];
+echo'<div class="check"><label for="ready_mail">Выполнено<input type="checkbox"  value="" id="ready_mail" disabled name="statmess" ';	
+	$sql = "SELECT DISTINCT stata FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP where mnomer='$num'";
+	$statement = $pdo->prepare($sql);
+	$statement->execute();
+	$result_stata = $statement->fetchAll();
+	foreach ($result_stata as $stat) {
+	
+		if($countst==1 and $stat['stata']==1){echo' checked="checked" ';}
+		else{echo'';}
+		  }				
+	
+	echo '><div></div></label></div>';	
+?>	

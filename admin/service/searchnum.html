@@ -1,0 +1,44 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if (!empty($_POST['searchnum'])) {
+	
+	$search = $_POST['searchnum'];
+ 
+	$sth = $pdo->query("SELECT distinct id, nazvanie, data, status FROM infomessage inner join infovin ON infomessage.id = infovin.mnomer inner join sap ON infovin.vin = sap.VIN_SAP where id LIKE '$search%'");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+} 
+else {
+	
+	$sth = $pdo->query("SELECT distinct id, nazvanie, data, status FROM infomessage inner join infovin ON infomessage.id = infovin.mnomer inner join sap ON infovin.vin = sap.VIN_SAP");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+}
+	
+	if ($result) {
+	$n=0;
+
+				foreach ($result as $rowka){
+				$n++;
+				echo "<div class='messages'>";
+				echo "<div class='num-mess'><form method='post' action='message.php'><button value='".$rowka["id"]."' name='choice'>".$n.'. '.$rowka["id"]."</button></form></div>";
+				echo "<div class='cont-mess'>".$rowka["nazvanie"]."<span class='tooltiptext mes'>".$rowka["nazvanie"]."</span></div>";
+				echo "<div class='acor-kompl'><button class='kompl' onclick='kompl();' value='".$rowka["id"]."'>Показать</button><div></div></div>";
+				echo "<div class='acor-vin'><button class='vin' onclick='vin();' value='".$rowka["id"]."'>Показать</button><div ></div></div>";
+				echo "<div >".$rowka["data"]."</div>";
+				echo "<div>";
+					if($rowka["status"]==1){echo"Выполнено";}
+					else{echo"Не выполнено";}
+				echo"</div>";
+				echo "</div>";
+				}
+			
+			
+	
+	}
+
+?>

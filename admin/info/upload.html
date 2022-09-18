@@ -1,0 +1,95 @@
+<?php
+session_start();
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+if (!empty($_FILES['attachment'])) {
+    $file = $_FILES['attachment'];
+	$file1 = $_FILES['attachment1'];
+	$file2 = $_FILES['attachment2'];
+	$file3 = $_FILES['attachment3'];
+	$file4 = $_FILES['attachment4'];
+	$file5 = $_FILES['attachment5'];
+	$file6 = $_FILES['attachment6'];
+	$file7 = $_FILES['attachment7'];
+	$file8 = $_FILES['attachment8'];
+	$file9 = $_FILES['attachment9'];
+	$file10 = $_FILES['attachment10'];
+
+    $srcFileName = $file['name'];
+	$srcFileName1 = $file1['name'];
+	$srcFileName2 = $file2['name'];
+	$srcFileName3 = $file3['name'];
+	$srcFileName4 = $file4['name'];
+	$srcFileName5 = $file5['name'];
+	$srcFileName6 = $file6['name'];
+	$srcFileName7 = $file7['name'];
+	$srcFileName8 = $file8['name'];
+	$srcFileName9 = $file9['name'];
+	$srcFileName10 = $file10['name'];
+
+
+//    $allowedExtensions = ['pdf'];
+//    $extension = pathinfo($srcFileName, PATHINFO_EXTENSION);
+
+if(!is_dir('uploads/' . $srcFileName))mkdir('uploads/' . $srcFileName, 0755); if(move_uploaded_file($file['tmp_name'], 'uploads/' . $srcFileName . '/' . $file['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';} 
+if(!is_dir('uploads/' . $srcFileName))mkdir('uploads/' . $srcFileName, 0755); if(move_uploaded_file($file1['tmp_name'], 'uploads/' . $srcFileName . '/' . $file1['name'])) {$error = 'Ошибка при загрузке файла';} else {$result = 'Успех!';}
+
+
+    /*
+	if (!in_array($extension, $allowedExtensions)) {
+        $error = 'Загрузка файлов с таким расширением запрещена!';
+    } elseif ($file['error'] !== UPLOAD_ERR_OK) {
+        $error = 'Ошибка при загрузке файла.';
+    } elseif (file_exists($newFilePath)) {
+        $error = 'Файл с таким именем уже существует';
+    } elseif (!move_uploaded_file($file['tmp_name'], $newFilePath)) {
+        $error = 'Ошибка при загрузке файла';
+    } else {
+        $result = 'Успех!';
+    } 
+	*/
+}
+?>
+<style>
+input[type='file'] {
+  color: transparent;
+}
+</style>
+<html>
+<head>
+    <title>Загрузка файла</title>
+</head>
+<body>
+<?php if (!empty($error)): ?>
+    <?= $error ?>
+<?php elseif (!empty($result)): ?>
+    <?= $result ?>
+<?php endif; ?>
+<br>
+
+
+<form action="" method="post" enctype="multipart/form-data">
+    <input type="text" name="kompl" id="kompl" disabled><input id="fl" type="file" name="attachment">
+	<input type="text" name="vv" id="vv" disabled><input id="f2" type="file" name="attachment1">
+	<input type="text" name="vv1" id="vv1" disabled><input type="file" name="attachment2">
+	<input type="text" name="vv2" id="vv2" disabled><input type="file" name="attachment3">
+	<input type="text" name="vv3" id="vv3" disabled><input type="file" name="attachment4">
+	<input type="text" name="vv4" id="vv4" disabled><input type="file" name="attachment5">
+	<input type="text" name="vv5" id="vv5" disabled><input type="file" name="attachment6">
+	<input type="text" name="vv6" id="vv6" disabled><input type="file" name="attachment7">
+	<input type="text" name="vv7" id="vv7" disabled><input type="file" name="attachment8">
+	<input type="text" name="vv8" id="vv8" disabled><input type="file" name="attachment9">
+	<input type="text" name="vv9" id="vv9" disabled><input type="file" name="attachment10">
+    <br><input type="submit">
+</form>
+
+<script>
+document.getElementById('fl').onchange = function () {
+    document.getElementById('kompl').value = document.getElementById('fl').value.replace(/.*[\\\/]/, "");
+}
+document.getElementById('f2').onchange = function () {
+    document.getElementById('vv').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; 
+	
+	include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+
+try
+{
+  $result = $pdo->query("SELECT kompl, idsk FROM skkompl where idsk LIKE '$search%'");
+}
+catch (PDOException $e)
+{
+  $error = 'Ошибка: Вывода комплектации из БД';
+  include 'error.html.php';
+  exit();
+}
+
+foreach ($result as $row)
+{
+  $categories[] = array('idsk' => $row['idsk'], 'kompl' => $row['kompl']);
+}
+
+
+	
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>РМ ЭРЭ</title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+  </head>
+
+    
+   <body class="main wrap">
+<a href="index.php" class="back"></a>	
+	
+		<div class="heading">
+			<h1>Панель администратора</h1>
+			<h1>РМ CK</h1>
+		</div>
+	 <div class="main ere-tab">	
+
+
+
+		
+		<div  class="table-kr" >
+			<div class="line-kr" id="title-kr" >
+				<div  class="filter-div">Комплектация
+				<form method="post" class="filter" action="">
+					<input type="text" name="search" id="search1" placeholder="Поиск по комплектации">
+				</form>
+				</div>
+				<div  class="filter-div">Сервисная книжка
+				<form method="post" class="filter" action="">
+					<input type="text" name="search" id="search" placeholder="Поиск по CR">
+				</form>
+				</div>
+				
+			</div>
+			<div id="search_box-result">
+		  <?php foreach ($categories as $category): ?>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div ><?php htmlout($category['kompl']); ?></div>
+					  <div ><?php htmlout($category['idsk']); ?></div>
+					  
+					  <!-- <input type="submit" name="action" value="Delete"> -->
+				  </div>
+			  </form>
+		  <?php endforeach; ?></div>
+		
+			
+			
+		
+	</div>
+	</div>	
+		
+		
+  </body>
+  
+  <script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "s1.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search1').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "s2.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {
+      $('form').keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+      }
+   });
+});
+</script>
+</html>

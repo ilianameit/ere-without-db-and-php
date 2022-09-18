@@ -1,0 +1,84 @@
+<script>
+var list = document.getElementById("voen-list");
+var count=document.querySelectorAll('.voen-list li').length;
+document.getElementById("add-li").onclick = function() {
+    var li = document.createElement("li");
+	var btns = document.querySelectorAll('.plus.botblock');
+    li.innerHTML = "<div class='block'><div class='kompl'><input class='data-list' name='kompl[]' list='voen'><datalist id='voen'><option value='$result_row['DrwNum']'></option></datalist></input></div><div class='reason' id='reason'></div> </div> ";
+	
+	//  <input type='text' name='reason[]'>
+    list.appendChild(li);
+	count++;
+	
+	var del = document.getElementById("del-li");
+	del.style.display = 'flex';
+	del.onclick = function() {
+	count--;
+		if(list.children.length >= 2){
+			list.removeChild(list.children[list.children.length-2]);
+		}if(count==1){
+			del.style.display = 'none';
+		}
+	}
+	for (var i = 0 ; i < btns.length; i++) {
+		list.appendChild(btns[i]);
+	}
+}
+</script>	
+<script>
+var li=document.querySelectorAll('.chosen-results li');
+var countli = li.length;
+
+var res=document.querySelectorAll('li.active-result');
+
+var buttons = document.querySelectorAll('#kompl>div>ul li');
+
+for (index = 0; index < buttons.length; index++) {
+    button = buttons[index];
+    button.addEventListener('click', clickHandler);
+
+}
+
+function clickHandler(event) {
+alert(document.getElementById('kompl').getElementsByTagName('li').length);
+
+}
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  $( '.chosen-search-input' ).css( 'width', '100%');
+let itemsLength = $('#kompl .chosen-choices li').length; // Создаем переменную, в которой будем хранить/обновлять наше кол-во элементов
+let reason = $('#reason input'); 
+let reasonLenght = 0; //$('#reason input').lenght
+const $button = $('#kompl'),
+  $container = $('#reason');
+  $at = $('a');
+
+  
+$button.on('click', "#voen_chosen > div > ul > li:not(.active-result)", function(){
+itemsLength = $('#kompl .chosen-choices li').length;
+
+if(itemsLength-1>reasonLenght ){
+  $container.append('' + '<li><input type="text" name="reason[]"></li>' );   
+}  
+reasonLenght = $('#reason li').length;
+
+  // Обновляем кол-во .item после каждого добавления
+  $( '.chosen-search-input' ).attr( 'placeholder', 'Выберите комплектации...');
+  $( '.chosen-search-input' ).css( 'width', '100%');
+});
+
+		$button.on('mouseup',"a" ,function(){
+	var index = $('#kompl a').index( this );	
+//	if(itemsLength<=reasonLenght ){
+	$container.children("li:nth-child("+(index+1)+")").remove();  
+//	} 
+	itemsLength = $('#kompl .chosen-choices li').length;
+	reasonLenght = $('#reason li').length;	
+
+
+	});	
+	
+</script>	

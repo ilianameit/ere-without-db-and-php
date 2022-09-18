@@ -1,0 +1,48 @@
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if(isset($_POST['search_btn'])) {
+	$search = $_POST['search'];
+	setcookie("Coockie",$search, time()+3600);header("Refresh: 0");
+	}
+	
+	
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT * FROM sap where VIN_SAP LIKE '%$search'";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result_array = $statement->fetchAll();
+    foreach ($result_array as $result_row) {				
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?> 
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/menu.css">
+	<link rel="shortcut icon" href="../img/favicon.png" type="image/x-icon">
+	<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <?php echo "<title>Комплектация: ".$result_row["DrwNum"]."</title>";?>
+</head>
+
+<body>
+
+  <form action="text.php" method="post">
+    <p><textarea name="ids"></textarea></p>
+	<input type="checkbox" name="stata" value = "1" />
+    <p><input type="submit" value="Отправить"></p>
+  </form>
+
+</body>
+<script src="js/js-libary.js"></script>
+</html>

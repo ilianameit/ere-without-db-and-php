@@ -1,0 +1,476 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+    <title><?php htmlout($pageTitle); ?></title>
+  </head>
+  <style>
+  .errorvin {
+    background-color: #caf9cc;
+    position: fixed;
+    top: 40%;
+    left: 30%;
+    width: 40%;
+	color:black;
+    height: 10%;
+	display: none;
+    text-align: center;
+    justify-content: center;
+    z-index: 5;
+	font-weight:bold;
+	font-size:30px;
+    border: 4px solid #ffffff;
+    padding: 20px;
+}
+.errorvin {
+ -moz-transition: all 1.5s ease-out;
+ -o-transition: all 1.5s ease-out;
+ -webkit-transition: all 1.5s ease-out;
+ transition: all 1.5s ease-out;
+ }
+ 
+.errorvin:hover{
+ color:red;
+ }
+ .errorvin {
+  font-weight:bold;
+  box-shadow: 0px 0px 5px 6px rgb(240 255 235);
+}
+.accept { background-color:#caf9cc;}
+.denied  {background-color:rgb(249, 202, 202);}
+  </style>
+  <body class='wrap'>
+	
+			<div class="heading">
+			<h1>Панель администратора</h1>
+			<h1>Добавление СК</h1>
+		</div>
+		<a href="index.php" class="back"></a>
+<div class="main sk"> 
+    <form action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">      
+		  <div class="manual-text">
+		  <select class="lang" style="height:auto;" name="LN" id="LN">
+				<option value="ru">ru</option>
+				<option value="en">en</option>
+				<option value="fr">fr</option>
+				<option value="es">es</option>
+			</select>
+			<div class="osn">
+				<div class="manual-line">
+					<div class="left">
+						<p>Сервисная книжка: </p> 
+					</div>
+					<div class="right">
+						<label for="id"><div class="right-input-text" ><input placeholder="Название сервисной книжки" type="text" name="id" id="id" value="<?php htmlout($id); ?>"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Вниманию потребителя: </p>
+					</div>
+					<div class="right">
+						<label for="vp"><div class="right-input-text" ><input readonly  type="text" name="vp" id="vp" value="<?php htmlout($vp); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vp">Выберите файл...<input id="f2" type="file" name="attachment" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Предпродажная подготовка автомобиля: </p>
+					</div>
+					<div class="right">
+						<label for="predpp"><div class="right-input-text"><input readonly  type="text" name="predpp" id="predpp" value="<?php htmlout($predpp); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-predpp">Выберите файл...<input id="f3" type="file" name="attachment1" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Условия гарантии:  </p>
+					</div> 
+					<div class="right">
+						<label for="ga"><div  class="right-input-text"><input readonly  type="text" name="ga" id="ga" value="<?php htmlout($ga); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ga">Выберите файл...<input id="f4" type="file" name="attachment2" accept="application/pdf"></div></div></label>
+					</div>
+				</div> 
+				
+				<div class="manual-line">
+					<div class="left">				
+						<p>Виды и периодичность проведения технического обслуживания а/м КАМАЗ: </p>
+					</div>
+					<div class="right">
+						<label for="vidto"><div class="right-input-text"><input readonly type="text" name="vidto" id="vidto" value="<?php htmlout($vidto); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vidto">Выберите файл...<input id="f5" type="file" name="attachment3" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Корректировака периодичности:  </p>
+					</div>
+					<div class="right">
+						<label for="kp"><div class="right-input-text"><input readonly type="text" name="kp" id="kp" value="<?php htmlout($kp); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-kp">Выберите файл...<input id="f6" type="file" name="attachment4" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>График проведения технического обслуживания автомобилей КАМАЗ: </p>
+					</div>
+					<div class="right">
+						<label for="grafto"><div class="right-input-text"><input readonly type="text" name="grafto" id="grafto" value="<?php htmlout($grafto); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-grafto">Выберите файл...<input id="f7" type="file" name="attachment5" accept="application/pdf"></div></div></label>
+					</div>
+					
+				</div>
+				<div class="manual-line">
+					<div class="left">
+						<p>Перечень работ для выполнения технического обслуживания автомобилей: </p>
+					</div>
+					<div class="right">
+						<label for="pwork"><div class="right-input-text"><input readonly type="text" name="pwork" id="pwork" value="<?php htmlout($pwork); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pwork">Выберите файл...<input id="f8" type="file" name="attachment6" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Список сокращений: </p>
+					</div>
+					<div class="right">
+						<label for="spisok"><div class="right-input-text"><input readonly type="text" name="spisok" id="spisok" value="<?php htmlout($spisok); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-spisok">Выберите файл...<input id="f9" type="file" name="attachment7" accept="application/pdf"></div></div></label>
+					</div>
+				</div>
+				
+			</div>	
+			<div id="block">
+					<div class="manual-line">
+						<div class="left">
+							<p>Вкладыш 1: </p>
+						</div>
+						<div class="right">
+							<label for="vkl1"><div class="right-input-text"><input type="text" name="vkl1" id="vkl1" value="<?php htmlout($vkl1); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vkl1">Выберите файл...<input id="f10" type="file" name="attachment8" accept="application/pdf"></div></div></label>
+						</div>
+					</div>
+					
+					<div class="manual-line">
+						<div class="left">
+							<p>Вкладыш 2: </p>
+						</div>
+						<div class="right">
+							<label for="vkl2"><div class="right-input-text"><input type="text" name="vkl2" id="vkl2" value="<?php htmlout($vkl2); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vkl2">Выберите файл...<input id="f11" type="file" name="attachment9" accept="application/pdf"></div></div></label>
+						</div>
+					</div>
+					
+					<div class="manual-line">
+						<div class="left">
+							<p>Вкладыш 3: </p>
+						</div>
+						<div class="right">
+							<label for="vkl3"><div class="right-input-text"><input type="text" name="vkl3" id="vkl3" value="<?php htmlout($vkl3); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vkl3">Выберите файл...<input id="f12" type="file" name="attachment10" accept="application/pdf"></div></div></label>
+						</div>
+					</div>
+					
+					<div class="manual-line">
+						<div class="left">
+							<p>Вкладыш 4: </p>
+						</div>
+						<div class="right">
+							<label for="vkl4"><div class="right-input-text"><input type="text" name="vkl4" id="vkl4" value="<?php htmlout($vkl4); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vkl4">Выберите файл...<input id="f13" type="file" name="attachment11" accept="application/pdf"></div></div></label>
+						</div>
+					</div>
+			</div>
+			
+				
+			</div>		
+				<div  class="manual-line footaddruk">
+					<div class="add-buttons">
+						<div id="clickmevkl" class="add">
+								<div class='add' id="plus-vkl">Добавить вкладыши</div>
+						</div>
+					</div>	
+				
+				
+					<div class='ruk' id="button-add">
+						<button>Добавить...<input type="submit" value="<?php htmlout($button); ?>"></button>
+					</div>
+				</div>
+			
+		</form>
+	</div>
+  <p id='message' class='errorvin zoom'></p>
+  </body>
+
+
+
+  
+<script>
+$( "#clickmevkl" ).click(function() {
+  $( "#block" ).slideToggle( "slow", function() {
+    $("#plus-vkl").html() == "Свернуть вкладыши" ? $("#plus-vkl").html('Добавить вкладыши') : $("#plus-vkl").html('Свернуть вкладыши');
+  });
+});
+</script>  
+  
+<script>
+var id = document.getElementById('id');
+if (id == '') {
+    id.style.borderColor = "red";
+} 
+
+
+
+document.getElementById('f2').addEventListener('change', function(){
+   var div1 = document.getElementById('f2').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-1.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('vp').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-vp');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-vp');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("vp").value = null;document.getElementById("f2").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+
+document.getElementById('f3').addEventListener('change', function(){
+   var div1 = document.getElementById('f3').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-2.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('predpp').value = document.getElementById('f3').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-predpp');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-predpp');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("predpp").value = null;document.getElementById("f3").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+
+document.getElementById('f4').addEventListener('change', function(){
+   var div1 = document.getElementById('f4').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-3.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ga').value = document.getElementById('f4').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ga');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ga');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ga").value = null;document.getElementById("f4").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+
+document.getElementById('f5').addEventListener('change', function(){
+   var div1 = document.getElementById('f5').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-4.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('vidto').value = document.getElementById('f5').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-vidto');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-vidto');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("vidto").value = null;document.getElementById("f5").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+document.getElementById('f6').addEventListener('change', function(){
+   var div1 = document.getElementById('f6').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-5.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('kp').value = document.getElementById('f6').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-kp');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-kp');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("kp").value = null;document.getElementById("f6").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+document.getElementById('f7').addEventListener('change', function(){
+   var div1 = document.getElementById('f7').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-6.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('grafto').value = document.getElementById('f7').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-grafto');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-grafto');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("grafto").value = null;document.getElementById("f7").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('f8').addEventListener('change', function(){
+   var div1 = document.getElementById('f8').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-7.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('pwork').value = document.getElementById('f8').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-pwork');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-pwork');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("pwork").value = null;document.getElementById("f8").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('f9').addEventListener('change', function(){
+   var div1 = document.getElementById('f9').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-8.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('spisok').value = document.getElementById('f9').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-spisok');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-spisok');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("spisok").value = null;document.getElementById("f9").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+
+
+
+//vkl
+document.getElementById('f10').onchange = function () {
+	document.getElementById('vkl1').value = document.getElementById('f10').value.replace(/.(.*)/, ".pdf");
+	let elem = document.getElementById('button-vkl1');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+
+document.getElementById('f11').onchange = function () {
+	document.getElementById('vkl2').value = document.getElementById('f11').value.replace(/.(.*)/, ".pdf");
+	let elem = document.getElementById('button-vkl2');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+
+document.getElementById('f12').onchange = function () {
+	document.getElementById('vkl3').value = document.getElementById('f12').value.replace(/.(.*)/, ".pdf");
+	let elem = document.getElementById('button-vkl3');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+
+document.getElementById('f13').onchange = function () {
+	document.getElementById('vkl4').value = document.getElementById('f13').value.replace(/.(.*)/, ".pdf");
+	let elem = document.getElementById('button-vkl4');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+
+</script> 
+
+</html>

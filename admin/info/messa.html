@@ -1,0 +1,302 @@
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+	
+	//SELECT * FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP WHERE VIN_SAP = 'XTC430804E1293823'
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT DISTINCT DrwNum FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result_array = $statement->fetchAll();
+    foreach ($result_array as $result_row) {
+	
+//	echo $result_row["DrwNum"];
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?> 
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+	<link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../../css/admin.css">
+    <?php echo "<title>Комплектация: ".$result_row["DrwNum"]."</title>";?>
+</head>
+
+<body>
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT vin FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) {
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?>
+
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+	
+	//SELECT * FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP WHERE VIN_SAP = 'XTC430804E1293823'
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT * FROM infomessage";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result1 = $statement->fetchAll();
+    foreach ($result1 as $row1) {
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Панель администратора</title>
+		<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+	<link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../../css/admin.css">
+  </head>
+
+  
+  
+  <body class="hidden-body">
+  <a href=".." class="back"></a>
+	<div class="heading">
+		<h1>Рабочее место сервесного центра</h1>
+	</div>  
+	<div class="switch-vinmess">
+		<div class="active" id="mess-to-vin">
+			<img src="../../img/mess.png">
+		</div>
+		<div class="" id="vin-to-mess">
+			<!-- <img src="../../img/vin.png" id="vin-img"> -->
+			<p id="vin-img">VIN</p>
+		</div>
+	</div>
+	
+	<div id="mess-vin">
+	<!-- общие письма -->
+		<div id="div-message" class="active">
+			<div class="filters-report">
+				<div id="div-filters">
+				<form method="post" class="filter" action="">
+						<input type="text" name="search" id="search11" placeholder="№ Письма">
+					</form>
+					<form method="post" class="filter" action="" id="filter-search-text">
+						<input type="text" name="search" id="search12" placeholder="Текст письма">
+					</form>
+				</div>
+				<a href="otchet.html" class="create-report">Создать отчет<span></span></a>
+			</div>
+			<div class="table">
+	 <form action="">
+				<div class="title-mess white-border">
+					<div class="num-mess">№ письма</div>
+					<div >Письмо</div>
+					<div class="kompl">Комплектация</div>
+					<div class="spisok-vin">Список VIN</div>
+					<div>Дата добавления</div>
+					<div><label for="status">Статус<input type="checkbox"
+				  name="status" value="" id="status" checked onclick="return false;"><span></span></label></div>
+				</div>
+				
+				
+				
+				
+				<div class="messages-block">
+				
+				
+					<div class="messages">
+						<a href="message.html">
+						<?php foreach ($result1 as $row1): ?><div class="num-mess"><?php echo "".$row1["nomer"]."<br>"; ?></div><?php endforeach; ?>
+						<?php foreach ($result1 as $row1): ?><div class="cont-mess" tabindex="0"><?php echo "".$row1["nazvanie"]."<br>"; ?><span class="tooltiptext">Полный текст</span></div><?php endforeach; ?>
+						<div id="acor-kompl">
+							<input type="checkbox" name="acor" id="acor" />
+							<label for="acor">*****-*****-******-**</label>
+							<ul class="acor-body">
+								<li>КАМАЗ-54901-0000004-92</li>
+								<li>КАМАЗ-54901-0000014-92</li>
+								<li>КАМАЗ-54901-0000024-92</li>
+								<li>КАМАЗ-54901-0000034-92</li>
+								<li>КАМАЗ-54901-0000044-92</li>
+								<li>Электробус-54901-1110004-92</li>
+								<li>КАМАЗ-54901-0000054-92</li>
+								<li>КАМАЗ-54901-0000064-92</li>
+								<li>КАМАЗ-54901-0000074-92</li>
+								<li>Электробус-54901-1110005-92</li>
+							</ul>
+						</div>
+						<div id="acor-vin">
+							<input type="checkbox" name="acor" id="acor-vin1" />
+							<label for="acor-vin1">***************</label>
+							<ul class="acor-body">
+								<li>
+									<label for="">XTC123343L431CK<input checked onclick="return false;" type="checkbox" name="" value="" id="">
+										<span></span>
+									</label>
+								</li>
+								<li>
+									<label for="">XTC123343L432CK<input onclick="return false;" type="checkbox" name="" value="" id="">
+										<span></span>
+									</label>
+								</li>
+								<li>
+									<label for="">XTC123343L433CK<input onclick="return false;" type="checkbox" name="done" value="" id="">
+										<span></span>
+									</label>
+								</li>
+								<li>
+									<label for="">XTC123343L434CK<input checked onclick="return false;" type="checkbox" name="" value="" id="">
+										<span></span>
+									</label>
+								</li>
+								
+							</ul>
+						</div>
+						<div>21.05.2020</div>
+						<div><label for="">Выполнено<input checked onclick="return false;" type="checkbox"
+					  name="done" value="" id=""><span></span></label>
+						</div>
+						</a>
+					</div>
+					</div>
+				</div>
+				
+			</div>
+		  </form>			
+		</div>
+	
+		<!-- письма по вин -->
+		<div id="div-message-vin">
+			<div class="filters-report">
+				<div id="div-filters">
+				<form method="post" class="filter" action="">
+						<input type="text" name="search" id="search1" placeholder="VIN">
+					</form>
+					<form method="post" class="filter" action="">
+						<input type="text" name="search" id="search2" placeholder="Модель">
+					</form>
+				</div>
+				<a href="otchet.html" class="create-report">Создать отчет<span></span></a>
+			</div>
+			<div class="table ">
+				<form action=""> 
+				<div class="title-vin white-border">
+					<div>VIN номер</div>
+					<div>Модель автотехники</div>
+					<div class="num-mess">№ письма</div>
+					<div >Письмо</div>
+					<div>Дата обновления</div>
+					<div><label for="status12">Статус<input onclick="return false;" type="checkbox"
+				  name="status" value="" id="status12"><span></span></label></div>
+				</div>
+				
+				<div class="messages-block">
+					<div class="messages">
+						<a href="vin-messages.html">
+							<div>XTC123343L431CK</div>
+							<div>КАМАЗ-54901-0000004-92</div>
+							<div class="num-mess">старт</div>
+							<div class="cont-mess" tabindex="0">Замена масла и антифриза и другое...<span class="tooltiptext">Полный текст сообщения и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...и прочее...</span></div>
+							<div>21.05.2020</div>
+							<div><label for="">Выполнено<input onclick="return false;" type="checkbox"
+						  name="done" value="" id=""><span></span></label>
+							</div>
+						</a>
+					</div>
+					<div class="messages">
+						<a href="vin-messages.html">
+							<div>абобус</div>
+							<div>абобус-12345-0000004-92</div>
+							<div class="num-mess">11111111111111111111111111</div>
+							<div class="cont-mess" tabindex="1">ПОЧИНИТЬ ЭЛЕКТРИЧЕСТВО<span class="tooltiptext">qwertyui wertyu wertyui</span></div>
+							<div>21.05.2020</div>
+							<div><label for="">Выполнено<input onclick="return false;" checked type="checkbox"
+						  name="done" value="" id=""><span></span></label>
+							</div>
+						</a>
+					</div>
+					<div class="messages">
+						<a href="vin-messages.html">
+							<div>XTC123343L443CK</div>
+							<div>КАМАЗ-54901-0000004-91</div>
+							<div class="num-mess">200</div>
+							<div class="cont-mess" tabindex="2">Замена масла и антифриза и другое...<span class="tooltiptext">Замена масла и антифриза и другое... Замена масла и антифриза и другое... Замена масла и антифриза и другое...</span></div>
+							<div>21.03.2020</div>
+							<div><label for="">Выполнено<input onclick="return false;" type="checkbox"
+						  name="done" value="" id=""><span></span></label>
+							</div>
+						</a>
+					</div>
+					
+					
+					
+				</div>
+			</form>	
+			</div>
+		</div>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+$(document).ready(function(){
+<!-- при нажатии на переключатель -->
+	$("#mess-to-vin").bind('click', function(){
+	<!-- устанавливает на кнопку подчеркивание -->
+		$("#mess-to-vin").addClass("active");
+		 $("#vin-to-mess").removeClass("active");
+		 $("#div-message-vin").removeClass("active");
+		$("#div-message").addClass("active");
+ });
+	 $("#vin-to-mess").bind('click', function(){ 
+
+		$("#vin-to-mess").addClass("active");
+		$("#mess-to-vin").removeClass("active"); 
+		$("#div-message-vin").addClass("active");
+		$("#div-message").removeClass("active");
+		
+		
+	});
+});
+</script>
+
+
+ </body>
+</html>

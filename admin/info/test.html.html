@@ -1,0 +1,32 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php htmlout($pageTitle); ?></title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+	<link rel="stylesheet" href="css/chosen.css">
+  </head>
+
+  <body class="wrap">
+		<a href="index.php" class="back"></a>
+  
+	
+		
+		<form action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">
+			<textarea class='textarea-line head' rows='1' name="id[]"  ></textarea>
+			<textarea class='textarea-line head' name="textarea[]" ></textarea>
+			
+			<textarea class='textarea-line head' rows='1' name="id[]"  ></textarea>
+			<textarea class='textarea-line head' name="textarea[]" ></textarea>
+			
+			
+			<button style="height: 30px; width: 60px;" id = "button-add">Добавить...<input type="submit" value="<?php htmlout($button); ?>"></button>
+		</form>
+		
+
+  </body>
+</html>

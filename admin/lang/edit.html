@@ -1,0 +1,227 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+		include $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/db.inc.php';	
+try {
+
+	$page = $_POST['page'];
+
+	$sql = "SELECT * FROM $page ";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $res = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+}
+
+
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	
+	
+	
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+    <title><?php htmlout($pageTitle); ?></title>
+  </head>
+  <style>
+  .errorvin {
+    background-color: #caf9cc;
+    position: fixed;
+    top: 40%;
+    left: 30%;
+    width: 40%;
+	color:black;
+    height: 10%;
+	display: none;
+    text-align: center;
+    justify-content: center;
+    z-index: 5;
+	font-weight:bold;
+	font-size:30px;
+    border: 4px solid #ffffff;
+    padding: 20px;
+}
+.errorvin {
+ -moz-transition: all 1.5s ease-out;
+ -o-transition: all 1.5s ease-out;
+ -webkit-transition: all 1.5s ease-out;
+ transition: all 1.5s ease-out;
+ }
+ 
+.errorvin:hover{
+ color:red;
+ }
+ .errorvin {
+  font-weight:bold;
+  box-shadow: 0px 0px 5px 6px rgb(240 255 235);
+}
+.accept { background-color:#caf9cc;}
+.denied  {background-color:rgb(249, 202, 202);}
+
+tr { display: block; float: left; width:24%; }
+th, td { display: block; margin:10px 0 10px; padding-bottom: 10px;    text-align: center;}
+input {
+font-family: 'PFD';
+    width: 100%;
+    text-align: center;
+    position: relative;
+    top: 45%;
+    border: none;
+    border-image-slice: 1;
+    color: white;
+    font-size: 24px;
+    font-weight: normal;
+    margin-right: 10px;
+    background: transparent;
+}
+  </style>
+  <body>
+
+  		<div class="heading">
+			<h1><?php htmlout($pageTitle); ?></h1>
+		</div>
+  
+
+	<a href="index.php" class="back"></a>
+	
+    <form  action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">      
+		  <div class="manual-text edit-div">
+		  <input id="LN" name="LNLN" style="display:none;" value="<?php htmlout($LN); ?>"></input>
+		  <input id="pagename" name="pagename" style="display:none;" value="<?php htmlout($page); ?>"></input>
+			
+				
+<?php 
+				echo "<table style='width:100%;'>";
+
+				foreach ($res as $i=>$row) 
+					{
+						echo "<tr>";
+					foreach ($row as $index => $r)
+						{
+							echo "<td>";
+//							echo "<td><textarea class='textarea-line' rows='1' name='".$index."[$i]' value='' >".htmlspecialchars($r, ENT_QUOTES, 'UTF-8')."</textarea>";
+//							echo "<td><textarea class='textarea-line' rows='1' name='".$index."[]' value='' >".htmlspecialchars_decode($r, ENT_QUOTES)."</textarea>";
+							echo "<td><textarea class='textarea-line' rows='1' name='".$index."[]' value='' >".htmlspecialchars($r, ENT_QUOTES, 'UTF-8')."</textarea>";
+							echo "</td>";
+						}
+						echo "</tr>";
+					}
+				echo "</table>";
+				
+?>
+
+				<div  class="manual-line footaddruk">
+					<div class="add-buttons">
+						<div id="clickmepril" class="add">
+						</div>
+					</div>
+						<div class='ruk' id = "button-add">
+						<button>Изменить...<input name="submit" type="submit" value="<?php htmlout($button); ?>"></button>
+					</div>
+				</div>
+			</div>
+		
+		</form>  <p id='message' class='errorvin zoom'></p>
+  </body>
+  <script>
+//var $parent = $('.manual-text');
+//$parent.on('paste input click', '.textarea-line', function () {
+//    if ($(this).outerHeight() > this.scrollHeight){
+//        $(this).height(1)
+//    }
+ //   while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))){
+//       $(this).height($(this).height() + 1)
+//    }
+//});
+</script>
+
+<script>
+
+const tx = document.querySelectorAll("td textarea");
+var column = document.querySelectorAll('tr');
+const td = document.querySelectorAll("td");
+var linearea = document.querySelectorAll('textarea');
+
+
+
+for (let i = 0; i < column.length; i++) {
+
+var t = column[i].querySelectorAll('textarea').length;
+var tdl = column[i].querySelectorAll('td').length;
+
+for (let j = 0; j < t; j++) {
+		var g = column[i].querySelectorAll('textarea')[j];
+		column[i].querySelectorAll('textarea')[j].addEventListener('click', event => {
+
+
+
+
+		for (var o = 0; o < column.length; o++) {
+
+
+				column[o].querySelectorAll('textarea')[j].removeAttribute("rows");
+				
+				column[o].querySelectorAll('textarea')[j].setAttribute("style", "height:" + (column[o].querySelectorAll('textarea')[j].scrollHeight) + "px;overflow-y:hidden;");
+		column[o].querySelectorAll('textarea')[j].addEventListener("input", OnInput, false);
+	}  
+ 
+ var maxHeight = 0;
+      var mainDivs = column;
+	 for (var b = 0; b < column.length; b++) { 
+	
+if (maxHeight < mainDivs[b].querySelectorAll('textarea')[j].clientHeight) {
+ 
+          maxHeight = mainDivs[b].querySelectorAll('textarea')[j].clientHeight; 
+			 
+	 } 	
+}
+	 
+	 	 for (var b = 0; b < column.length; b++) { 
+	
+	 mainDivs[b].querySelectorAll('textarea')[j].style.height = maxHeight + "px";	
+}	 
+				
+function OnInput() {
+
+
+	for (var o = 0; o < column.length; o++) {
+column[o].querySelectorAll('textarea')[j].style.height = (this.scrollHeight) + "px";
+	}
+
+}
+
+	});
+	
+	column[i].querySelectorAll('textarea')[j].addEventListener("focusin", event => {
+	for (var o = 0; o < column.length; o++) {
+		column[o].querySelectorAll('textarea')[j].closest('td').style.borderTop = "1px dashed #ffc107";
+		column[o].querySelectorAll('textarea')[j].closest('td').style.borderBottom = "1px dashed #ffc107";
+		column[0].querySelectorAll('textarea')[j].closest('td').style.borderLeft = "1px dashed #ffc107";
+		column[column.length - 1].querySelectorAll('textarea')[j].closest('td').style.borderRight = "1px dashed #ffc107";
+		}
+	});
+	column[i].querySelectorAll('textarea')[j].addEventListener("focusout", event => {
+	for (var o = 0; o < column.length; o++) {
+		column[o].querySelectorAll('textarea')[j].closest('td').style.border ="none";
+		}
+	});
+
+
+
+			
+	
+	}
+}
+
+
+</script>
+</html>

@@ -1,0 +1,409 @@
+<?php 
+session_start();
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+if(isset($_POST['jav']))
+{
+		$lang = $_POST['jav'];
+		$_SESSION['LN'] = $lang;
+		$sql = "SELECT * FROM page_present where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+}
+else 
+{
+	if(!isset($_SESSION['LN']))
+	{
+		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+		$LN = ['ru', 'en', 'fr', 'es'];
+		$lang = in_array($lang, $LN) ? $lang : 'en';
+		$_SESSION['LN'] = $lang;
+
+		$sql = "SELECT * FROM page_present where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+	}
+	else 
+	{
+		$lang = $_SESSION['LN'];
+
+		$sql = "SELECT * FROM page_present where LN = '$lang' -- ";
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$res = $statement->fetchAll();
+		foreach ($res as $r) {}
+	}
+}
+
+
+?> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><?php echo htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8'); ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<link rel="stylesheet" href="css/style.css">	
+	<script src="js/js-libary.js"></script>
+
+
+</head>
+<body>
+
+<img class="obratka" src="img/telefon.png"/>
+
+<div class="obratka-open">
+	<div>
+		<p class="foot"><?php echo htmlspecialchars($r['tel1'], ENT_QUOTES, 'UTF-8'); ?></p>
+		<p class="foot"><a class="num-phone" href="tel:+78552550416">№ 8(8552)-55-04-16</a></p>
+		<p class="foot">E-mail: <a class='mailto' href="mailto:portal-service@kamaz.ru">portal-service@kamaz.ru</a></p>
+		<p style="margin-top:15px;" class="foot"><?php echo htmlspecialchars($r['tel2'], ENT_QUOTES, 'UTF-8'); ?></p>
+		<p class="foot"><a class="num-phone" href="tel:+78552338389">№ 8(8552)33-83-89</a></p>
+		<p class="foot">E-mail: <a class='mailto' href="mailto:novikova@kamaz.ru">NovikovA@kamaz.ru</a></p>
+	</div>
+</div>
+
+
+
+<ul id="menu">
+        <li data-menuanchor="block1" class="active"><a href="#block1"></a></li>
+        <li data-menuanchor="block2" ><a href="#block2"></a></li>
+        <li data-menuanchor="block3"><a href="#block3"></a></li>
+        <li data-menuanchor="block4"><a href="#block4"></a></li>
+    </ul>
+	
+
+	<img class="menu-open" src="img/menushk1.png"/>
+    <div id="menu2">
+		<form  method="post" action="">
+			<div class= 'acordion ln' >
+			<input type="checkbox" id="ln">
+			<label for="ln" value="<?php echo htmlspecialchars($r['LN'], ENT_QUOTES, 'UTF-8'); ?>"><div></div></label>
+			<div class="acor-body">
+			<ul class='list' name="jav" onchange="this.form.submit();">
+				<li><label><input name='jav' type="radio" value="ru"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="en"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="fr"><div></div></label></li>
+				<li><label><input name='jav' type="radio" value="es"><div></div></label></li>
+			</ul>
+			</div>
+			</div>
+		</form>
+		
+		<div id="menu-1" class="menu-g active1"><p class="main-p1 text-portal"><?php echo htmlspecialchars($r['About'], ENT_QUOTES, 'UTF-8'); ?></p></div>
+		<div id="menu-2" class="menu-g"><p class="main-p1 text-portal"><?php echo htmlspecialchars($r['infochar'], ENT_QUOTES, 'UTF-8'); ?></p></div>
+		<div id="menu-3" class="menu-g"><a class="text-portal main-p1" href="https://catalog.kamaz.ru/"><?php echo htmlspecialchars($r['v1'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+		<div id="menu-4" class="menu-g"><a class="text-portal main-p1" href="vvod.html"><?php echo htmlspecialchars($r['v2'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+		<div id="menu-5" class="menu-g"><a class="text-portal main-p1" href="vin.php">KAMAZ-Guide</a></div>
+    </div>
+
+
+    <div id="fullpage">
+	
+        <div class="section" data-anchor="block1">
+            <div id="header" class="content">
+                <div class="first-div">
+						<p class="p-portal"><?php echo htmlspecialchars($r['eed'], ENT_QUOTES, 'UTF-8'); ?></p><hr><p class="p-portal p-portal2"><?php echo htmlspecialchars($r['sdk'], ENT_QUOTES, 'UTF-8'); ?></p>
+						<img class='w80' src="img/foon1.png"/>
+				</div>
+            </div>
+        </div>
+		
+        <div class="section" data-anchor="block2">
+			<div class="div2-osnov">
+				<p class="div2-p">
+				<span class="div2-head"><?php echo htmlspecialchars($r['h1'], ENT_QUOTES, 'UTF-8'); ?></span><br>
+				<span class='prox-font'><?php echo htmlspecialchars($r['text1'], ENT_QUOTES, 'UTF-8'); ?></span></p>
+				<img class="div2-img" src="54901-10.png"/>
+			</div>
+        </div>
+		
+        <div class="section" data-anchor="block3">
+            <div id="vozmojnosti-portal">
+				<p class="div3-head"><?php echo htmlspecialchars($r['h2'], ENT_QUOTES, 'UTF-8'); ?></p>
+				<ul class="ul">
+					<li><?php echo htmlspecialchars($r['li1'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li2'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li3'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li4'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li5'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li6'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li7'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li8'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li9'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['li10'], ENT_QUOTES, 'UTF-8'); ?></li>
+				</ul>
+			</div>
+        </div>
+		
+        <div class="section" data-anchor="block4">
+            <p class="div4-head"><?php echo htmlspecialchars($r['h3'], ENT_QUOTES, 'UTF-8'); ?></p>
+	<div id="gruzovik">
+		<img  id='kamaz6595' src="6595-3.png"/>
+		  <img class="btn btn1 popup-open pulse" src="img/ne-prosmotr.png"/>
+		  <img class="btn btn2 popup-open1 pulse" src="img/ne-prosmotr.png"/>
+		  <img class="btn btn3 popup-open2 pulse" src="img/ne-prosmotr.png"/>
+		  <img class="btn btn4 popup-open3 pulse" src="img/ne-prosmotr.png"/>
+		  <img class="btn btn5 popup-open4 pulse" src="img/ne-prosmotr.png"/>
+	</div>	
+        </div>
+		
+    </div>
+
+<div class="fade popup-fade">
+	<div class="pop popup">
+		<div class='img' >
+			<div class='head-gradient'>
+				<div class='head'><?php echo htmlspecialchars($r['s1text1'], ENT_QUOTES, 'UTF-8'); ?></div>
+				<div class='head2'><?php echo htmlspecialchars($r['s1text2'], ENT_QUOTES, 'UTF-8'); ?></div>
+			</div>
+			<div class='main'>
+				<div class='foot-gradient'>
+					<div class='list'>
+						<div class='li'><?php echo htmlspecialchars($r['s1text3'], ENT_QUOTES, 'UTF-8'); ?></div>
+						<div class='li'><?php echo htmlspecialchars($r['s1text4'], ENT_QUOTES, 'UTF-8'); ?></div>
+						<div class='li'><?php echo htmlspecialchars($r['s1text5'], ENT_QUOTES, 'UTF-8'); ?></div>
+					</div>
+					<div class='text-list'>
+					<div><?php echo htmlspecialchars($r['s1text6'], ENT_QUOTES, 'UTF-8'); ?>:</div>
+						<ul>
+							<li><?php echo htmlspecialchars($r['s1text7'], ENT_QUOTES, 'UTF-8'); ?></li>
+							<li><?php echo htmlspecialchars($r['s1text8'], ENT_QUOTES, 'UTF-8'); ?></li>
+							<li><?php echo htmlspecialchars($r['s1text9'], ENT_QUOTES, 'UTF-8'); ?></li>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+		<span class="close popup-close"></span>
+	</div>		
+</div>
+
+<div class="fade popup-fade1">
+	<div class="pop popup1">
+		<div class='img' >
+			<div class='head'><?php echo htmlspecialchars($r['s2text1'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='head2'><?php echo htmlspecialchars($r['s2text2'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='notes'>
+			<div class='note'><?php echo htmlspecialchars($r['s2text3'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='note'><?php echo htmlspecialchars($r['s2text4'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='note'><?php echo htmlspecialchars($r['s2text5'], ENT_QUOTES, 'UTF-8'); ?></div>
+			</div>
+			<div class='list'>
+				<div class='li'><?php echo htmlspecialchars($r['s2text6'], ENT_QUOTES, 'UTF-8'); ?></div>
+				<div class='li'><?php echo htmlspecialchars($r['s2text7'], ENT_QUOTES, 'UTF-8'); ?></div>
+			</div>
+		</div>
+		<span class="close popup-close"></span>
+	</div>		
+</div>
+
+<div class="fade popup-fade2">
+	<div class="pop popup2">
+		<div class='img' >
+			<div class='head'><?php echo htmlspecialchars($r['s3text1'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='main'>
+				<div class='list'>
+					<div class='li'><?php echo htmlspecialchars($r['s3text2'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text3'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text4'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text5'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text6'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text7'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text8'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s3text9'], ENT_QUOTES, 'UTF-8'); ?></div>
+				</div>
+				<div class='text-list'>
+					<div class='proced'><?php echo htmlspecialchars($r['s3text10'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='desc'><?php echo htmlspecialchars($r['s3text11'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='system'><?php echo htmlspecialchars($r['s3text12'], ENT_QUOTES, 'UTF-8'); ?></div>
+				</div>
+			</div>
+		</div>
+		<span class="close popup-close"></span>
+	</div>		
+</div>	
+ 
+<div class="fade popup-fade3">
+	<div class="pop popup3">
+		<div class='img' >
+			<div class='head'>
+				<?php echo htmlspecialchars($r['s4text1'], ENT_QUOTES, 'UTF-8'); ?>
+			</div>
+			<div class='list'>
+					<div class='li'><?php echo htmlspecialchars($r['s4text2'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s4text3'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s4text4'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s4text5'], ENT_QUOTES, 'UTF-8'); ?></div>
+			</div>
+		</div>
+		<span class="close popup-close"></span>
+	</div>		
+</div>
+
+<div class="fade popup-fade4">
+	<div class="pop popup4">
+		<div class='img' >
+			<div class='head'><?php echo htmlspecialchars($r['s5text1'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='notes'>
+			<div class='note'><?php echo htmlspecialchars($r['s5text2'], ENT_QUOTES, 'UTF-8'); ?></div>
+			<div class='note left'><?php echo htmlspecialchars($r['s5text3'], ENT_QUOTES, 'UTF-8'); ?></div>
+			</div>
+			<div class='main'>
+				<div class='list'>
+					<div class='li'><?php echo htmlspecialchars($r['s5text4'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<div class='li'><?php echo htmlspecialchars($r['s5text5'], ENT_QUOTES, 'UTF-8'); ?></div>
+				</div>
+				<div class='text-list'>
+				<div><?php echo htmlspecialchars($r['s5text6'], ENT_QUOTES, 'UTF-8'); ?></div>
+					<ul>
+					<li><?php echo htmlspecialchars($r['s5text7'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['s5text8'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['s5text9'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['s5text10'], ENT_QUOTES, 'UTF-8'); ?></li>
+					<li><?php echo htmlspecialchars($r['s5text11'], ENT_QUOTES, 'UTF-8'); ?></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<span class="close popup-close"></span>
+	</div>		
+</div> 
+
+<script>
+$('input[type=radio]').on('change', function() {
+    $(this).closest("form").submit();
+});
+</script>
+
+<script>
+jQuery(function($) { 
+  $(".menu-open").click(function() {
+    $('#menu2').toggle(300);
+	$('#menu2').addClass('actived');
+  });
+});
+</script>
+
+
+<script>
+jQuery(function($) { 
+  $(".obratka").click(function() {
+    $('.obratka-open').toggle(300);
+  });
+});
+</script>
+
+<script>
+ $(document).ready(function($) {
+$('.popup-close').click(function() {
+		$(this).parents('div.fade').fadeOut();
+		return false;
+	});	
+	
+	$(document).keydown(function(e) {
+		if (e.keyCode === 27) {
+			e.stopPropagation();
+			$('.fade').fadeOut();
+		}
+	});
+	
+	$('.fade').click(function(e) {
+		if ($(e.target).closest('.pop').length == 0) {
+			$(this).fadeOut();					
+		}
+	});
+});
+</script>
+
+<script>
+ $(document).ready(function($) {
+	$('.popup-open').click(function() {
+		$('.popup-fade').fadeIn();
+		return false;
+	});	 
+	
+});
+</script>
+<script>
+$(document).ready(function($) {
+	$('.popup-open1').click(function() {
+		$('.popup-fade1').fadeIn();
+		return false;
+	});	
+	
+});
+</script>
+<script>
+$(document).ready(function($) {
+	$('.popup-open2').click(function() {
+		$('.popup-fade2').fadeIn();
+		return false;
+	});	
+	
+});
+</script>
+<script>
+$(document).ready(function($) {
+	$('.popup-open3').click(function() {
+		$('.popup-fade3').fadeIn();
+		return false;
+	});	
+	
+});
+</script>
+<script>
+$(document).ready(function($) {
+	$('.popup-open4').click(function() {
+		$('.popup-fade4').fadeIn();
+		return false;
+	});	
+	
+});
+</script>
+
+<script>
+ $('.btn').click(function() {
+    if ($(this).attr('src') == 'img/ne-prosmotr.png') {
+        $(this).attr('src', 'img/prosmotr.png');
+		$(this).removeClass("pulse");
+    }	else { $("#to4ka1").css({display:'block'}, 1000); }
+});
+</script>
+
+<script> document.oncontextmenu = cmenu; function cmenu() { return false; } </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/jquery.fullPage.min.js"></script>
+<script>
+        $(document).ready(function() {
+            $('#fullpage').fullpage({
+                anchors: ['block1', 'block2', 'block3', 'block4'],
+                menu: '#menu',
+                css3: true,
+                scrollingSpeed: 1000,
+				normalScrollElements: '#vozmojnosti-portal .ul'
+            });
+        });
+</script>
+
+  <script>
+$('.menu-g').click(function(){
+	$('.menu-g').removeClass("active1");
+	$(this).addClass("active1");
+});
+</script>
+  
+  
+</body>
+</html>
+
+
+

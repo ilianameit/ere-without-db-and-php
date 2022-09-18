@@ -1,0 +1,58 @@
+<?php
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+		$num = $_POST['num'];
+		
+		try {
+			$sql = "SELECT DISTINCT *  FROM infooper where mnomer='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$kodop = $statement->fetchAll();
+				
+				
+				
+				
+
+								
+				$stmt = $pdo->query("SELECT count(*)  FROM infooper where mnomer='$num'"); // выполняем запрос
+$count = $stmt->fetch(PDO::FETCH_NUM)[0];
+
+				if($count>1) {
+				
+				echo"
+				
+			
+					<div class='head-oper white-border'>
+						<div class='w-10'>№<br>п/п</div>
+						<div class='w-40'>Код работ</div>
+						<div class='w-40'>Наименование операций</div>
+						<div class='w-10'>Трудоемкость</div>
+					</div>
+					
+					<div class='perechen-oper'>
+					 
+					
+				";
+				
+				$nn = 0;
+				foreach ($kodop as $kod) { 
+				$nn++;
+				 echo"<div class='oper-line'>
+						<div class='w-10'>$nn</div>
+						<div class='w-40' tabindex='0'>".$kod["codoper"]."</div>
+						<div class='w-40' tabindex='0'>".$kod["nameoper"]."</span></div>
+						<div class='w-10' tabindex='0'>".$kod["work"]."</div>
+					</div>";
+				
+				}echo"</div>";
+				}
+				
+				}
+			catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+		
+?>
+
+<script>
+	var cnt = "<?php echo $count; ?>";
+</script>

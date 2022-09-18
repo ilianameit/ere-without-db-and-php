@@ -1,0 +1,81 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php htmlout($pageTitle); ?></title>
+	<link rel="stylesheet" href="../../css/admin.css">
+  </head>
+  <body>
+	<a href="index.php" class="back"></a>
+    <div class="heading">
+    <h1><?php htmlout($pageTitle); ?></h1>
+	</div>
+	<div class="main " id="admin-panel-vhod">
+    <form action="?<?php htmlout($action); ?>" method="post">
+      <div class="manual-text login">
+		<div class="manual-line">
+			<label for="name">
+				<div class="left no-white-border">
+					<p>Имя:</p>				
+				</div>
+				<div class="right">
+					<div class="right-input-text">	
+						<input type="text" name="name" id="name" value="<?php htmlout($name); ?>"></label>
+					</div>
+				</div>
+		</div>
+      <div class="manual-line">
+        <label for="email">
+			<div class="left no-white-border">
+				<p>E-mail: </p>
+			</div>			
+			<div class="right">
+				<div class="right-input-text">	
+					<input type="text" name="email" id="email" value="<?php htmlout($email); ?>">
+				</div>
+			</div>
+		</label>
+      </div>
+      <div class="manual-line">
+        <label for="password">
+			<div class="left no-white-border">
+				<p>Введите пароль: </p>
+			</div>
+			<div class="right">
+				<div class="right-input-text">	
+					<input type="password" name="password" id="password">
+				</div>
+			</div>
+		</label>
+      </div>
+	  </div>
+	  <div class="roles">
+      <fieldset >
+        <legend>Роли:</legend>
+        <?php for ($i = 0; $i < count($roles); $i++): ?>
+          <div class="legends-label">
+            <label for="role<?php echo $i; ?>"><input type="checkbox"
+              name="roles[]" id="role<?php echo $i; ?>"
+              value="<?php htmlout($roles[$i]['id']); ?>"<?php
+              if ($roles[$i]['selected'])
+              {
+                echo ' checked';
+              }
+              ?>><span><?php htmlout($roles[$i]['id']); ?></span></label>:
+              <?php htmlout($roles[$i]['description']); ?>
+          </div>
+        <?php endfor; ?>
+      </fieldset>
+	    
+      <div>
+        <input type="hidden" name="id" value="<?php
+            htmlout($id); ?>">
+        <input  class="add-role" type="submit" value="<?php htmlout($button); ?>">
+      </div>
+	  </div>
+    </form>
+	</div>
+  </body>
+</html>

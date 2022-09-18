@@ -1,0 +1,31 @@
+ 
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if (!empty($_POST['searchvin'])) {
+	
+	$search = $_POST['searchvin'];
+ 
+	$sth = $pdo->query("SELECT DISTINCT VIN_SAP FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP WHERE sap.VIN_SAP LIKE '%$search%'");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+} 
+else {
+}
+	
+	if ($result) {
+	echo '<ul>';
+	$n=0;
+
+				foreach ($result as $result_row){
+				$n++;
+				echo " <li><form method='post' action='messagevin.php'><button value='".$result_row["VIN_SAP"]."' name='choice'><div class='num'>".$n.". </div><div class='vin'>".$result_row["VIN_SAP"]."</div></button></form></li> ";
+				}
+			
+			
+	echo '</ul>';
+	}
+
+?>

@@ -1,0 +1,31 @@
+<?php
+		include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+		$num = $_POST['num'];
+
+		
+				include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+			try {
+			$sql = "SELECT DISTINCT *  FROM infomaterial where mnomer='$num'";
+				$statement = $pdo->prepare($sql);
+				$statement->execute();
+				$zpchti = $statement->fetchAll();
+				$nzp = 0;
+				foreach ($zpchti as $zp) { 
+					if(!empty($zp["numberzch"])){
+						$nzp++;
+						 echo"<div class='perech-line'>	
+								<div class='w-10'>$nzp</div>
+								<div class='w-40' tabindex='0'>".$zp["numberzch"]."</div>
+								<div class='w-40' tabindex='0'>".$zp["namezch"]."</span></div>
+								<div class='w-10' >".$zp["kol"]."</div>
+								<div class='w-10' tabindex='0'>".$zp["zchizv"]."</span></div>
+							</div>";
+					}
+				}
+				}catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}	
+				
+			
+		
+?>

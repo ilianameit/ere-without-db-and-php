@@ -1,0 +1,575 @@
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font:normal 100% 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color:#798289;
+}
+
+* {
+	box-sizing:border-box;
+}
+
+p {
+  margin:0;
+}
+
+img {
+  max-width: 100%;
+}
+
+.content {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.content:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+#fullpage {
+  
+}
+
+div.section:nth-of-type(1) {
+  padding-top: 60px;
+  background: -webkit-linear-gradient(to bottom, #000000, #131313, #131313);
+background: -moz-linear-gradient(to bottom, #000000, #131313, #131313);
+background: linear-gradient(to bottom, #000000, #131313, #131313);overflow:hidden;height:100%;margin:0;
+}
+
+div.section:nth-of-type(2) {
+  padding-top: 60px;
+  background: -webkit-linear-gradient(to bottom, #131313, #292929, #313131);
+background: -moz-linear-gradient(to bottom, #131313, #292929, #313131);
+background: linear-gradient(to bottom, #131313, #292929, #000000);overflow:hidden;height:100%;margin:0;
+}
+
+div.section:nth-of-type(3) {
+   padding-top: 60px;
+  background: -webkit-linear-gradient(to bottom, #131313, #292929, #313131);
+background: -moz-linear-gradient(to bottom, #131313, #292929, #313131);
+background: linear-gradient(to bottom, #000000, #131313, #131313);overflow:hidden;height:100%;margin:0;
+}
+
+div.section:nth-of-type(4) {
+     padding-top: 60px;
+  background: -webkit-linear-gradient(to bottom, #131313, #292929, #313131);
+background: -moz-linear-gradient(to bottom, #131313, #292929, #313131);
+background: linear-gradient(to bottom, #131313, #131313, #292929);overflow:hidden;height:100%;margin:0;
+}
+
+/*
+#menu2 {
+    left: 5%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 2%;
+    width: 100%;
+    z-index: 70;
+    text-align: right;
+
+}
+*/
+#menu2 {
+    padding-left:5%;
+	float:left;
+    position: fixed;
+	text-align:center;
+	padding-top:20px;
+	margin-bottom:50px;
+    width: 100%;
+    z-index: 70;
+	background-color: black;
+	cursor:pointer;
+}
+#menu2:before { 
+content:"";
+background-image: linear-gradient(rgb(0,0,0), rgba(255,255,255,0)); 
+height:50px;
+width:100%; 
+position:absolute;
+top:65px;
+left:0px;
+}
+
+
+#menu {
+    position: fixed;
+    z-index: 70;
+	top:20%;
+	left:4.5%
+}
+
+#menu li {
+    background: url(../img/menu-4erta.png);
+	background-repeat:no-repeat;
+}
+
+
+#menu li a, #menu li.active a {
+    display: block;
+    padding: 40px 20px;
+    text-decoration: none;
+    color:#ccc;
+}
+
+#menu li.active {
+    background: url(../img/menu-4erta-aktiv.png);
+	background-repeat:no-repeat;
+    color: #fff;
+}   
+
+/**/
+#header {
+    height: 100%;
+    min-height: 300px !important;
+    position: relative;
+}
+
+
+#header .wrap {
+    left: 50%;
+    max-width: 800px;
+    padding: 0 15px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+#header h1 {
+    color: #fff;
+    font-size: 65px;
+    font-weight: 900;
+    line-height: 95px;
+    padding-top: 50px;
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+#header p {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 36px;
+    padding: 20px;
+    text-align: justify;
+}
+
+.scrollicon,.imgNumber {
+  text-align: center;
+}
+
+.imgNumber img {
+  margin-top: 12%;
+}
+
+
+
+
+/*######Стили для демо###########*/
+
+/*Кнопка "К статье"*/
+.backToSitehereBtn{
+  display: block;
+  width: 150px;
+  height: 150px;
+  background: #01BC78;
+  text-align: center;
+  line-height: 170px;
+  font-size: 20px;
+  border-radius: 50%;
+  color:#fff;
+  position: absolute;
+  text-decoration: none;
+  top: 29px;
+  left:-40px;
+  transform:rotate(-45deg) scale(1);
+  transition:all 0.25s linear;
+}
+
+.backToSitehereBtn:hover {
+  text-decoration: none;
+  top:30px;
+  left:-10px;
+  transform:rotate(-45deg) scale(1.3);
+}
+
+
+
+
+
+
+
+
+
+
+::-webkit-scrollbar { /* chrome based */
+    width: 0px;  /* ширина scrollbar'a */
+    background: transparent;  /* опционально */
+}
+
+html {
+    -ms-overflow-style: none;  /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+
+.underline {
+  border-bottom: 2px solid currentColor;
+}
+
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('../fonts/Proxima-lt.ttf');
+}
+@font-face {
+    font-family: 'futurabookc';
+    src: url('../fonts/futurabookc.ttf');
+}
+
+
+
+html, body, p {
+    font-family: 'futurabookc', sans-serif;
+		letter-spacing: 2px;
+}
+
+.underline--dotted {
+  border-bottom: 3px white solid;
+}
+
+#gruzovik .btn1 {
+    position: absolute;
+    bottom: 25%;
+	width:30px;
+    left: 28%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#gruzovik .btn2 {
+    position: absolute;
+    bottom: 63%;
+	width:30px;
+    left: 35%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#gruzovik .btn3 {
+    position: absolute;
+    bottom: 49%;
+	width:30px;
+    left: 60%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#gruzovik .btn4 {
+    position: absolute;
+    bottom: 25%;
+	width:30px;
+    left: 44%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#gruzovik .btn5 {
+    position: absolute;
+    bottom: 18%;
+	width:30px;
+    left: 67%;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+
+#gruzovik .btn1:hover,.btn2:hover,.btn3:hover,.btn4:hover,.btn5:hover {
+    background-color: grey;
+}
+
+
+
+.active1{
+
+background: linear-gradient(90deg, rgb(47 47 47 / 0%) 0%, rgb(47 47 47) 35%, rgb(82 82 82) 49%, rgb(45 45 45) 62%, rgb(55 55 55 / 0%) 100%);height:43px}
+ 
+hr {
+border: 0;
+width:40%;
+height: 2px;
+background: #000;
+background-image: -webkit-linear-gradient(left, #37363a, white, #353538);
+background-image: -moz-linear-gradient(left, #fff, #000, #fff);
+background-image: -ms-linear-gradient(left, #fff, #000, #fff);
+background-image: -o-linear-gradient(left, #fff, #000, #fff);
+
+}
+
+
+vozmojnosti-portal2 li:before {
+    content:  "—";
+    position: relative;
+    left:     -5px;
+}
+
+
+.accordion {background-color: transparent;color:white;cursor: pointer;padding: 18px;width: 100%;border: none;text-align: left;outline: none;font-size: 16px;transition: 1s;border: 1px solid lightgrey;}
+.active {margin-bottom:10px;}
+.panel {padding: 0 18px;background-color: #f5f5f5;max-height: 0;overflow: hidden;transition: max-height 0.2s ease-out;}
+
+.popup-fade,.popup-fade1,.popup-fade2,.popup-fade3,.popup-fade4 {
+	display: none;
+}
+.popup-fade:before,.popup-fade1:before,.popup-fade2:before,.popup-fade3:before,.popup-fade4:before {
+	content: '';
+	background: #000;
+	position: fixed; 
+	left: 0;
+	top: 0;
+	width: 100%; 
+	height: 100%;
+	opacity: 0.95;
+	z-index: 9999;
+}
+
+.popup,.popup1,.popup2,.popup3,.popup4 {
+	position: fixed;
+	top: 3%;
+	left: 10%;
+	padding: 20px;
+	width: 100%;
+	height:100%;
+	margin-left: -200px;	
+	z-index: 99999;
+	opacity: 1;	
+}
+.popup-close {
+	position: absolute;
+	top: 10%;
+	right: 10%;
+}
+
+.pulse {
+
+ // border-radius: 50%;
+  animation: radial-pulse 2s infinite;
+  cursor:pointer;
+}
+
+@keyframes radial-pulse {
+  0% {
+    box-shadow: 0 0 3px 0 rgba(255, 255, 255, 0.9);
+  }
+ 
+  100% {
+    box-shadow: 0 0 3px 86px rgba(255, 255, 255, 0);
+  }
+}
+
+.main-p1 {
+	color:white;
+	font-family: 'futurabookc', sans-serif;
+}
+.actived {display:none;}
+.obratka-open {display:none;width:40%;position:absolute;bottom:5%;left:7%;z-index:22;background: rgba(21,21,21,0.7); padding:15px;}
+.obratka-open:before{
+  content:"";
+  position: absolute;
+  left: -40px;
+  bottom:5%;
+  border:20px solid;
+  border-color: transparent #1a1a1a transparent transparent;
+}
+
+#vozmojnosti-portal2 {
+	height:100%;
+	display:inline-block;
+	margin-top:50px;
+	//background-color: rgba(0, 0, 0, 0.2);
+}
+#vozmojnosti-portal2:after {
+    content : "";
+    display: block;
+    background-image: url("../54901-9-3.png");
+	background-size:13%;
+    height:90%;
+    opacity: 0.1;
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-position: right;
+
+}
+
+.obratka {width:50px;position:absolute;bottom:5%;left:3%;z-index:50;cursor:pointer;}
+
+.first-div {margin-top:100px;}
+.menu-g {float:left;width:18%}
+.menu-open {display:none;}
+.text-portal {font-size:25px;margin-bottom:0px;margin-top:0px;}
+.p-portal {font-size:30px;color:white;text-align:center;}
+.p-portal2 {font-size:24px;color:white;text-align:center;}
+
+.div2-p {margin-left:10%;margin-top:-1%;font-weight:100;font-size:26px;color:white;float:left;width:25%;}
+.div2-osnov {width:100%;margin-top:10%;}
+.div2-img {width:65%;float:right;}
+.div2-head {font-size:60px;}
+
+
+
+.div3-head {font-size:60px;color:white;margin-left:12%;float:left;}
+.ul {margin-left:10%;float:left;font-family: 'Proxima Nova', sans-serif;letter-spacing:2px;width:85%;}
+
+ul {
+    list-style: none;
+	padding:0px;
+	font-weight:100;
+}
+li {color:white;padding:5px 0;font-size:26px;margin-top:15px;}
+
+
+
+.div4-head {font-size:40px;color:white;margin:0;margin-top:50px;}
+.foot {
+	color:white;
+	font-size:22px;
+}
+#gruzovik {
+	width:100%;
+    background-size:70%;
+	background-repeat: no-repeat;
+	background-position: center;
+    position: relative;
+	text-align:center;
+}
+
+
+/*
+@media (max-width: 767px) {
+	p {font-size:14px !important;}
+	a {font-size:14px !important;}
+	div {font-size:14px !important;}
+	span {font-size:14px !important;}
+	ul,li {font-size:14px !important;}
+}
+*/
+
+
+
+@media screen and (min-width: 260px) and (max-width: 470px) { 
+ .menu-g {width:100%;margin:40px 0;}
+ .obratka-open {width:100%;}
+ .first-div {margin-top:20px;}
+ .menu-open {width:50px;position:fixed;z-index:999;display:block;}
+ #menu2 {display:none;left:0px;  background: -webkit-linear-gradient(to bottom, #000000, #131313, #131313);background: -moz-linear-gradient(to bottom, #000000, #131313, #131313);background: linear-gradient(to bottom, #000000, #131313, #131313);}
+ .main-p1 {font-size:20px;}
+.p-portal {font-size:18px !important;}
+.p-portal2 {font-size:16px !important;}
+.div2-head {font-size:24px;}
+.div2-p {font-size:16px;margin-left:10%;margin-top:-1%;width:90%;}
+.div2-img {width:95%;}
+
+.div3-head {font-size:20px;color:white;text-align:center;margin-left:3%;}
+#vozmojnosti-portal2 {margin-top: 0px;}
+.ul {margin-left:7%;float:left;font-family: 'Proxima Nova', sans-serif;letter-spacing:0px;width:90%;}
+li {padding:2px 0;font-size:12px;margin-top:1px;}
+.active1 {height:36px;}
+.div4-head {font-size:20px;color:white;margin:0;margin-top:20px;}
+#gruzovik {margin-top:100px;}
+.foot {font-size:14px;}
+#menu2:before {display:none;}
+.popup,.popup1,.popup2,.popup3,.popup4 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0;
+	width: 100%;
+	height:100%;
+	margin-left: 0;	
+	z-index: 99999;
+	opacity: 1;	}		
+}
+
+@media screen and (min-width: 470px) and (max-width: 768px) { 
+#header p {padding:0;}
+#menu {top:15%;}
+ .menu-g {width:100%;margin:15px 0;}
+#menu li a, #menu li.active a {padding:15px 10px;}
+ .obratka-open {width:100%;}
+ .first-div {margin-top:20px;}
+ .menu-open {width:50px;position:fixed;z-index:999;display:block;}
+ #menu2 {display:none;left:0px;  background: -webkit-linear-gradient(to bottom, #000000, #131313, #131313);background: -moz-linear-gradient(to bottom, #000000, #131313, #131313);background: linear-gradient(to bottom, #000000, #131313, #131313);}
+ .main-p1 {font-size:20px;}
+ .active1 {height:34px;}
+.p-portal {font-size:18px !important;}
+.p-portal2 {font-size:16px !important;}
+.div2-head {font-size:24px;}
+.div2-p {font-size:16px;margin-left:10%;margin-top:-5%;width:90%;}
+.div2-img {width:65%;}
+.div2-osnov {width:100%;margin-top:0%;}
+.div3-head {font-size:20px;color:white;text-align:center;margin-left:3%;}
+#vozmojnosti-portal2 {margin-top: -3%;}
+.ul {margin-left:7%;float:left;font-family: 'Proxima Nova', sans-serif;letter-spacing:0px;width:90%;}
+li {padding:5px 0;font-size:12px;margin-top:10px;}
+.ul li {padding: 0;margin:0;}
+.div4-head {font-size:20px;color:white;margin:0;margin-top:-5%;}
+#gruzovik {margin-top:0px;}
+.foot {font-size:14px;}
+#menu2:before {display:none;}
+.popup,.popup1,.popup2,.popup3,.popup4 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0;
+	width: 100%;
+	height:100%;
+	margin-left: 0;	
+	z-index: 99999;
+	opacity: 1;	}		
+}
+
+
+
+@media screen and (min-width: 769px) and (max-width: 1150px) { 
+
+.obratka-open {width:100%;}
+.active1{height:30px};
+.first-div {margin-top:100px;}
+#menu2:before {top:53px;}
+.main-p1 {font-size:16px;}
+.p-portal {font-size:26px !important;}
+.p-portal2 {font-size:22px !important;}
+.div2-head {font-size:26px;}
+.div2-p {font-size:22px;margin-left:10%;margin-bottom:5%;width:90%;}
+.div2-img {width:95%;margin:0px;}
+.div2-osnov {width:100%;margin-top:4%;}
+
+
+.div3-head {font-size:26px;color:white;text-align:center;margin-left:8%;}
+#vozmojnosti-portal2 {margin-top: 2%;}
+.ul {margin-left:7%;float:left;font-family: 'Proxima Nova', sans-serif;letter-spacing:2px;width:90%;}
+li {padding:5px 0;font-size:18px;margin-top:10px;}
+.ul li {padding: 5px;margin:5px;}
+.div4-head {font-size:26px;color:white;margin:0;margin-top:10%;}
+#gruzovik {margin-top:50px;}
+.foot {font-size:20px;}
+
+.popup,.popup1,.popup2,.popup3,.popup4 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0;
+	width: 100%;
+	height:100%;
+	margin-left: 0;	
+	z-index: 99999;
+	opacity: 1;	}		
+}

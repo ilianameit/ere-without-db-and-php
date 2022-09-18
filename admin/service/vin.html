@@ -1,0 +1,308 @@
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+	
+
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT DISTINCT DrwNum FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result_array = $statement->fetchAll();
+    foreach ($result_array as $result_row) {
+	
+//	echo $result_row["DrwNum"];
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?> 
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+	<link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../../css/admin.css">
+    <?php echo "<title>Комплектация: ".$result_row["DrwNum"]."</title>";?>
+</head>
+<!--<style>
+*{margin:0px;padding:0px;}
+.select{position:relative;width:100px;height:20px;background:#fff;border:1px solid #bbb;z-index:1;}
+.select > span{display:block;width:100px;height:20px;text-align:center;vertical-align:middle;cursor:pointer;}
+.select_{display:none;position:absolute;padding-right:20px;max-height:100px;background:#fff;border:1px solid #bbb;overflow:auto;}
+.select_ > div{white-space:nowrap}
+.select:hover{z-index:100;}
+.select:hover > .select_{display:block;}
+
+</style>-->
+<body class="wrap hidden">
+	<a class="back"><?php include '../logout.inc.html.php'; ?></a>
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT vin FROM sap INNER JOIN infovin ON infovin.vin = sap.VIN_SAP";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetchAll();
+    foreach ($result as $row) {
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?>
+
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+	
+	
+try {
+	$search = $_COOKIE['Coockie'];
+	$sql = "SELECT * FROM infomessage";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result1 = $statement->fetchAll();
+    foreach ($result1 as $row1) {
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?>
+
+	<div id="mess-vin">
+		<div class="table">
+			<div class="title-mess search-block">
+				<div class="num-mess">
+					<form method="post" action="">
+						
+							<input class='searchin' type="text" name="search" id="searchnum" placeholder="Поиск по №Письма">
+						
+					</form>
+				</form>
+				</div>
+				<div ></div>
+				<div class="kompl"></div>
+				<div class="spisok-vin acor">	
+					<form method="post" action="">
+						
+							<input class='searchin' type="text" name="search" id="searchvin" placeholder="Поиск по VIN">
+						
+					</form>
+					<div class='list-resultvin' id='resultvins'>
+					</div>
+				</div>
+				<div ></div>
+				<div ></div>
+			</div>
+			<div class="title-mess white-border"> <!--style="width:100%;float:left;position:relative;"-->
+				<div class="number">№</div >
+				<div class="num-mess">№ письма</div>
+				<div >Тема письма</div>
+				<div class="kompl">Комплектации</div>
+				<div class="spisok-vin">VIN</div>
+				<div >Дата</div>
+				<div >Статус</div>
+			</div>
+
+
+			<div class="messages-block" id='search_box-result'>
+<?php 
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+try {
+	$search = $_COOKIE['Coockie'];
+	//исходная   $sql = "SELECT * FROM infomessage inner join infovin ON infomessage.id = infovin.mnomer inner join sap ON infovin.vin = sap.VIN_SAP";
+	$sql = "SELECT distinct id, nazvanie, data, status FROM infomessage inner join infovin ON infomessage.id = infovin.mnomer inner join sap ON infovin.vin = sap.VIN_SAP";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $res = $statement->fetchAll();
+	$n=0;
+	
+    foreach ($res as $rowka) {
+	$n++;
+		
+echo "<div class='messages'>";
+	echo '<div class="number">'.$n.'. </div>';
+	echo "<div class='num-mess'><form method='post' action='message.php'><button value='".$rowka["id"]."' name='choice'>".$rowka["id"]."</button></form></div>";
+	echo "<div class='cont-mess'>".$rowka["nazvanie"]."<span class='tooltiptext mes'>".$rowka["nazvanie"]."</span></div>";
+	echo "<div class='acor-kompl'><button class='kompl' onclick='kompl();' value='".$rowka["id"]."'>Показать</button><div></div></div>";
+	echo "<div class='acor-vin'><button class='vin' onclick='vin();' value='".$rowka["id"]."'>Показать</button><div ></div></div>";
+	echo "<div >".$rowka["data"]."</div>";
+	echo "<div>";
+		if($rowka["status"]==1){echo"Выполнено";}
+		else{echo"Не выполнено";}
+	echo"</div>";
+echo "</div>";
+		
+	 
+    }
+	$kompl = $result_row["DrwNum"];
+	
+} 
+catch(PDOException $e) {
+    echo "Ошибка при asdasd создании записи в базе данных: " . $e->getMessage();
+}
+	//setcookie("Coockie-kompl",$kompl, time()+3600);
+	$kompl = $_COOKIE['Coockie-kompl'];
+?>
+
+			</div>
+		</div>
+	</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+<script>
+function vin()
+{
+
+  $('.vin').on('click', function() {
+    var vin = $(this).attr('value');
+	$(this).css('display','none');
+	var div = $(this).next();
+
+	$.ajax({
+                type: "POST",
+                url: "vins.php",
+                data: "vin="+vin,
+                //При удачном завершение запроса - выводим то, что нам вернул PHP
+                success: function(html) {
+					
+ //предварительно очищаем нужный элемент страницы
+                        div.empty();
+//и выводим ответ php скрипта
+                        div.append(html);
+                }
+        });
+	})
+};
+</script>
+<script>
+function kompl()
+{
+
+  $('.kompl').on('click', function() {
+    var kompl = $(this).attr('value');
+	$(this).css('display','none');
+	var div = $(this).next();
+
+	$.ajax({
+                type: "POST",
+                url: "kompl.php",
+                data: "kompl="+kompl,
+                //При удачном завершение запроса - выводим то, что нам вернул PHP
+                success: function(html) {
+					
+ //предварительно очищаем нужный элемент страницы
+                        div.empty();
+//и выводим ответ php скрипта
+                        div.append(html);
+                }
+        });
+	})
+};
+</script>
+
+ <script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#searchnum').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var searchnum = $(this).val();
+		if  (searchnum.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "searchnum.php",
+				data: {'searchnum': searchnum},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+
+
+$(document).ready(function() {	
+	var $resultvin = $('#resultvins');
+	var timer;
+	$('#searchvin').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var searchvin = $(this).val();
+		if  (searchvin.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "searchvin.php",
+				data: {'searchvin': searchvin},
+				success: function(msg){
+					$resultvin.html(msg);
+					if(msg != ''){	
+						$resultvin.fadeIn();
+					} else {
+						$resultvin.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+</script>
+
+
+
+
+<script src="../../js/js-libary.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

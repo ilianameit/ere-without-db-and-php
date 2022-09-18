@@ -1,0 +1,982 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+    <title><?php htmlout($pageTitle); ?></title>
+  </head>
+  <style>
+  .errorvin {
+    background-color: #caf9cc;
+    position: fixed;
+    top: 40%;
+    left: 30%;
+    width: 40%;
+	color:black;
+    height: 10%;
+	display: none;
+    text-align: center;
+    justify-content: center;
+    z-index: 5;
+	font-weight:bold;
+	font-size:30px;
+    border: 4px solid #ffffff;
+    padding: 20px;
+}
+.errorvin {
+ -moz-transition: all 1.5s ease-out;
+ -o-transition: all 1.5s ease-out;
+ -webkit-transition: all 1.5s ease-out;
+ transition: all 1.5s ease-out;
+ }
+ 
+.errorvin:hover{
+ color:red;
+ }
+ .errorvin {
+  font-weight:bold;
+  box-shadow: 0px 0px 5px 6px rgb(240 255 235);
+}
+.accept { background-color:#caf9cc;}
+.denied  {background-color:rgb(249, 202, 202);}
+  </style>
+  <body class='wrap'>
+
+  		<div class="heading">
+			<h1><?php htmlout($pageTitle); ?></h1>
+		</div>
+  
+
+	<a href="index.php" class="back"></a>
+
+	<div class='main ere'>
+    <form action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">      
+		  <div class="manual-text edit-div">
+		  <div class='osn'>
+		  
+		  <input id="LN" name="LN" style="display:none;" value="<?php htmlout($LN); ?>"></input>
+				<div class="manual-line">
+					<div class="left">
+						<p>Руководство: </p> 
+					</div>
+					<div class="right">
+						<label for="id"><div class="right-input-text"><input readonly placeholder="Название руководства" type="text" name="id" id="id" value="<?php htmlout($id); ?>"></div></label>
+					</div>
+					<div class="right">
+							<label for="izvid"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvid" id="izvid" value="<?php htmlout($izvid); ?>"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Вашему Вниманию: </p>
+					</div>
+					<div class="right">
+						<label for="vv"><div class="right-input-text" ><input readonly  type="text" name="vv" id="vv" value="<?php htmlout($vv); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vv">Выберите файл...<input id="f2" type="file" name="attachment" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvvv"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvvv" id="izvvv" value="<?php htmlout($izvvv); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Экслуатационные параметры: </p>
+					</div>
+					<div class="right">
+						<label for="ep"><div class="right-input-text"><input readonly  type="text" name="ep" id="ep" value="<?php htmlout($ep); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ep">Выберите файл...<input id="f3" type="file" name="attachment1" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvep"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvep" id="izvep" value="<?php htmlout($izvep); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Краткое описание систем и механизмов автомобиля: </p>
+					</div> 
+					<div class="right">
+						<label for="ks"><div  class="right-input-text"><input readonly  type="text" name="ks" id="ks" value="<?php htmlout($ks); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ks">Выберите файл...<input id="f4" type="file" name="attachment2" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvks"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvks" id="izvks" value="<?php htmlout($izvks); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div> 
+				
+				<div class="manual-line">
+					<div class="left">				
+						<p>Эксплуатация автомобиля: </p>
+					</div>
+					<div class="right">
+						<label for="ea"><div class="right-input-text"><input readonly type="text" name="ea" id="ea" value="<?php htmlout($ea); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ea">Выберите файл...<input id="f5" type="file" name="attachment3" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvea"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvea" id="izvea" value="<?php htmlout($izvea); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Эксплуатация автомобиля в холодный период: </p>
+					</div>
+					<div class="right">
+						<label for="eax"><div class="right-input-text"><input readonly type="text" name="eax" id="eax" value="<?php htmlout($eax); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-eax">Выберите файл...<input id="f6" type="file" name="attachment4" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izveax"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izveax" id="izveax" value="<?php htmlout($izveax); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Техническое обслуживание: </p>
+					</div>
+					<div class="right">
+						<label for="tho"><div class="right-input-text"><input readonly type="text" name="tho" id="tho" value="<?php htmlout($tho); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-tho">Выберите файл...<input id="f7" type="file" name="attachment5" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvtho"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvtho" id="izvtho" value="<?php htmlout($izvtho); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				<div class="manual-line">
+					<div class="left">
+						<p>Возможные неисправности агрегатов и систем автомобиля: </p>
+					</div>
+					<div class="right">
+						<label for="vn"><div class="right-input-text"><input readonly type="text" name="vn" id="vn" value="<?php htmlout($vn); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-vn">Выберите файл...<input id="f8" type="file" name="attachment6" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvvn"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvvn" id="izvvn" value="<?php htmlout($izvvn); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Хранение автомобиля: </p>
+					</div>
+					<div class="right">
+						<label for="xa"><div class="right-input-text"><input readonly type="text" name="xa" id="xa" value="<?php htmlout($xa); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-xa">Выберите файл...<input id="f9" type="file" name="attachment7" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvxa"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvxa" id="izvxa" value="<?php htmlout($izvxa); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Транспортирование автомобиля: </p>
+					</div>
+					<div class="right">
+						<label for="ta"><div class="right-input-text"><input readonly type="text" name="ta" id="ta" value="<?php htmlout($ta); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ta">Выберите файл...<input id="fl0" type="file" name="attachment8" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvta"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvta" id="izvta" value="<?php htmlout($izvta); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Гарантии предприятия-изготовителя и порядок предъявления рекламации: </p>
+					</div>
+					<div class="right">
+						<label for="ga"><div class="right-input-text"><input readonly type="text" name="ga" id="ga" value="<?php htmlout($ga); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-ga">Выберите файл...<input id="fl1" type="file" name="attachment9" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvga"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvga" id="izvga" value="<?php htmlout($izvga); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				
+				<div class="manual-line">
+					<div class="left">
+						<p>Утилизация: </p>
+					</div>
+					<div class="right">
+						<label for="yt"><div class="right-input-text"><input readonly type="text" name="yt" id="yt" value="<?php htmlout($yt); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-yt">Выберите файл...<input id="fl2" type="file" name="attachment10" accept="application/pdf"></div></div></label>
+					</div>
+					<div class="right">
+							<label for="izvyt"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvyt" id="izvyt" value="<?php htmlout($izvyt); ?>"></div><div class="right-input-file"></div></label>
+					</div>
+				</div>
+				</div>
+				
+				<div id="block">
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 1: </p>
+						</div>
+						<div class="right">
+							<label for="pril1"><div class="right-input-text"><input type="text" name="pril1" id="pril1" value="<?php htmlout($pril1); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril1">Выберите файл...<input id="fl3" type="file" name="attachment11" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril1"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril1" id="izvpril1" value="<?php htmlout($izvpril1); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 2: </p>
+						</div>
+						<div class="right">
+							<label for="pril2"><div class="right-input-text"><input type="text" name="pril2" id="pril2" value="<?php htmlout($pril2); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril2">Выберите файл...<input id="fl4" type="file" name="attachment12" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril2"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril2" id="izvpril2" value="<?php htmlout($izvpril2); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 3: </p>
+						</div>
+						<div class="right">
+							<label for="pril3"><div class="right-input-text"><input type="text" name="pril3" id="pril3" value="<?php htmlout($pril3); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril3">Выберите файл...<input id="fl5" type="file" name="attachment13" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril3"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril3" id="izvpril3" value="<?php htmlout($izvpril3); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 4: </p>
+						</div>
+						<div class="right">
+							<label for="pril4"><div class="right-input-text"><input type="text" name="pril4" id="pril4" value="<?php htmlout($pril4); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril4">Выберите файл...<input id="fl6" type="file" name="attachment14" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril4"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril4" id="izvpril4" value="<?php htmlout($izvpril4); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 5: </p>
+						</div>
+						<div class="right">
+							<label for="pril5"><div class="right-input-text"><input type="text" name="pril5" id="pril5" value="<?php htmlout($pril5); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril5">Выберите файл...<input id="fl7" type="file" name="attachment15" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril5"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril5" id="izvpril5" value="<?php htmlout($izvpril5); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 6: </p>
+						</div>
+						<div class="right">
+							<label for="pril6"><div class="right-input-text"><input type="text" name="pril6" id="pril6" value="<?php htmlout($pril6); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril6">Выберите файл...<input id="fl8" type="file" name="attachment16" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril6"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril6" id="izvpril6" value="<?php htmlout($izvpril6); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 7: </p>
+						</div>
+						<div class="right">
+							<label for="pril7"><div class="right-input-text"><input type="text" name="pril7" id="pril7" value="<?php htmlout($pril7); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril7">Выберите файл...<input id="fl9" type="file" name="attachment17" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril7"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril7" id="izvpril7" value="<?php htmlout($izvpril7); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 8: </p>
+						</div>
+						<div class="right">
+							<label for="pril8"><div class="right-input-text"><input type="text" name="pril8" id="pril8" value="<?php htmlout($pril8); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril8">Выберите файл...<input id="f20" type="file" name="attachment18" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril8"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril8" id="izvpril8" value="<?php htmlout($izvpril8); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 9: </p>
+						</div>
+						<div class="right">
+							<label for="pril9"><div class="right-input-text"><input type="text" name="pril9" id="pril9" value="<?php htmlout($pril9); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril9">Выберите файл...<input id="f21" type="file" name="attachment19" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril9"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril9" id="izvpril9" value="<?php htmlout($izvpril9); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 10: </p>
+						</div>
+						<div class="right">
+							<label for="pril10"><div class="right-input-text"><input type="text" name="pril10" id="pril10" value="<?php htmlout($pril10); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril10">Выберите файл...<input id="f22" type="file" name="attachment20" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril10"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril10" id="izvpril10" value="<?php htmlout($izvpril10); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 11: </p>
+						</div>
+						<div class="right">
+							<label for="pril11"><div class="right-input-text"><input type="text" name="pril11" id="pril11" value="<?php htmlout($pril11); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril11">Выберите файл...<input id="f23" type="file" name="attachment21" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril11"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril11" id="izvpril11" value="<?php htmlout($izvpril11); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Приложение 12: </p>
+						</div>
+						<div class="right">
+							<label for="pril12"><div class="right-input-text"><input type="text" name="pril12" id="pril12" value="<?php htmlout($pril12); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-pril12">Выберите файл...<input id="f24" type="file" name="attachment22" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvpril12"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvpril12" id="izvpril12" value="<?php htmlout($izvpril12); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+				</div>
+				
+				<div id="blockpril">
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 1: </p>
+						</div>
+						<div class="right">
+							<label for="dop1"><div class="right-input-text"><input type="text" name="dop1" id="dop1" value="<?php htmlout($dop1); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop1">Выберите файл...<input id="f25" type="file" name="attachment23" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop1"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop1" id="izvdop1" value="<?php htmlout($izvdop1); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 2: </p>
+						</div>
+						<div class="right">
+							<label for="dop2"><div class="right-input-text"><input type="text" name="dop2" id="dop2" value="<?php htmlout($dop2); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop2">Выберите файл...<input id="f26" type="file" name="attachment24" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop2"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop2" id="izvdop2" value="<?php htmlout($izvdop2); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 3: </p>
+						</div>
+						<div class="right">
+							<label for="dop3"><div class="right-input-text"><input type="text" name="dop3" id="dop3" value="<?php htmlout($dop3); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop3">Выберите файл...<input id="f27" type="file" name="attachment25" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop3"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop3" id="izvdop3" value="<?php htmlout($izvdop3); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 4: </p>
+						</div>
+						<div class="right">
+							<label for="dop4"><div class="right-input-text"><input type="text" name="dop4" id="dop4" value="<?php htmlout($dop4); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop4">Выберите файл...<input id="f28" type="file" name="attachment26" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop4"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop4" id="izvdop4" value="<?php htmlout($izvdop4); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 5: </p>
+						</div>
+						<div class="right">
+							<label for="dop5"><div class="right-input-text"><input type="text" name="dop5" id="dop5" value="<?php htmlout($dop5); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop5">Выберите файл...<input id="f29" type="file" name="attachment27" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop5"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop5" id="izvdop5" value="<?php htmlout($izvdop5); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 6: </p>
+						</div>
+						<div class="right">
+							<label for="dop6"><div class="right-input-text"><input type="text" name="dop6" id="dop6" value="<?php htmlout($dop6); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop6">Выберите файл...<input id="f30" type="file" name="attachment28" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop6"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop6" id="izvdop6" value="<?php htmlout($izvdop6); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 7: </p>
+						</div>
+						<div class="right">
+							<label for="dop7"><div class="right-input-text"><input type="text" name="dop7" id="dop7" value="<?php htmlout($dop7); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop7">Выберите файл...<input id="f31" type="file" name="attachment29" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop7"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop7" id="izvdop7" value="<?php htmlout($izvdop7); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 8: </p>
+						</div>
+						<div class="right">
+							<label for="dop8"><div class="right-input-text"><input type="text" name="dop8" id="dop8" value="<?php htmlout($dop8); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop8">Выберите файл...<input id="f32" type="file" name="attachment30" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop8"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop8" id="izvdop8" value="<?php htmlout($izvdop8); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 9: </p>
+						</div>
+						<div class="right">
+							<label for="dop9"><div class="right-input-text"><input type="text" name="dop9" id="dop9" value="<?php htmlout($dop9); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop9">Выберите файл...<input id="f33" type="file" name="attachment31" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop9"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop9" id="izvdop9" value="<?php htmlout($izvdop9); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+					<div class="manual-line">
+						<div class="left">
+							<p>Дополнение 10: </p>
+						</div>
+						<div class="right">
+							<label for="dop10"><div class="right-input-text"><input type="text" name="dop10" id="dop10" value="<?php htmlout($dop10); ?>"></div><div class="right-input-file"><div class="choosebtn" id="button-dop10">Выберите файл...<input id="f34" type="file" name="attachment32" accept="application/pdf"></div></div></label>
+						</div>
+						<div class="right">
+							<label for="izvdop10"><div class="right-input-text"><input placeholder="№ Извещения" type="text" name="izvdop10" id="izvdop10" value="<?php htmlout($izvdop10); ?>"></div><div class="right-input-file"></div></label>
+						</div>
+					</div>
+				</div>				
+			
+			</div>
+		<div  class="manual-line footaddruk">
+					<div class="add-buttons">
+						<div id="clickmepril" class="add">
+								<div class='add' id="plus-pril">Добавить приложения</div>
+						</div>
+						<div id="clickmedop" class="add">
+								<div id="plus-dop">Добавить дополнения</div>
+						</div>
+					</div>
+					
+						<div class='ruk' id = "button-add">
+						<button>Изменить...<input type="submit" value="<?php htmlout($button); ?>"></button>
+					</div>
+				</div>
+		</form>
+		</div>
+		<p id='message' class='errorvin zoom'></p>
+  </body>
+
+<script>
+$( "#clickmepril" ).click(function() {
+  $( "#block" ).slideToggle( "slow", function() {
+    $("#plus-pril").html() == "Свернуть приложения" ? $("#plus-pril").html('Добавить приложения') : $("#plus-pril").html('Свернуть приложения');
+  });
+});
+</script>
+<script>
+$( "#clickmedop" ).click(function() {
+  $( "#blockpril" ).slideToggle( "slow", function() {
+    $("#plus-dop").html() == "Свернуть дополнения" ? $("#plus-dop").html('Добавить дополнения') : $("#plus-dop").html('Свернуть дополнения');
+  });
+});
+</script>
+<script>
+$('#block .right-input-text input').change(function() {    
+    $(this).val($(this).val().replace(/ /g,"-"));
+});
+</script> 
+<script>
+$('#blockpril .right-input-text input').change(function() {    
+    $(this).val($(this).val().replace(/ /g,"-"));
+});
+</script>
+<script>
+document.getElementById('f2').addEventListener('change', function(){
+   var div1 = document.getElementById('f2').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-1.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('vv').value = document.getElementById('f2').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-vv');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-vv');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("vv").value = null;document.getElementById("f2").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+
+document.getElementById('f3').addEventListener('change', function(){
+   var div1 = document.getElementById('f3').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-2.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ep').value = document.getElementById('f3').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ep');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ep');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ep").value = null;document.getElementById("f3").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+
+document.getElementById('f4').addEventListener('change', function(){
+   var div1 = document.getElementById('f4').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-3.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ks').value = document.getElementById('f4').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ks');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ks');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ks").value = null;document.getElementById("f4").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+
+document.getElementById('f5').addEventListener('change', function(){
+   var div1 = document.getElementById('f5').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-4.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ea').value = document.getElementById('f5').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ea');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ea');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ea").value = null;document.getElementById("f5").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+document.getElementById('f6').addEventListener('change', function(){
+   var div1 = document.getElementById('f6').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-5.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('eax').value = document.getElementById('f6').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-eax');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-eax');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("eax").value = null;document.getElementById("f6").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+}); 
+
+document.getElementById('f7').addEventListener('change', function(){
+   var div1 = document.getElementById('f7').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-6.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('tho').value = document.getElementById('f7').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-tho');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-tho');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("tho").value = null;document.getElementById("f7").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('f8').addEventListener('change', function(){
+   var div1 = document.getElementById('f8').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-7.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('vn').value = document.getElementById('f8').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-vn');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-vn');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("vn").value = null;document.getElementById("f8").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('f9').addEventListener('change', function(){
+   var div1 = document.getElementById('f9').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-8.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('xa').value = document.getElementById('f9').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-xa');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-xa');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("xa").value = null;document.getElementById("f9").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('fl0').addEventListener('change', function(){
+   var div1 = document.getElementById('fl0').value;
+   var sr1 = div1.slice(-6);
+  if( sr1 == "-9.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ta').value = document.getElementById('fl0').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ta');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ta');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ta").value = null;document.getElementById("fl0").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('fl1').addEventListener('change', function(){
+   var div1 = document.getElementById('fl1').value;
+   var sr1 = div1.slice(-7);
+  if( sr1 == "-10.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('ga').value = document.getElementById('fl1').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-ga');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+}
+   else { 
+    let elem = document.getElementById('button-ga');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("ga").value = null;document.getElementById("fl1").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+
+document.getElementById('fl2').addEventListener('change', function(){
+   var div1 = document.getElementById('fl2').value;
+   var sr1 = div1.slice(-7);
+  if( sr1 == "-11.pdf" ){
+	document.getElementById('message').innerHTML ="Файл успешно добавлен";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.add("accept");
+	document.getElementById('message').classList.remove("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+	
+    document.getElementById('yt').value = document.getElementById('fl2').value.replace(/.*[\\\/]/, "");
+	let elem = document.getElementById('button-yt');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvyt').value = document.getElementById('fl2').value.replace(/.(.*)/, "");
+	document.getElementById('izvyt').placeholder = '№ извещения';
+	document.getElementById('izvyt').classList.add("test2");
+}
+   else { 
+    let elem = document.getElementById('button-yt');
+	elem.style.color = 'red';elem.style.backgroundImage = 'url(img/button.png)';
+    document.getElementById("yt").value = null;document.getElementById("fl2").value = null;
+    document.getElementById('message').innerHTML ="Ошибка в наименовании раздела";
+	document.getElementById('message').style.display = 'block';
+	document.getElementById('message').classList.remove("accept");
+	document.getElementById('message').classList.add("denied");
+	setTimeout(() => document.getElementById('message').style.display = 'none', 2500);
+  }
+});
+</script> 
+<script>
+
+document.getElementById('fl3').onchange = function () {
+	document.getElementById('izvpril1').value = document.getElementById('fl3').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril1');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril1').placeholder = '№ извещения';
+	document.getElementById('izvpril1').classList.add("test2");
+}
+document.getElementById('fl4').onchange = function () {
+	document.getElementById('izvpril2').value = document.getElementById('fl4').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril2');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril2').placeholder = '№ извещения';
+	document.getElementById('izvpril2').classList.add("test2");
+}
+document.getElementById('fl5').onchange = function () {
+	document.getElementById('izvpril3').value = document.getElementById('fl5').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril3');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril3').placeholder = '№ извещения';
+	document.getElementById('izvpril3').classList.add("test2");
+}
+document.getElementById('fl6').onchange = function () {
+	document.getElementById('izvpril4').value = document.getElementById('fl6').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril4');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril4').placeholder = '№ извещения';
+	document.getElementById('izvpril4').classList.add("test2");
+}
+document.getElementById('fl7').onchange = function () {
+	document.getElementById('izvpril5').value = document.getElementById('fl7').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril5');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril5').placeholder = '№ извещения';
+	document.getElementById('izvpril5').classList.add("test2");
+}
+document.getElementById('fl8').onchange = function () {
+	document.getElementById('izvpril6').value = document.getElementById('fl8').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril6');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril6').placeholder = '№ извещения';
+	document.getElementById('izvpril6').classList.add("test2");
+}
+document.getElementById('fl9').onchange = function () {
+	document.getElementById('izvpril7').value = document.getElementById('fl9').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril7');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril7').placeholder = '№ извещения';
+	document.getElementById('izvpril7').classList.add("test2");
+}
+document.getElementById('f20').onchange = function () {
+	document.getElementById('izvpril8').value = document.getElementById('f20').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril8');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril8').placeholder = '№ извещения';
+	document.getElementById('izvpril8').classList.add("test2");
+}
+document.getElementById('f21').onchange = function () {
+	document.getElementById('izvpril9').value = document.getElementById('f21').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril9');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril9').placeholder = '№ извещения';
+	document.getElementById('izvpril9').classList.add("test2");
+}
+document.getElementById('f22').onchange = function () {
+	document.getElementById('izvpril10').value = document.getElementById('f22').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril10');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril10').placeholder = '№ извещения';
+	document.getElementById('izvpril10').classList.add("test2");
+}
+document.getElementById('f23').onchange = function () {
+	document.getElementById('izvpril11').value = document.getElementById('f23').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril11');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril11').placeholder = '№ извещения';
+	document.getElementById('izvpril11').classList.add("test2");
+}
+document.getElementById('f24').onchange = function () {
+	document.getElementById('izvpril12').value = document.getElementById('f24').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-pril12');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvpril12').placeholder = '№ извещения';
+	document.getElementById('izvpril12').classList.add("test2");
+}
+document.getElementById('f25').onchange = function () {
+	document.getElementById('izvdop1').value = document.getElementById('f25').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop1');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop1').placeholder = '№ извещения';
+	document.getElementById('izvdop1').classList.add("test2");
+}
+document.getElementById('f26').onchange = function () {
+	document.getElementById('izvdop2').value = document.getElementById('f26').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop2');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop2').placeholder = '№ извещения';
+	document.getElementById('izvdop2').classList.add("test2");
+}
+document.getElementById('f27').onchange = function () {
+	document.getElementById('izvdop3').value = document.getElementById('f27').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop3');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop3').placeholder = '№ извещения';
+	document.getElementById('izvdop3').classList.add("test2");
+}
+document.getElementById('f28').onchange = function () {
+	document.getElementById('izvdop4').value = document.getElementById('f28').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop4');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop4').placeholder = '№ извещения';
+	document.getElementById('izvdop4').classList.add("test2");
+}
+document.getElementById('f29').onchange = function () {
+	document.getElementById('izvdop5').value = document.getElementById('f29').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop5');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop5').placeholder = '№ извещения';
+	document.getElementById('izvdop5').classList.add("test2");
+
+}
+document.getElementById('f30').onchange = function () {
+	document.getElementById('izvdop6').value = document.getElementById('f30').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop6');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop6').placeholder = '№ извещения';
+	document.getElementById('izvdop6').classList.add("test2");
+}
+document.getElementById('f31').onchange = function () {
+	document.getElementById('izvdop7').value = document.getElementById('f31').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop7');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop7').placeholder = '№ извещения';
+	document.getElementById('izvdop7').classList.add("test2");
+}
+document.getElementById('f32').onchange = function () {
+	document.getElementById('izvdop8').value = document.getElementById('f32').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop8');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop8').placeholder = '№ извещения';
+	document.getElementById('izvdop8').classList.add("test2");
+}
+document.getElementById('f33').onchange = function () {
+	document.getElementById('izvdop9').value = document.getElementById('f33').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop9');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop9').placeholder = '№ извещения';
+	document.getElementById('izvdop9').classList.add("test2");
+}
+document.getElementById('f34').onchange = function () {
+	document.getElementById('izvdop10').value = document.getElementById('f34').value.replace(/.(.*)/, "");
+	let elem = document.getElementById('button-dop10');
+	elem.style.color = '#00ff00';
+	elem.style.backgroundImage = 'url(img/button-gj.png)';
+	document.getElementById('izvdop10').placeholder = '№ извещения';
+	document.getElementById('izvdop10').classList.add("test2");
+}
+</script> 
+</html>

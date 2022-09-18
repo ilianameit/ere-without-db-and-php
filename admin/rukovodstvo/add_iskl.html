@@ -1,0 +1,117 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php';	
+	?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title><?php htmlout($pageTitle); ?></title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+	<link rel="stylesheet" href="css/chosen.css">
+  </head>
+
+  <body class="wrap">
+		<a href="?voen" class="back"></a>
+  
+	
+		
+		<form action="?<?php htmlout($action); ?>" method="post" enctype="multipart/form-data">
+			<div class="heading">
+				<h1>Панель администратора</h1>
+				<h1><?php htmlout($pageTitle); ?></h1>
+			</div>
+	<div class="main-div -hidden"> 	
+<div class='dlist'>	
+	<div class='headlist'>
+		
+		<div class='head'>
+		Комплектация
+		</div>
+		<div class='head'>
+		Причина
+		</div>					  
+	</div>					  
+<?php 
+	include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+	$sql = "SELECT DISTINCT DrwNum, idere FROM sap left JOIN erekompl ON erekompl.kompl = sap.DrwNum where idere IS NULL and sap.company='$company'";   
+		
+		$statement = $pdo->prepare($sql);
+		$statement->execute();
+		$result_array = $statement->fetchAll();
+			
+	echo "<ol class='voen-list list-style-none' id='voen-list'><li>
+<div class='block'>";
+
+	
+echo "	<div class='kompl' id='kompl'>
+			<select data-placeholder='Выберите комплектации...' class='chosen-select' name='kompl[]' id='voen' multiple tabindex='1'>";
+	foreach ($result_array as $result_row) {
+	if ($result_row['DrwNum']) {
+	echo ' <option value="'.$result_row['DrwNum'].'">'.$result_row['DrwNum'].'</option>';
+	}
+	}
+	echo '</select></div><div class="reason" id="reason">  </div> </div> </li>
+	<div class="plus botblock" style="display:none;">
+		<div id="add-li" class="plus-btn">&#43;</div>
+		<div id="del-li" class="minus-btn">	&#45;</div>
+	</div>
+	</ol>';
+?>
+	
+	</div>
+	</div>
+	<div class="foot-btn" >
+	  <div class="button-add" id="btn-voen">
+		<input class = "save text-center" name="submit" type="submit" value="<?php htmlout($button); ?>">
+	  </div>
+	 </div>
+
+
+
+
+		</form>
+		
+<script>
+  $( '.chosen-search-input' ).css( 'width', '100%');
+let itemsLength = $('#kompl .chosen-choices li').length; // Создаем переменную, в которой будем хранить/обновлять наше кол-во элементов
+let reason = $('#reason input'); 
+let reasonLenght = 0; //$('#reason input').lenght
+const $button = $('#kompl'),
+  $container = $('#reason');
+  $at = $('a');
+
+  
+$button.on('click', "#voen_chosen > div > ul > li:not(.active-result)", function(){
+itemsLength = $('#kompl .chosen-choices li').length;
+
+if(itemsLength-1>reasonLenght ){
+  $container.append('' + '<li><input type="text" name="reason[]"></li>' );   
+}  
+reasonLenght = $('#reason li').length;
+
+  // Обновляем кол-во .item после каждого добавления
+  $( '.chosen-search-input' ).attr( 'placeholder', 'Выберите комплектации...');
+  $( '.chosen-search-input' ).css( 'width', '100%');
+});
+
+		$button.on('mouseup',"a" ,function(){
+	var index = $('#kompl a').index( this );	
+//	if(itemsLength<=reasonLenght ){
+	$container.children("li:nth-child("+(index+1)+")").remove();  
+//	} 
+	itemsLength = $('#kompl .chosen-choices li').length;
+	reasonLenght = $('#reason li').length;	
+
+
+	});	
+	
+</script>	
+  </body>
+
+  
+    <script src="js/chosen.jquery.js" type="text/javascript"></script>
+  <script src="js/init.js" type="text/javascript" ></script>
+  
+</html>

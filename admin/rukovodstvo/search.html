@@ -1,0 +1,40 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/includes/db.inc.php';
+
+
+if (!empty($_POST['search'])) {
+	
+	$search = $_POST['search'];
+ 
+	$sth = $pdo->query("SELECT * FROM ererazdel where LN LIKE '$search%'");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	
+} 
+else {
+	
+	$sth = $pdo->query("SELECT * FROM ererazdel");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+}
+	
+	if ($result) {
+		?>
+
+				<?php foreach ($result as $row): ?>
+				<form action="" method="post">
+					<div  class="line-kr">
+						  <div ><?php echo $row['id']; ?></div>
+						  <div ><?php echo $row['LN']; ?></div>
+						  <div ><input type="hidden" name="LN" value="<?php echo $row['LN']; ?>"><input type="hidden" name="id" value="<?php echo $row['id']; ?>"><input type="submit" name="action" value="Edit"></div>
+						  <!-- <input type="submit" name="action" value="Delete"> -->
+					</div>
+				</form>
+				<?php endforeach; ?>
+			
+			
+		<?php
+	}
+
+?>

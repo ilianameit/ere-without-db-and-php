@@ -1,0 +1,135 @@
+<?php include_once $_SERVER['DOCUMENT_ROOT'] .
+    '/includes/helpers.inc.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Информационные письма</title>
+	<link rel="stylesheet" href="../../css/admin.css">
+	<script src="../../js/js-libary.js"></script>
+  </head>
+
+  
+   <body class="main">
+		<a class="back"><?php include '../logout.inc.html.php'; ?></a>
+	 
+		<div class="heading">
+			<h1>Панель администратора</h1>
+			<h2>Информационного письма</h2>
+		</div>
+	 <div class="main">	
+
+		<div  class="table-kr serv" >
+		<div class="title-mess white-border">
+				<div>№ письма</div>
+				<div>Тема письма</div>
+				<div>Дата</div>
+				<div>Изменить</div>
+			</div>
+			<!--<div class="line-kr" id="title-kr" >
+				<div  class="filter-div">Комплектация
+				<form method="post" class="filter" action="">
+					<input type="text" name="search" id="search1" placeholder="Поиск по комплектации">
+				</form>
+				</div>
+				<div  class="filter-div">Руководство
+				<form method="post" class="filter" action="">
+					<input type="text" name="search" id="search" placeholder="Поиск по руководству">
+				</form>
+				</div>
+				<div id="empty-div"></div>
+			</div>-->
+			<div id="search_box-result">
+		  <?php foreach ($infomes as $mess): ?>
+			  <form action="" method="post">
+				  <div class="line-kr">
+					  <div ><?php htmlout($mess['id']); ?></div>
+					  <div ><?php htmlout($mess['nazvanie']); ?></div>
+					  <div ><?php htmlout($mess['data']); ?></div>
+					  <div ><input type="hidden" name="id" value="<?php echo $mess['id']; ?>"><input type="submit" name="action" value="Edit"></div>
+					  <!-- <input type="submit" name="action" value="Delete"> -->
+				  </div>
+			  </form>
+		  <?php endforeach; ?></div>
+		
+			<div class="line-bot" id="foot-kr">
+				<div class="btn-add-plus">
+					<a href="?add">Добавить информационное письмо</a>
+				</div>
+				
+			</div>
+			
+		
+	</div>
+	</div>	
+		
+
+  </body>
+  
+  <script>
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "search.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {	
+	var $result = $('#search_box-result');
+	var timer;
+	$('#search1').on('keyup', function(){	
+		window.clearTimeout(timer);
+		var search = $(this).val();
+		if  (search.length >= 0){
+			timer = setTimeout(function () {
+
+			$.ajax({
+				type: "POST",
+				url: "search1.php",
+				data: {'search': search},
+				success: function(msg){
+					$result.html(msg);
+					if(msg != ''){	
+						$result.fadeIn();
+					} else {
+						$result.fadeOut(100);
+					}
+				}
+			});}, 1500);
+		 } else{
+			
+		 }
+	});
+});
+
+$(document).ready(function() {
+      $('form').keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+      }
+   });
+});
+</script>
+</html>
